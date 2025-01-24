@@ -40,6 +40,7 @@ router.beforeEach((to, from, next) => {
     !(
       to.path === "/" ||
       to.path === "/index" ||
+      to.path === "/stateList" ||
       to.path === "/attraction" ||
       to.path === "/hotel" ||
       to.path === "/food" ||

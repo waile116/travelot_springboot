@@ -1,9 +1,10 @@
 <template>
   <ul>
     <li><p @click="toIndex">首页</p></li>
+    <li><p @click="toStateList">州属</p></li>
     <li><p @click="toAttraction">景点</p></li>
-    <li><p @click="toHotel">住宿</p></li>
     <li><p @click="toFood">美食</p></li>
+    <li><p @click="toHotel">住宿</p></li>
   </ul>
 </template>
 
@@ -14,6 +15,11 @@ export default {
     toIndex() {
       this.$router.push({
         path: "/index",
+      });
+    },
+    toStateList() {
+      this.$router.push({
+        path: "/stateList",
       });
     },
     toAttraction() {
@@ -48,7 +54,7 @@ ul li {
 p {
   color: white;
   font-family: var(--font-family);
-  font-size: 18px;
+  font-size: 1.5vw;
   line-height: 25px;
   cursor: pointer;
   position: relative;

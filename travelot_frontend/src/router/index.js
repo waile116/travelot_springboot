@@ -3,6 +3,8 @@ import Index from "../views/Index.vue";
 import Attraction from "../views/Attraction.vue";
 import Hotel from "../views/Hotel.vue";
 import Food from "../views/Food.vue";
+import StateList from "../views/StateList.vue";
+import StateInfo from "../views/StateInfo.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 
@@ -31,6 +33,16 @@ const routes = [
     path: "/food",
     name: "Food",
     component: Food,
+  },
+  {
+    path: "/stateList",
+    name: "StateList",
+    component: StateList,
+  },
+  {
+    path: "/stateInfo",
+    name: "StateInfo",
+    component: StateInfo,
   },
   {
     path: "/login",

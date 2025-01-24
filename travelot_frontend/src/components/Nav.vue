@@ -54,7 +54,7 @@ export default {
 .wrapper .right p {
   color: white;
   font-family: var(--font-family);
-  font-size: 18px;
+  font-size: 1.5vw;
   line-height: 25px;
   cursor: pointer;
   margin: 0 2vw;
@@ -82,7 +82,7 @@ export default {
   color: white;
   font-family: var(--font-family);
   font-weight: 700;
-  font-size: 18px;
+  font-size: 1.5vw;
   background-color: var(--color-orange);
   padding: 1vw 2.5vw;
 
