@@ -6,7 +6,7 @@
         <p>马来西亚热门州属</p>
         <ul class="card">
           <li>
-            <img src="" alt="kualalumpur" />
+            <img :src="stateArr[0].stateImg" alt="kualalumpur" />
             <p>吉隆坡</p>
           </li>
           <li>
@@ -95,6 +95,24 @@ import Nav from "../components/Nav.vue";
 
 export default {
   name: "Index",
+  data() {
+    return {
+      stateId: this.$route.query.stateId,
+      state: {},
+      stateArr: [],
+    };
+  },
+  created() {
+    //根据orderTypeId查询商家信息
+    this.$axios
+      .post("StateController/listState")
+      .then((response) => {
+        this.stateArr = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  },
   components: {
     Nav,
   },
@@ -157,5 +175,8 @@ export default {
 
 .wrapper .carousel .card li p {
   padding: 1vw 2vw;
+}
+
+.wrapper .carousel .card li img {
 }
 </style>
