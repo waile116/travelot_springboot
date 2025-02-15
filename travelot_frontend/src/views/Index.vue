@@ -4,22 +4,11 @@
     <ul class="carousel">
       <li>
         <p>马来西亚热门州属</p>
-        <ul class="card">
-          <li>
-            <img :src="stateArr[0].stateImg" alt="kualalumpur" />
-            <p>吉隆坡</p>
-          </li>
-          <li>
-            <img src="" alt="penang" />
-            <p>槟城</p>
-          </li>
-          <li>
-            <img src="" alt="johor" />
-            <p>柔佛</p>
-          </li>
-          <li>
-            <img src="" alt="pahang" />
-            <p>彭亨</p>
+        <ul class="card" ref="scrollContainer">
+          <li v-for="item in stateArr" @click="">
+            <img :src="item.stateImg" alt="kualalumpur" />
+            <p class="title">{{ item.name }}</p>
+            <p class="desc">{{ item.desc }}</p>
           </li>
         </ul>
       </li>
@@ -116,6 +105,17 @@ export default {
   components: {
     Nav,
   },
+  mounted() {
+    //horizontal scroll
+    const container = this.$refs.scrollContainer;
+    if (container) {
+      const handleWheel = (e) => {
+        e.preventDefault();
+        container.scrollLeft += e.deltaY;
+      };
+      container.addEventListener("wheel", handleWheel); //listen for mouse wheel event and execute handleWheel when detected
+    }
+  },
 };
 </script>
 
@@ -140,16 +140,32 @@ export default {
 .wrapper .carousel .card {
   display: flex;
   justify-content: flex-start;
-  flex-wrap: wrap;
+  overflow-x: scroll; /*make overflow scrollable*/
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory; /*automatically move to snap point*/
+  padding-bottom: 1.5vw;
+}
+
+/* hide scrollbar */
+.wrapper .carousel .card::-webkit-scrollbar {
+  background-color: transparent;
+  height: 10px;
+}
+.wrapper .carousel .card::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--color-text);
 }
 
 .wrapper .carousel .card li {
+  scroll-snap-align: start; /*snap at start of elements*/
+  flex: 0 0 auto; /*grow/shrink/basis */
   margin: 2vw 2vw 0 0;
+  padding-bottom: 1vw;
   height: 25vw;
   width: 20vw;
   border-radius: 15px;
   box-shadow: 1px 3px 3px #c3c3c3;
-  border: solid 1px #f7f7f7;
+  border: solid 1px #d6d6d6;
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -173,10 +189,27 @@ export default {
   transform: translateX(0);
 }
 
-.wrapper .carousel .card li p {
-  padding: 1vw 2vw;
+.wrapper .carousel .card li img {
+  height: 60%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;
+  transition: transform 0.3s ease-in-out;
 }
 
-.wrapper .carousel .card li img {
+.wrapper .carousel .card li:hover img {
+  transform: scale(1.1);
+}
+
+.wrapper .carousel .card li p {
+  padding: 1vw 2vw 0;
+}
+
+.wrapper .carousel .card li .title {
+  font-size: 1.5vw;
+}
+
+.wrapper .carousel .card li .desc {
+  font-size: 1vw;
 }
 </style>
