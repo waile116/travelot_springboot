@@ -5,10 +5,13 @@
       <li>
         <p>马来西亚热门州属</p>
         <ul class="card" ref="scrollContainer">
+          <i class="fa fa-chevron-left"></i>
+          <i class="fa fa-chevron-right"></i>
           <li v-for="item in stateArr" @click="">
-            <img :src="item.stateImg" alt="kualalumpur" />
+            <img :src="item.stateImg" />
             <p class="title">{{ item.name }}</p>
             <p class="desc">{{ item.desc }}</p>
+            <i class="fa fa-chevron-right"></i>
           </li>
         </ul>
       </li>
@@ -108,28 +111,71 @@ export default {
   mounted() {
     //horizontal scroll
     const container = this.$refs.scrollContainer;
-    if (container) {
-      const handleWheel = (e) => {
-        e.preventDefault();
-        container.scrollLeft += e.deltaY;
-      };
-      container.addEventListener("wheel", handleWheel); //listen for mouse wheel event and execute handleWheel when detected
+    const rightArrow = document.querySelector(
+      ".wrapper .carousel .fa-chevron-right"
+    );
+    const leftArrow = document.querySelector(
+      ".wrapper .carousel .fa-chevron-left"
+    );
+    if (rightArrow && leftArrow) {
+      rightArrow.addEventListener("click", () => {
+        container.scrollBy({ left: 600, behavior: "smooth" });
+      });
+
+      leftArrow.addEventListener("click", () => {
+        container.scrollBy({ left: -600, behavior: "smooth" });
+      });
     }
   },
 };
 </script>
 
 <style scoped>
+.wrapper {
+  position: relative;
+}
+
 .wrapper .carousel {
   display: flex;
   flex-direction: column;
 }
 
+/* carousel container*/
 .wrapper .carousel > li {
-  padding: 2vw 2vw 0 4vw;
+  margin: 1.5vw 4vw 0 4vw;
 }
 
-.wrapper .carousel > li > p {
+/* carousel arrow */
+.wrapper .carousel .fa-chevron-right,
+.wrapper .carousel .fa-chevron-left {
+  position: absolute;
+  top: 17%;
+  padding: 0.8vw 1vw;
+  font-size: 2vw;
+  color: var(--color-text);
+  background-color: white;
+  box-shadow: 1px 2px 4px #c3c3c3;
+  z-index: 2;
+  border-radius: 10vw;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+.wrapper .carousel .fa-chevron-left {
+  left: 0;
+  margin-left: 2vw;
+}
+.wrapper .carousel .fa-chevron-right {
+  right: 0;
+  margin-right: 2vw;
+}
+.wrapper .carousel .fa-chevron-right:hover,
+.wrapper .carousel .fa-chevron-left:hover {
+  color: white;
+  background-color: var(--color-blue1);
+}
+
+/* title */
+.wrapper .carousel p {
   font-size: 2vw;
 }
 
@@ -137,13 +183,14 @@ export default {
   margin-bottom: 2vw;
 }
 
+/* card container */
 .wrapper .carousel .card {
   display: flex;
   justify-content: flex-start;
   overflow-x: scroll; /*make overflow scrollable*/
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory; /*automatically move to snap point*/
-  padding-bottom: 1.5vw;
+  padding-bottom: 0.5vw;
 }
 
 /* hide scrollbar */
@@ -151,27 +198,24 @@ export default {
   background-color: transparent;
   height: 10px;
 }
-.wrapper .carousel .card::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: var(--color-text);
-}
 
+/* each individual card */
 .wrapper .carousel .card li {
   scroll-snap-align: start; /*snap at start of elements*/
   flex: 0 0 auto; /*grow/shrink/basis */
-  margin: 2vw 2vw 0 0;
+  margin: 2vw 1vw 0 1vw;
   padding-bottom: 1vw;
   height: 25vw;
-  width: 20vw;
+  width: 21vw;
   border-radius: 15px;
-  box-shadow: 1px 3px 3px #c3c3c3;
-  border: solid 1px #d6d6d6;
+  box-shadow: 3px 3px 3px #c3c3c3;
   cursor: pointer;
   position: relative;
   z-index: 1;
   overflow: hidden;
 }
 
+/* background transition*/
 .wrapper .carousel .card li::before {
   content: "";
   position: absolute;
@@ -181,10 +225,9 @@ export default {
   transition: transform 0.2s ease-in-out;
   height: 100%;
   width: 100%;
-  background-color: #f7f7f7;
+  background-color: var(--color-blue1);
   z-index: -1;
 }
-
 .wrapper .carousel .card li:hover::before {
   transform: translateX(0);
 }
@@ -202,14 +245,39 @@ export default {
 }
 
 .wrapper .carousel .card li p {
-  padding: 1vw 2vw 0;
+  padding: 1vw 1.5vw 0;
 }
 
+/*text and arrow transition*/
 .wrapper .carousel .card li .title {
   font-size: 1.5vw;
 }
-
 .wrapper .carousel .card li .desc {
   font-size: 1vw;
+}
+.wrapper .carousel .card li .title,
+.wrapper .carousel .card li .desc {
+  position: relative;
+  color: var(--color-text);
+  transition: color 0.2s ease-in-out;
+}
+.wrapper .carousel .card li .fa-chevron-right {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  right: 0;
+  font-size: 1.25vw;
+  padding: 1vw 1.5vw;
+  color: var(--color-text);
+  background-color: transparent;
+  box-shadow: 0 0 0;
+  margin-right: 0;
+  transition: color 0.2s ease-in-out;
+}
+.wrapper .carousel .card li:hover .title,
+.wrapper .carousel .card li:hover .desc,
+.wrapper .carousel .card li:hover .fa-chevron-right {
+  background-color: transparent;
+  color: white;
 }
 </style>

@@ -5,6 +5,7 @@ public class State{
         private String name;
         private String description;
         private String stateimg;
+        private String region;
 
     public Integer getId() {
         return id;
@@ -36,4 +37,13 @@ public class State{
     public void setStateImg(String stateimg) {
         this.stateimg = stateimg;
     }
+
+    public String getRegion() {
+        return region;
+    }
+    public void setRegion() {
+        this.region = region;
+    }
+
+
 }
