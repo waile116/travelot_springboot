@@ -7,10 +7,10 @@
         <ul class="card" ref="scrollContainer">
           <i class="fa fa-chevron-left"></i>
           <i class="fa fa-chevron-right"></i>
-          <li v-for="item in stateArr" @click="">
-            <img :src="item.stateImg" />
-            <p class="title">{{ item.name }}</p>
-            <p class="desc">{{ item.desc }}</p>
+          <li v-for="state in stateArr" @click="toStateInfo(state.stateId)">
+            <img :src="state.stateImg" />
+            <p class="title">{{ state.name }}</p>
+            <p class="desc">{{ state.desc }}</p>
             <i class="fa fa-chevron-right"></i>
           </li>
         </ul>
@@ -89,15 +89,12 @@ export default {
   name: "Index",
   data() {
     return {
-      stateId: this.$route.query.stateId,
-      state: {},
       stateArr: [],
     };
   },
   created() {
-    //根据orderTypeId查询商家信息
     this.$axios
-      .post("StateController/listState")
+      .get("StateController/listState")
       .then((response) => {
         this.stateArr = response.data;
       })
@@ -127,6 +124,11 @@ export default {
       });
     }
   },
+  methods: {
+    toStateInfo(id) {
+      this.$router.push({ path: "/stateInfo", query: { id: id } });
+    },
+  },
 };
 </script>
 
@@ -135,21 +137,18 @@ export default {
   position: relative;
 }
 
+/*carousel container*/
 .wrapper .carousel {
   display: flex;
   flex-direction: column;
-}
-
-/* carousel container*/
-.wrapper .carousel > li {
-  margin: 1.5vw 4vw 0 4vw;
+  margin: 1.5vw 4vw 0;
 }
 
 /* carousel arrow */
 .wrapper .carousel .fa-chevron-right,
 .wrapper .carousel .fa-chevron-left {
   position: absolute;
-  top: 17%;
+  top: 16%;
   padding: 0.8vw 1vw;
   font-size: 2vw;
   color: var(--color-text);
@@ -190,7 +189,6 @@ export default {
   overflow-x: scroll; /*make overflow scrollable*/
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory; /*automatically move to snap point*/
-  padding-bottom: 0.5vw;
 }
 
 /* hide scrollbar */
@@ -203,7 +201,7 @@ export default {
 .wrapper .carousel .card li {
   scroll-snap-align: start; /*snap at start of elements*/
   flex: 0 0 auto; /*grow/shrink/basis */
-  margin: 2vw 1vw 0 1vw;
+  margin: 1vw;
   padding-bottom: 1vw;
   height: 25vw;
   width: 21vw;

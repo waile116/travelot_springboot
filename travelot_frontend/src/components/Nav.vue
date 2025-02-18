@@ -32,7 +32,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1vw 4vw;
+  padding: 0 4vw;
   background-color: var(--color-blue1);
 }
 
@@ -41,7 +41,7 @@ export default {
 }
 
 .wrapper .left img {
-  object-fit: cover;
+  object-fit: contain;
   width: 10vw;
   padding-right: 2vw;
 }

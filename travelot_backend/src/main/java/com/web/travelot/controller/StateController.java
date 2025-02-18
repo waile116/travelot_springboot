@@ -3,6 +3,7 @@ package com.web.travelot.controller;
 import com.web.travelot.po.State;
 import com.web.travelot.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +20,8 @@ public class StateController {
         return stateService.listState();
     };
 
-    @RequestMapping("/getStateById")
-    public State getStateById(Integer stateId) throws Exception{
+    @RequestMapping("/getStateById/{stateId}")
+    public State getStateById(@PathVariable("stateId") Integer stateId) throws Exception{
         return stateService.getStateById(stateId);
     };
 }

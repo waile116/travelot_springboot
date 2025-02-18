@@ -37,7 +37,7 @@
 import Nav from "../components/Nav.vue";
 
 export default {
-  name: "Index",
+  name: "StateList",
   data() {
     return {
       stateId: this.$route.query.stateId,
@@ -78,16 +78,14 @@ export default {
   position: relative;
 }
 
-/*carousel container*/
 .wrapper .carousel {
   display: flex;
   flex-direction: column;
-  padding: 0 2vw 2vw 4vw;
+  margin: 1.5vw 2vw 0 4vw;
 }
 
 /* title */
 .wrapper .carousel > p {
-  padding-top: 1.5vw;
   font-size: 2vw;
 }
 
@@ -95,8 +93,11 @@ export default {
 .wrapper .carousel .card {
   display: flex;
   justify-content: flex-start;
-  padding-bottom: 0.5vw;
   flex-wrap: wrap;
+}
+
+.wrapper .carousel .card:last-child {
+  margin-bottom: 2vw;
 }
 
 /* hide scrollbar */
@@ -108,7 +109,7 @@ export default {
 /* each individual card */
 .wrapper .carousel .card li {
   flex: 0 0 auto; /*grow/shrink/basis */
-  margin: 2vw 2vw 0 0;
+  margin: 1vw 2vw 1vw 0;
   padding-bottom: 1vw;
   height: 25vw;
   width: 21vw;
