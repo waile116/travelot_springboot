@@ -2,30 +2,32 @@
   <div class="wrapper">
     <Nav></Nav>
     <div class="carousel">
-      <p>西海岸州属</p>
+      <div class="region">
+        <!-- :class is vue's class binding, when selected region matches, it will render  class "active"-->
+        <p
+          @click="selectedRegion = 'west coast'"
+          :class="{ active: selectedRegion === 'west coast' }"
+        >
+          西海岸
+        </p>
+        <p
+          @click="selectedRegion = 'east coast'"
+          :class="{ active: selectedRegion === 'east coast' }"
+        >
+          东海岸
+        </p>
+        <p
+          @click="selectedRegion = 'east'"
+          :class="{ active: selectedRegion === 'east' }"
+        >
+          东马
+        </p>
+      </div>
       <ul class="card">
-        <li v-for="item in isWestCoast" @click="">
-          <img :src="item.stateImg" />
-          <p class="title">{{ item.name }}</p>
-          <p class="desc">{{ item.desc }}</p>
-          <i class="fa fa-chevron-right"></i>
-        </li>
-      </ul>
-      <p>东海岸州属</p>
-      <ul class="card">
-        <li v-for="item in isEastCoast" @click="">
-          <img :src="item.stateImg" />
-          <p class="title">{{ item.name }}</p>
-          <p class="desc">{{ item.desc }}</p>
-          <i class="fa fa-chevron-right"></i>
-        </li>
-      </ul>
-      <p>东马州属</p>
-      <ul class="card">
-        <li v-for="item in isEast" @click="">
-          <img :src="item.stateImg" />
-          <p class="title">{{ item.name }}</p>
-          <p class="desc">{{ item.desc }}</p>
+        <li v-for="state in filterState" @click="toStateInfo(state.stateId)">
+          <img :src="state.stateImg" alt="state image" />
+          <p class="title">{{ state.name }}</p>
+          <p class="desc">{{ state.desc }}</p>
           <i class="fa fa-chevron-right"></i>
         </li>
       </ul>
@@ -40,6 +42,7 @@ export default {
   name: "StateList",
   data() {
     return {
+      selectedRegion: "west coast", //default
       stateId: this.$route.query.stateId,
       state: {},
       stateArr: [],
@@ -60,6 +63,11 @@ export default {
     Nav,
   },
   computed: {
+    filterState() {
+      return this.stateArr.filter(
+        (state) => state.region === this.selectedRegion
+      );
+    },
     isWestCoast() {
       return this.stateArr.filter((item) => item.region === "west coast");
     },
@@ -70,6 +78,11 @@ export default {
       return this.stateArr.filter((item) => item.region === "east");
     },
   },
+  methods: {
+    toStateInfo(id) {
+      this.$router.push({ path: "/stateInfo", query: { id: id } });
+    },
+  },
 };
 </script>
 
@@ -77,7 +90,6 @@ export default {
 .wrapper {
   position: relative;
 }
-
 .wrapper .carousel {
   display: flex;
   flex-direction: column;
@@ -85,8 +97,17 @@ export default {
 }
 
 /* title */
-.wrapper .carousel > p {
+.wrapper .carousel .region {
+  display: flex;
+  font-size: 1.5vw;
+  color: var(--color-text2);
+  align-items: center;
+}
+
+.wrapper .carousel .region .active {
+  display: flex;
   font-size: 2vw;
+  color: var(--color-text);
 }
 
 /* card container */
@@ -98,12 +119,6 @@ export default {
 
 .wrapper .carousel .card:last-child {
   margin-bottom: 2vw;
-}
-
-/* hide scrollbar */
-.wrapper .carousel .card::-webkit-scrollbar {
-  background-color: transparent;
-  height: 10px;
 }
 
 /* each individual card */
@@ -120,8 +135,50 @@ export default {
   z-index: 1;
   overflow: hidden;
 }
+.wrapper .carousel .card li p {
+  padding: 1vw 1.5vw 0;
+}
 
-/* background transition*/
+/* hide scrollbar */
+.wrapper .carousel .card::-webkit-scrollbar {
+  background-color: transparent;
+  height: 10px;
+}
+
+/* title transition*/
+.wrapper .carousel .region p {
+  margin: 0 3vw 1vw 0.1vw;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+}
+.wrapper .carousel .region p:hover {
+  transform: scale(1.1);
+}
+
+.wrapper .carousel .region p::before,
+.wrapper .carousel .region .active::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0%;
+  transform: translateX(-100%) translateY(100%) scale(0);
+  transition: transform 0.3s ease-in-out;
+  height: 0.2vw;
+  width: 110%;
+  border-radius: 2px;
+  background-color: var(--color-text2);
+}
+
+.wrapper .carousel .region .active::before {
+  background-color: var(--color-text);
+}
+
+.wrapper .carousel .region p:hover::before {
+  transform: translateX(-5%) translateY(100%);
+}
+
+/* card background transition*/
 .wrapper .carousel .card li::before {
   content: "";
   position: absolute;
@@ -150,16 +207,13 @@ export default {
   transform: scale(1.1);
 }
 
-.wrapper .carousel .card li p {
-  padding: 1vw 1.5vw 0;
-}
-
-/*text and arrow transition*/
+/* card text and arrow transition */
 .wrapper .carousel .card li .title {
   font-size: 1.5vw;
 }
 .wrapper .carousel .card li .desc {
   font-size: 1vw;
+  font-weight: 500;
 }
 .wrapper .carousel .card li .title,
 .wrapper .carousel .card li .desc {

@@ -12,6 +12,10 @@ public class AttractionServiceImpl implements AttractionService{
     private AttractionMapper attractionMapper;
 
     @Override
+    public List<Attraction> listAttractionRandom(){
+        return attractionMapper.listAttractionRandom();
+    };
+    @Override
     public List<Attraction> listAttractionById(Integer stateId){
         return attractionMapper.listAttractionById(stateId);
     };

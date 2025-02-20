@@ -2,19 +2,49 @@
   <div class="wrapper">
     <Nav></Nav>
     <ul class="carousel">
-      <li>
+      <li class="attraction">
         <p>{{ state.name }}热门景点</p>
         <ul class="card" ref="scrollContainer">
           <i class="fa fa-chevron-left"></i>
           <i class="fa fa-chevron-right"></i>
-          <li
-            v-for="attraction in attractionArr"
-            @click="toStateInfo(attraction.stateId)"
-          >
+          <li v-for="attraction in attractionArr" @click="">
             <img :src="attraction.attrImg" />
             <p class="title">{{ attraction.name }}</p>
-            <p class="desc">{{ attraction.desc }}</p>
-            <i class="fa fa-chevron-right"></i>
+            <div class="rating">
+              评分
+              <p class="score">{{ attraction.rating }}</p>
+              /5
+            </div>
+            <div class="ticket">
+              <span v-if="attraction.price !== 0">门票</span>
+              <p class="price">
+                {{ attraction.price === 0 ? "免费" : `¥${attraction.price}` }}
+              </p>
+              <span v-if="attraction.price !== 0">起</span>
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="hotel">
+        <p>{{ state.name }}热门酒店</p>
+        <ul class="card" ref="scrollContainer">
+          <i class="fa fa-chevron-left"></i>
+          <i class="fa fa-chevron-right"></i>
+          <li v-for="hotel in hotelArr" @click="">
+            <img :src="hotel.hotelImg" />
+            <p class="title">{{ hotel.name }}</p>
+            <div class="rating">
+              评分
+              <p class="score">{{ hotel.rating }}</p>
+              /5
+            </div>
+            <div class="ticket">
+              <span v-if="hotel.price !== 0">门票</span>
+              <p class="price">
+                {{ hotel.price === 0 ? "免费" : `¥${hotel.price}` }}
+              </p>
+              <span v-if="hotel.price !== 0">起</span>
+            </div>
           </li>
         </ul>
       </li>
@@ -32,6 +62,7 @@ export default {
       stateId: this.$route.query.id,
       state: {},
       attractionArr: [],
+      hotelArr: [],
     };
   },
   created() {
@@ -45,11 +76,21 @@ export default {
         console.error(error);
       });
 
-    //get attraction list with stateid
+    //get attraction list with stateId
     this.$axios
       .get("AttractionController/listAttractionById/" + this.stateId)
       .then((response) => {
         this.attractionArr = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    //get hotel list with stateId
+    this.$axios
+      .get("HotelController/listHotelById/" + this.stateId)
+      .then((response) => {
+        this.hotelArr = response.data;
       })
       .catch((error) => {
         console.error(error);
@@ -139,19 +180,13 @@ export default {
   scroll-snap-type: x mandatory; /*automatically move to snap point*/
 }
 
-/* hide scrollbar */
-.wrapper .carousel .card::-webkit-scrollbar {
-  background-color: transparent;
-  height: 10px;
-}
-
 /* each individual card */
 .wrapper .carousel .card li {
   scroll-snap-align: start; /*snap at start of elements*/
   flex: 0 0 auto; /*grow/shrink/basis */
-  margin: 1vw;
+  margin: 1vw 2vw 1vw 0;
   padding-bottom: 1vw;
-  height: 25vw;
+  height: 20vw;
   width: 21vw;
   border-radius: 15px;
   box-shadow: 3px 3px 3px #c3c3c3;
@@ -161,7 +196,56 @@ export default {
   overflow: hidden;
 }
 
-/* background transition*/
+.wrapper .carousel .card li div {
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5vw 1.5vw 0;
+  font-size: 1vw;
+  line-height: 0.8;
+  font-weight: 500;
+}
+
+.wrapper .carousel .card li .title {
+  padding: 0.5vw 1.5vw 0;
+  font-size: 1.5vw;
+}
+
+.wrapper .carousel .card li .ticket {
+  position: absolute;
+  top: auto;
+  right: 0;
+  bottom: 0;
+  padding: 1vw 1.5vw;
+}
+
+.wrapper .carousel .card li .rating .score {
+  font-size: 1.25vw;
+}
+
+.wrapper .carousel .card li .ticket .price {
+  font-size: 1.5vw;
+  font-weight: 700;
+}
+
+.wrapper .carousel .card li .rating .score,
+.wrapper .carousel .card li .ticket .price {
+  padding: 0 0.25vw;
+}
+
+/* hide scrollbar */
+.wrapper .carousel .card::-webkit-scrollbar {
+  background-color: transparent;
+  height: 10px;
+}
+
+/* card background transition*/
+.wrapper .carousel .card li img {
+  height: 60%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;
+  transition: transform 0.3s ease-in-out;
+}
 .wrapper .carousel .card li::before {
   content: "";
   position: absolute;
@@ -177,52 +261,31 @@ export default {
 .wrapper .carousel .card li:hover::before {
   transform: translateX(0);
 }
-
-.wrapper .carousel .card li img {
-  height: 60%;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 15px 15px 0 0;
-  transition: transform 0.3s ease-in-out;
-}
-
 .wrapper .carousel .card li:hover img {
   transform: scale(1.1);
 }
 
-.wrapper .carousel .card li p {
-  padding: 1vw 1.5vw 0;
-}
-
-/*text and arrow transition*/
-.wrapper .carousel .card li .title {
-  font-size: 1.5vw;
-}
-.wrapper .carousel .card li .desc {
-  font-size: 1vw;
+/* card text and arrow transition*/
+.wrapper .carousel .card li div {
+  position: relative;
+  color: var(--color-text2);
+  transition: color 0.2s ease-in-out;
 }
 .wrapper .carousel .card li .title,
-.wrapper .carousel .card li .desc {
+.wrapper .carousel .card li .rating .score {
   position: relative;
   color: var(--color-text);
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .card li .fa-chevron-right {
-  position: absolute;
-  top: auto;
-  bottom: 0;
-  right: 0;
-  font-size: 1.25vw;
-  padding: 1vw 1.5vw;
-  color: var(--color-text);
-  background-color: transparent;
-  box-shadow: 0 0 0;
-  margin-right: 0;
+.wrapper .carousel .card li .ticket .price {
+  position: relative;
+  color: var(--color-text3);
   transition: color 0.2s ease-in-out;
 }
 .wrapper .carousel .card li:hover .title,
-.wrapper .carousel .card li:hover .desc,
-.wrapper .carousel .card li:hover .fa-chevron-right {
+.wrapper .carousel .card li:hover div,
+.wrapper .carousel .card li:hover .rating .score,
+.wrapper .carousel .card li:hover .ticket .price {
   background-color: transparent;
   color: white;
 }

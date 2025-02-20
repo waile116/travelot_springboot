@@ -15,6 +15,11 @@ public class AttractionController {
     @Autowired
     private AttractionService attractionService;
 
+    @RequestMapping("/listAttractionRandom")
+    public List<Attraction> listAttractionRandom() throws Exception{
+        return attractionService.listAttractionRandom();
+    };
+
     @RequestMapping("/listAttractionById/{stateId}")
     public List<Attraction> listAttractionById(@PathVariable("stateId") Integer stateId) throws Exception{
         return attractionService.listAttractionById(stateId);

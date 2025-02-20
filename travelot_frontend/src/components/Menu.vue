@@ -69,7 +69,7 @@ p::before {
   left: 0%;
   transform: translateX(-100%) translateY(100%) scale(0);
   transition: transform 0.3s ease-in-out;
-  height: 2px;
+  height: 0.2vw;
   width: 130%;
   border-radius: 2px;
   background-color: white;
