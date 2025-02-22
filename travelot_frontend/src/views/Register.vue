@@ -28,11 +28,7 @@
               />
             </li>
             <li>
-              <input
-                type="password"
-                v-model="userName"
-                placeholder="用户名称"
-              />
+              <input type="text" v-model="username" placeholder="用户名称" />
             </li>
             <li class="sex">
               <div class="title">性别：</div>
@@ -49,7 +45,7 @@
         </div>
         <div class="down">
           <div class="button-register">
-            <button @click="login">注 册</button>
+            <button @click="register">注 册</button>
           </div>
           <div class="tnc">
             <input type="checkbox" class="checkbox" />
@@ -70,6 +66,9 @@ export default {
     return {
       userId: "",
       password: "",
+      confirmPassword: "",
+      username: "",
+      userSex: 1,
       isError: false,
       errorMsg: "",
       frompath: "",
@@ -84,11 +83,23 @@ export default {
         path: "/login",
       });
     },
-    login() {
-      this.isError = false;
-
-      // show error message
-      this.errorMsg = "";
+    // check if userId is already registered
+    checkUserId() {
+      this.$axios
+        .get(`UserController/getUserCountById/${this.userId}`)
+        .then((response) => {
+          if (response.data.result > 0) {
+            this.userId = ""; //reset userId
+            this.isError = true;
+            this.errorMsg = "此手机号码已存在";
+          }
+        });
+    },
+    // register user
+    register() {
+      console.log(this.userId);
+      console.log(this.username);
+      console.log(this.password);
       if (this.userId == "") {
         this.isError = true;
         this.errorMsg = "请输入手机号码";
@@ -96,31 +107,30 @@ export default {
       }
       if (this.password == "") {
         this.isError = true;
-        this.errorMsg = "密码不能为空";
+        this.errorMsg = "请输入密码";
         return;
       }
-
-      //登录请求
-      let url =
-        "UserController/getUserByIdByPass/" + this.userId + "/" + this.password;
+      if (this.password != this.confirmPassword) {
+        this.isError = true;
+        this.errorMsg = "密码不一致";
+        return;
+      }
+      if (this.username == "") {
+        this.isError = true;
+        this.errorMsg = "请输入用户名";
+        return;
+      }
+      //update user table through backend
       this.$axios
-        .get(url)
+        .post(
+          `UserController/saveUser/${this.userId}/${this.password}/${this.username}/${this.userSex}`
+        )
         .then((response) => {
-          let user = response.data.result;
-          console.log("user", user);
-          if (user == null) {
-            alert("用户名或密码不正确！");
+          if (response.data.result > 0) {
+            alert("注册成功");
+            this.$router.push("/login");
           } else {
-            //sessionstorage有容量限制，为了防止数据溢出，所以不将userImg数据放入session中
-            user.userImg = "";
-            this.$setSessionStorage("user", user);
-            if (this.frompath == "/register") {
-              this.$router.push({
-                path: "/index",
-              });
-            } else {
-              this.$router.go(-1);
-            }
+            alert("注册失败");
           }
         })
         .catch((error) => {
@@ -199,7 +209,7 @@ export default {
 .wrapper .register .box {
   height: 100%;
   width: 30vw;
-  border-radius: 15px;
+  border-radius: 1vw;
   box-shadow: 3px 3px 3px #c3c3c3;
   border: 1px solid #c3c3c3;
   box-sizing: border-box;
@@ -228,7 +238,7 @@ export default {
   width: 100%;
   box-sizing: border-box;
   padding: 1.5vw 1vw;
-  border-radius: 8px;
+  border-radius: 0.5vw;
 
   font-size: 1vw;
   border: 1px solid #c3c3c3;
@@ -246,6 +256,7 @@ export default {
 }
 .wrapper .register .box .form .sex .select input {
   margin: 0 0.5vw 0 1vw;
+  width: 1.5vw;
   cursor: pointer;
   accent-color: var(--color-text);
 }
@@ -288,7 +299,7 @@ export default {
   background-color: var(--color-orange);
   border: none;
   outline: none;
-  border-radius: 8px;
+  border-radius: 0.5vw;
 
   font-size: 1.5vw;
   font-weight: bold;
@@ -307,6 +318,7 @@ export default {
 }
 .wrapper .register .box .tnc .checkbox {
   cursor: pointer;
+  width: 1vw;
   margin: 0 0.5vw 0 0;
 }
 .wrapper .register .box .tnc .text {

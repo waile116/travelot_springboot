@@ -51,10 +51,17 @@ export default {
       password: "",
       isError: false,
       errorMsg: "",
-      frompath: "",
+      prePath: "", //previous page url
     };
   },
   methods: {
+    // invoked before this page instances are created
+    // next() allow page to continue create instance
+    beforeRouteEnter(to, from, next) {
+      next((thisPage) => {
+        thisPage.prePath = from.path; //get previous page url
+      });
+    },
     toIndex() {
       this.$router.push({ path: "/index" });
     },
@@ -63,6 +70,7 @@ export default {
         path: "/register",
       });
     },
+    // login user
     login() {
       this.isError = false;
 
@@ -75,25 +83,27 @@ export default {
       }
       if (this.password == "") {
         this.isError = true;
-        this.errorMsg = "密码不能为空";
+        this.errorMsg = "请输入密码";
         return;
       }
 
-      //登录请求
-      let url =
-        "UserController/getUserByIdByPass/" + this.userId + "/" + this.password;
+      // get user id from backend
       this.$axios
-        .get(url)
+        .get(`UserController/getUserByIdPass/${this.userId}/${this.password}`)
         .then((response) => {
           let user = response.data.result;
-          console.log("user", user);
+          console.log(user);
           if (user == null) {
-            alert("用户名或密码不正确！");
+            this.isError = true;
+            this.errorMsg = "用户名或密码不正确";
+            this.userId = "";
+            this.password = "";
           } else {
-            //sessionstorage有容量限制，为了防止数据溢出，所以不将userImg数据放入session中
+            //prevent data overflow in sessionStorage, so don't put userImg
             user.userImg = "";
             this.$setSessionStorage("user", user);
-            if (this.frompath == "/register") {
+            // if user come from register page, redirect to index
+            if (this.prePath == "/register") {
               this.$router.push({
                 path: "/index",
               });
@@ -255,7 +265,7 @@ export default {
   background-color: var(--color-orange);
   border: none;
   outline: none;
-  border-radius: 8px;
+  border-radius: 0.5vw;
 
   font-size: 1.5vw;
   font-weight: bold;

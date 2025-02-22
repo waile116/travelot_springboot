@@ -78,7 +78,7 @@ export default {
 
     //get attraction list with stateId
     this.$axios
-      .get("AttractionController/listAttractionById/" + this.stateId)
+      .get(`AttractionController/listAttractionById/${this.stateId}`)
       .then((response) => {
         this.attractionArr = response.data;
       })
@@ -88,7 +88,7 @@ export default {
 
     //get hotel list with stateId
     this.$axios
-      .get("HotelController/listHotelById/" + this.stateId)
+      .get(`HotelController/listHotelById/${this.stateId}`)
       .then((response) => {
         this.hotelArr = response.data;
       })

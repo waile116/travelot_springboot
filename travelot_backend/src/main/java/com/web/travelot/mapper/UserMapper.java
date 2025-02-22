@@ -1,0 +1,17 @@
+package com.web.travelot.mapper;
+
+import com.web.travelot.po.User;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+@Mapper
+public interface UserMapper {
+    @Insert("insert into user values(#{userId},#{username},#{password},null,NOW(),#{userSex},NOW())")
+    public int saveUser(User user);
+    @Select("select * from user where userId=#{userId} and password = #{password}")
+    public User getUserByIdPass(User user);
+    @Select("select count(*) from user where userId=#{userId}")
+    public int getUserCountById(String userId);
+}
