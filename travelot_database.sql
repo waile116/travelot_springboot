@@ -371,8 +371,10 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `userimg` mediumtext,
+  `user_img` mediumtext,
   `create_t` datetime DEFAULT NULL,
+  `sex` int(11) NOT NULL DEFAULT '1' COMMENT '用户性别（1：男； 0：女）',
+  `update_t` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -395,4 +397,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-20 17:02:03
+-- Dump completed on 2025-02-22 16:16:09

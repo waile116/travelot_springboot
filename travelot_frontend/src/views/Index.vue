@@ -166,7 +166,7 @@ export default {
   padding-bottom: 1vw;
   height: 25vw;
   width: 21vw;
-  border-radius: 15px;
+  border-radius: 1vw;
   box-shadow: 3px 3px 3px #c3c3c3;
   cursor: pointer;
   position: relative;
@@ -231,7 +231,7 @@ export default {
   height: 60%;
   width: 100%;
   object-fit: cover;
-  border-radius: 15px 15px 0 0;
+  border-radius: 1vw 1vw 0 0;
   transition: transform 0.3s ease-in-out;
 }
 

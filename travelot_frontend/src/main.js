@@ -16,7 +16,7 @@ import {
   removeLocalStorage,
 } from "./common.js";
 
-// axios base URL for server
+// axios base URL for backend server
 axios.defaults.baseURL = "http://localhost:8080/travelot/";
 
 const app = createApp(App);

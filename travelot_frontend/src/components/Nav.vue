@@ -36,6 +36,7 @@ export default {
   background-color: var(--color-blue1);
 }
 
+/*************** left side *****************/
 .wrapper .left {
   display: flex;
 }
@@ -46,6 +47,7 @@ export default {
   padding-right: 2vw;
 }
 
+/*************** right side *****************/
 .wrapper .right {
   display: flex;
   align-items: center;
@@ -59,23 +61,6 @@ export default {
   cursor: pointer;
   margin: 0 2vw;
   position: relative;
-}
-
-.wrapper .right p::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0%;
-  transform: translateX(-100%) translateY(100%) scale(0);
-  transition: transform 0.3s ease-in-out;
-  height: 0.2vw;
-  width: 130%;
-  border-radius: 2px;
-  background-color: white;
-}
-
-.wrapper .right p:hover::before {
-  transform: translateX(-10%) translateY(100%);
 }
 
 .wrapper .right button {
@@ -93,6 +78,24 @@ export default {
   position: relative;
   overflow: hidden;
   z-index: 1;
+}
+
+/*************** right side button animation *****************/
+.wrapper .right p::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0%;
+  transform: translateX(-100%) translateY(100%) scale(0);
+  transition: transform 0.3s ease-in-out;
+  height: 0.2vw;
+  width: 130%;
+  border-radius: 2px;
+  background-color: white;
+}
+
+.wrapper .right p:hover::before {
+  transform: translateX(-10%) translateY(100%);
 }
 
 .wrapper .right button::before {
