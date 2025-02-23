@@ -5,8 +5,14 @@
       <Menu></Menu>
     </div>
     <div class="right">
-      <p @click="toLogin">登录</p>
-      <button @click="toRegister">注册</button>
+      <p v-if="!isLogin" @click="toLogin">登录</p>
+      <button v-if="!isLogin" @click="toRegister">注册</button>
+      <p v-if="isLogin" @click="toProfile">
+        {{ this.user.username }}<i class="fa fa-chevron-right"></i>
+      </p>
+      <p v-if="isLogin" @click="toOrderList">
+        我的订单<i class="fa fa-chevron-right"></i>
+      </p>
     </div>
   </div>
 </template>
@@ -15,6 +21,18 @@
 import Menu from "./Menu.vue";
 export default {
   name: "Nav",
+  data() {
+    return {
+      user: {},
+      isLogin: false,
+    };
+  },
+  created() {
+    this.user = this.$getSessionStorage("user");
+    if (this.user != null) {
+      this.isLogin = true;
+    }
+  },
   components: { Menu },
   methods: {
     toLogin() {
@@ -22,6 +40,12 @@ export default {
     },
     toRegister() {
       this.$router.push({ path: "/register" });
+    },
+    toProfile() {
+      this.$router.push({ path: "/profile" });
+    },
+    toOrderList() {
+      this.$router.push({ path: "/orderList" });
     },
   },
 };
@@ -54,6 +78,8 @@ export default {
 }
 
 .wrapper .right p {
+  display: flex;
+  align-items: center;
   color: white;
   font-family: var(--font-family);
   font-size: 1.5vw;
@@ -61,6 +87,11 @@ export default {
   cursor: pointer;
   margin: 0 2vw;
   position: relative;
+}
+
+.wrapper .right p i {
+  font-size: 1.5vw;
+  margin-left: 1vw;
 }
 
 .wrapper .right button {
@@ -73,7 +104,7 @@ export default {
 
   outline: none;
   border: none;
-  border-radius: 10px;
+  border-radius: 1vw;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -89,13 +120,13 @@ export default {
   transform: translateX(-100%) translateY(100%) scale(0);
   transition: transform 0.3s ease-in-out;
   height: 0.2vw;
-  width: 130%;
+  width: 110%;
   border-radius: 2px;
   background-color: white;
 }
 
 .wrapper .right p:hover::before {
-  transform: translateX(-10%) translateY(100%);
+  transform: translateX(-5%) translateY(100%);
 }
 
 .wrapper .right button::before {

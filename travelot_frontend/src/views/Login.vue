@@ -9,7 +9,7 @@
         <p @click="toIndex">首页</p>
       </div>
     </div>
-    <div class="login">
+    <div class="container">
       <div class="box">
         <div class="up">
           <p class="title">手机号码登录</p>
@@ -54,14 +54,14 @@ export default {
       prePath: "", //previous page url
     };
   },
+  // invoked before this page instances are created
+  // next() allow page to continue create instance
+  beforeRouteEnter(to, from, next) {
+    next((thisPage) => {
+      thisPage.prePath = from.path; //get previous page url
+    });
+  },
   methods: {
-    // invoked before this page instances are created
-    // next() allow page to continue create instance
-    beforeRouteEnter(to, from, next) {
-      next((thisPage) => {
-        thisPage.prePath = from.path; //get previous page url
-      });
-    },
     toIndex() {
       this.$router.push({ path: "/index" });
     },
@@ -73,7 +73,7 @@ export default {
     // login user
     login() {
       this.isError = false;
-
+      //console.log(this.prePath);
       // show error message
       this.errorMsg = "";
       if (this.userId == "") {
@@ -96,12 +96,15 @@ export default {
           if (user == null) {
             this.isError = true;
             this.errorMsg = "用户名或密码不正确";
+            console.log("Login failed");
+            // reset input
             this.userId = "";
             this.password = "";
           } else {
             //prevent data overflow in sessionStorage, so don't put userImg
             user.userImg = "";
             this.$setSessionStorage("user", user);
+            console.log("Login success");
             // if user come from register page, redirect to index
             if (this.prePath == "/register") {
               this.$router.push({
@@ -178,14 +181,14 @@ export default {
 }
 
 /*************** login box *****************/
-.wrapper .login {
+.wrapper .container {
   display: flex;
   justify-content: center;
   margin: 3vw;
   padding-bottom: 3vw;
 }
 
-.wrapper .login .box {
+.wrapper .container .box {
   height: 100%;
   width: 30vw;
   border-radius: 1vw;
@@ -199,24 +202,24 @@ export default {
   justify-content: space-between;
 }
 
-.wrapper .login .box {
+.wrapper .container .box .title {
   font-size: 1.5vw;
 }
 
 /*************** form box *****************/
-.wrapper .login .box .form {
+.wrapper .container .box .form {
   width: 100%;
   padding-top: 1vw;
 }
 
-.wrapper .login .box .form li {
+.wrapper .container .box .form li {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   padding: 1vw 0 0;
 }
 
-.wrapper .login .box .form li input {
+.wrapper .container .box .form li input {
   width: 100%;
   box-sizing: border-box;
   padding: 1.5vw 1vw;
@@ -228,7 +231,7 @@ export default {
 }
 
 /*************** error msg *****************/
-.wrapper .login .box .error {
+.wrapper .container .box .error {
   display: flex;
   align-items: center;
   margin: 1vw 0 0;
@@ -236,12 +239,12 @@ export default {
   height: 2vw;
   background-color: var(--color-orange2);
   border: 1px solid var(--color-orange);
-  border-radius: 5px;
+  border-radius: 0.5vw;
   color: var(--color-orange);
   font-weight: normal;
   font-size: 1vw;
 }
-.wrapper .login .box .error i {
+.wrapper .container .box .error i {
   display: flex;
   justify-content: center;
   width: 1vw;
@@ -254,12 +257,12 @@ export default {
 }
 
 /*************** login button *****************/
-.wrapper .login .box .button-login {
+.wrapper .container .box .button-login {
   width: 100%;
   padding: 2vw 0 1vw;
 }
 
-.wrapper .login .box .button-login button {
+.wrapper .container .box .button-login button {
   width: 100%;
   height: 4vw;
   background-color: var(--color-orange);
@@ -278,39 +281,27 @@ export default {
 }
 
 /*************** tnc button *****************/
-.wrapper .login .box .tnc {
+.wrapper .container .box .tnc {
   display: flex;
   align-items: center;
 }
-.wrapper .login .box .tnc .checkbox {
+.wrapper .container .box .tnc .checkbox {
   cursor: pointer;
   width: 1vw;
   margin: 0 0.5vw 0 0;
 }
-.wrapper .login .box .tnc .text {
+.wrapper .container .box .tnc .text {
   font-size: 1vw;
   font-weight: normal;
   color: var(--color-text);
 }
-.wrapper .login .box .tnc .text .highlight {
+.wrapper .container .box .tnc .text .highlight {
   color: var(--color-text2);
   cursor: pointer;
-}
-
-/*************** register button *****************/
-.wrapper .register {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  font-size: 1vw;
-  font-weight: normal;
-  cursor: pointer;
-  color: var(--color-text2);
-  margin: 0 2vw 2vw 0;
 }
 
 /*************** login button animation *****************/
-.wrapper .login .box .button-login button::before {
+.wrapper .container .box .button-login button::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -323,7 +314,7 @@ export default {
   z-index: -1;
 }
 
-.wrapper .login .box .button-login button:hover::before {
+.wrapper .container .box .button-login button:hover::before {
   transform: translateX(0);
 }
 

@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getUserCountById(String userId) {
+    public int getUserCountById(Integer userId) {
         return userMapper.getUserCountById(userId);
     }
 }

@@ -9,7 +9,7 @@
         <p @click="toIndex">首页</p>
       </div>
     </div>
-    <div class="register">
+    <div class="container">
       <div class="box">
         <div class="up">
           <p class="title">用户注册</p>
@@ -71,7 +71,6 @@ export default {
       userSex: 1,
       isError: false,
       errorMsg: "",
-      frompath: "",
     };
   },
   methods: {
@@ -97,9 +96,6 @@ export default {
     },
     // register user
     register() {
-      console.log(this.userId);
-      console.log(this.username);
-      console.log(this.password);
       if (this.userId == "") {
         this.isError = true;
         this.errorMsg = "请输入手机号码";
@@ -120,6 +116,22 @@ export default {
         this.errorMsg = "请输入用户名";
         return;
       }
+
+      this.$axios
+        .get(`UserController/getUserCountById/${this.userId}`)
+        .then((response) => {
+          if (response.data.result > 0) {
+            this.isError = true;
+            this.errorMsg = "此手机号码已存在";
+            console.log("Register failed");
+            //reset input
+            this.userId = "";
+            this.password = "";
+            this.confirmPassword = "";
+            this.username = "";
+          }
+        });
+
       //update user table through backend
       this.$axios
         .post(
@@ -127,6 +139,7 @@ export default {
         )
         .then((response) => {
           if (response.data.result > 0) {
+            console.log("Register success");
             alert("注册成功");
             this.$router.push("/login");
           } else {
@@ -199,14 +212,14 @@ export default {
 }
 
 /*************** register box *****************/
-.wrapper .register {
+.wrapper .container {
   display: flex;
   justify-content: center;
   margin: 3vw;
   padding-bottom: 3vw;
 }
 
-.wrapper .register .box {
+.wrapper .container .box {
   height: 100%;
   width: 30vw;
   border-radius: 1vw;
@@ -215,26 +228,30 @@ export default {
   box-sizing: border-box;
   padding: 2vw;
   position: relative;
-  font-size: 1.5vw;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+.wrapper .container .box .title {
+  font-size: 1.5vw;
+}
+
 /*************** form box *****************/
-.wrapper .register .box .form {
+.wrapper .container .box .form {
   width: 100%;
   padding-top: 1vw;
 }
 
-.wrapper .register .box .form li {
+.wrapper .container .box .form li {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   padding: 1vw 0 0;
 }
 
-.wrapper .register .box .form li input {
+.wrapper .container .box .form li input {
   width: 100%;
   box-sizing: border-box;
   padding: 1.5vw 1vw;
@@ -246,15 +263,15 @@ export default {
 }
 
 /*************** sex selection *****************/
-.wrapper .register .box .form .sex {
+.wrapper .container .box .form .sex {
   font-size: 1vw;
   font-weight: normal;
 }
-.wrapper .register .box .form .sex .select {
+.wrapper .container .box .form .sex .select {
   display: flex;
   align-items: center;
 }
-.wrapper .register .box .form .sex .select input {
+.wrapper .container .box .form .sex .select input {
   margin: 0 0.5vw 0 1vw;
   width: 1.5vw;
   cursor: pointer;
@@ -262,7 +279,7 @@ export default {
 }
 
 /*************** error msg *****************/
-.wrapper .register .box .error {
+.wrapper .container .box .error {
   display: flex;
   align-items: center;
   margin: 1vw 0 0;
@@ -270,12 +287,12 @@ export default {
   height: 2vw;
   background-color: var(--color-orange2);
   border: 1px solid var(--color-orange);
-  border-radius: 5px;
+  border-radius: 0.5vw;
   color: var(--color-orange);
   font-weight: normal;
   font-size: 1vw;
 }
-.wrapper .register .box .error i {
+.wrapper .container .box .error i {
   display: flex;
   justify-content: center;
   width: 1vw;
@@ -288,12 +305,12 @@ export default {
 }
 
 /*************** register button *****************/
-.wrapper .register .box .button-register {
+.wrapper .container .box .button-register {
   width: 100%;
   padding: 2vw 0 1vw;
 }
 
-.wrapper .register .box .button-register button {
+.wrapper .container .box .button-register button {
   width: 100%;
   height: 4vw;
   background-color: var(--color-orange);
@@ -312,39 +329,27 @@ export default {
 }
 
 /*************** tnc button *****************/
-.wrapper .register .box .tnc {
+.wrapper .container .box .tnc {
   display: flex;
   align-items: center;
 }
-.wrapper .register .box .tnc .checkbox {
+.wrapper .container .box .tnc .checkbox {
   cursor: pointer;
   width: 1vw;
   margin: 0 0.5vw 0 0;
 }
-.wrapper .register .box .tnc .text {
+.wrapper .container .box .tnc .text {
   font-size: 1vw;
   font-weight: normal;
   color: var(--color-text);
 }
-.wrapper .register .box .tnc .text .highlight {
+.wrapper .container .box .tnc .text .highlight {
   color: var(--color-text2);
   cursor: pointer;
-}
-
-/*************** login button *****************/
-.wrapper .login {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  font-size: 1vw;
-  font-weight: normal;
-  cursor: pointer;
-  color: var(--color-text2);
-  margin: 0 2vw 2vw 0;
 }
 
 /*************** register button animation *****************/
-.wrapper .register .box .button-register button::before {
+.wrapper .container .box .button-register button::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -357,7 +362,7 @@ export default {
   z-index: -1;
 }
 
-.wrapper .register .box .button-register button:hover::before {
+.wrapper .container .box .button-register button:hover::before {
   transform: translateX(0);
 }
 

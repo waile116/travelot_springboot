@@ -1,17 +1,17 @@
 package com.web.travelot.po;
 
 public class User {
-    private String id;
+    private Integer id;
     private String password;
     private String username;
     private int sex;
     private String user_img;
 
-    public String getUserId() {
+    public Integer getUserId() {
         return id;
     }
 
-    public void setUserId(String id) {
+    public void setUserId(Integer id) {
         this.id = id;
     }
 

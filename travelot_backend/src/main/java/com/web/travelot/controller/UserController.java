@@ -13,7 +13,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/saveUser/{userId}/{password}/{username}/{userSex}")
-    public CommonResult<Integer> saveUser(@PathVariable("userId") String userId,
+    public CommonResult<Integer> saveUser(@PathVariable("userId") Integer userId,
                                           @PathVariable("password") String password,
                                           @PathVariable("username") String username,
                                           @PathVariable("userSex") Integer userSex) throws Exception {
@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserByIdPass/{userId}/{password}")
-    public CommonResult<User> getUserByIdPass(@PathVariable("userId") String userId,
+    public CommonResult<User> getUserByIdPass(@PathVariable("userId") Integer userId,
                                               @PathVariable("password") String password) throws Exception {
         User user = new User();
         user.setUserId(userId);
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserCountById/{userId}")
-    public CommonResult<Integer> getUserCountById(@PathVariable("userId") String userId) throws Exception {
+    public CommonResult<Integer> getUserCountById(@PathVariable("userId") Integer userId) throws Exception {
         int result = userService.getUserCountById(userId);
         return new CommonResult<>(200, "success", result);
     }

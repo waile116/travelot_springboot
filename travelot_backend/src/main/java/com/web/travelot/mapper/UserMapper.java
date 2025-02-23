@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Update;
 public interface UserMapper {
     @Insert("insert into user values(#{userId},#{username},#{password},null,NOW(),#{userSex},NOW())")
     public int saveUser(User user);
-    @Select("select * from user where userId=#{userId} and password = #{password}")
+    @Select("select * from user where id=#{userId} and password = #{password}")
     public User getUserByIdPass(User user);
-    @Select("select count(*) from user where userId=#{userId}")
-    public int getUserCountById(String userId);
+    @Select("select count(*) from user where id=#{userId}")
+    public int getUserCountById(Integer userId);
 }

@@ -3,10 +3,13 @@ import Index from "../views/Index.vue";
 import Attraction from "../views/Attraction.vue";
 import Hotel from "../views/Hotel.vue";
 import Food from "../views/Food.vue";
+import Profile from "../views/Profile.vue";
+import OrderList from "../views/OrderList.vue";
 import StateList from "../views/StateList.vue";
 import StateInfo from "../views/StateInfo.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import NotFound from "../views/NotFound.vue";
 
 const routes = [
   {
@@ -35,6 +38,16 @@ const routes = [
     component: Food,
   },
   {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+  },
+  {
+    path: "/orderList",
+    name: "OrderList",
+    component: OrderList,
+  },
+  {
     path: "/stateList",
     name: "StateList",
     component: StateList,
@@ -53,6 +66,11 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register,
+  },
+  // catch all routes (show not found page)
+  {
+    path: "/:pathMatch(.*)*",
+    component: NotFound,
   },
 ];
 

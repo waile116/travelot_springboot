@@ -69,9 +69,6 @@ export default {
         console.error(error);
       });
   },
-  components: {
-    Nav,
-  },
   mounted() {
     //horizontal scroll
     const container = this.$refs.scrollContainer;
@@ -90,6 +87,9 @@ export default {
         container.scrollBy({ left: -600, behavior: "smooth" });
       });
     }
+  },
+  components: {
+    Nav,
   },
   methods: {
     toStateInfo(id) {
@@ -115,7 +115,7 @@ export default {
 .wrapper .carousel .fa-chevron-right,
 .wrapper .carousel .fa-chevron-left {
   position: absolute;
-  top: 16%;
+  top: 32%;
   padding: 0.8vw 1vw;
   font-size: 2vw;
   color: var(--color-text);
