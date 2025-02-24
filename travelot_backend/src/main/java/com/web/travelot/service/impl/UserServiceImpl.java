@@ -17,6 +17,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int updateUserImgById(User user){
+        return userMapper.updateUserImgById(user);
+    };
+    @Override
     public User getUserByIdPass(User user) {
         return userMapper.getUserByIdPass(user);
     }

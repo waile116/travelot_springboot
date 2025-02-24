@@ -6,6 +6,8 @@ import com.web.travelot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/UserController")
 public class UserController {
@@ -23,7 +25,19 @@ public class UserController {
         user.setPassword(password);
         user.setUserSex(userSex);
         int result = userService.saveUser(user);
-        return new CommonResult<>(200, "success", result);
+        return new CommonResult<>(200, "Register success", result);
+    }
+
+    @PostMapping("/updateUserImgById/{userId}")
+    public CommonResult<Integer> saveUser(@PathVariable("userId") Integer userId,
+                                          @RequestBody Map<String, String> requestBody) throws Exception {
+
+        String userImg = requestBody.get("userImg");
+        User user = new User();
+        user.setUserId(userId);
+        user.setUserImg(userImg);
+        int result = userService.updateUserImgById(user);
+        return new CommonResult<>(200, "UserImg update success", result);
     }
 
     @GetMapping("/getUserByIdPass/{userId}/{password}")

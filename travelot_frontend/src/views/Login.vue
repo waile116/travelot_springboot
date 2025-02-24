@@ -31,7 +31,7 @@
             <button @click="login">登 录</button>
           </div>
           <div class="tnc">
-            <input type="checkbox" class="checkbox" />
+            <input type="checkbox" id="checkbox" class="checkbox" />
             <p class="text">
               阅读并同意旅客之家的<span class="highlight">服务协议</span>
             </p>
@@ -86,13 +86,18 @@ export default {
         this.errorMsg = "请输入密码";
         return;
       }
+      if (!document.getElementById("checkbox").checked) {
+        this.isError = true;
+        this.errorMsg = "请阅读并同意旅客之家的服务协议";
+        return;
+      }
 
       // get user id from backend
       this.$axios
         .get(`UserController/getUserByIdPass/${this.userId}/${this.password}`)
         .then((response) => {
           let user = response.data.result;
-          console.log(user);
+
           if (user == null) {
             this.isError = true;
             this.errorMsg = "用户名或密码不正确";
@@ -101,8 +106,6 @@ export default {
             this.userId = "";
             this.password = "";
           } else {
-            //prevent data overflow in sessionStorage, so don't put userImg
-            user.userImg = "";
             this.$setSessionStorage("user", user);
             console.log("Login success");
             // if user come from register page, redirect to index

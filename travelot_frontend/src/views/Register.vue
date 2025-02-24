@@ -48,7 +48,7 @@
             <button @click="register">注 册</button>
           </div>
           <div class="tnc">
-            <input type="checkbox" class="checkbox" />
+            <input type="checkbox" class="checkbox" id="checkbox" />
             <p class="text">
               阅读并同意旅客之家的<span class="highlight">服务协议</span>
             </p>
@@ -116,6 +116,11 @@ export default {
         this.errorMsg = "请输入用户名";
         return;
       }
+      if (!document.getElementById("checkbox").checked) {
+        this.isError = true;
+        this.errorMsg = "请阅读并同意旅客之家的服务协议";
+        return;
+      }
 
       this.$axios
         .get(`UserController/getUserCountById/${this.userId}`)
@@ -139,8 +144,8 @@ export default {
         )
         .then((response) => {
           if (response.data.result > 0) {
-            console.log("Register success");
             alert("注册成功");
+            console.log(response.data.message);
             this.$router.push("/login");
           } else {
             alert("注册失败");
@@ -263,13 +268,15 @@ export default {
 }
 
 /*************** sex selection *****************/
-.wrapper .container .box .form .sex {
+.wrapper .container .box .form .sex .title {
   font-size: 1vw;
   font-weight: normal;
 }
 .wrapper .container .box .form .sex .select {
   display: flex;
   align-items: center;
+  font-size: 1vw;
+  font-weight: normal;
 }
 .wrapper .container .box .form .sex .select input {
   margin: 0 0.5vw 0 1vw;

@@ -6,6 +6,7 @@ public class User {
     private String username;
     private int sex;
     private String user_img;
+    private String alias;
 
     public Integer getUserId() {
         return id;
@@ -45,5 +46,13 @@ public class User {
 
     public void setUserImg(String user_img) {
         this.user_img = user_img;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }
