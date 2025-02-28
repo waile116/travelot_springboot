@@ -7,6 +7,7 @@ public class User {
     private int sex;
     private String user_img;
     private String alias;
+    private Boolean isAdmin;
 
     public Integer getUserId() {
         return id;
@@ -55,4 +56,9 @@ public class User {
     public void setAlias(String alias) {
         this.alias = alias;
     }
+
+    public Boolean getIsAdmin() {
+       return isAdmin;
+    }
+
 }

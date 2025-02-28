@@ -10,6 +10,7 @@ import StateInfo from "../views/StateInfo.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import NotFound from "../views/NotFound.vue";
+import Admin from "../views/Admin.vue";
 
 const routes = [
   {
@@ -66,6 +67,14 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register,
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: Admin,
+    meta: {
+      requiresAdmin: true,
+    },
   },
   // catch all routes (show not found page)
   {

@@ -5,8 +5,8 @@
       <li class="state">
         <p>马来西亚州属</p>
         <ul class="card" ref="scrollContainer">
-          <i class="fa fa-chevron-left"></i>
-          <i class="fa fa-chevron-right"></i>
+          <i class="fa fa-chevron-left disabled" ref="leftArrow"></i>
+          <i class="fa fa-chevron-right" ref="rightArrow"></i>
           <li v-for="state in stateArr" @click="toStateInfo(state.stateId)">
             <img :src="state.stateImg" />
             <p class="title">{{ state.name }}</p>
@@ -72,21 +72,41 @@ export default {
   mounted() {
     //horizontal scroll
     const container = this.$refs.scrollContainer;
-    const rightArrow = document.querySelector(
-      ".wrapper .carousel .fa-chevron-right"
-    );
-    const leftArrow = document.querySelector(
-      ".wrapper .carousel .fa-chevron-left"
-    );
-    if (rightArrow && leftArrow) {
-      rightArrow.addEventListener("click", () => {
-        container.scrollBy({ left: 600, behavior: "smooth" });
-      });
+    const rightArrow = this.$refs.rightArrow;
+    const leftArrow = this.$refs.leftArrow;
 
-      leftArrow.addEventListener("click", () => {
-        container.scrollBy({ left: -600, behavior: "smooth" });
+    const updateArrows = () => {
+      // if reach threshold, add or remove the label
+      if (container.scrollLeft <= container.scrollWidth * 0.004) {
+        leftArrow.classList.add("disabled");
+      } else {
+        leftArrow.classList.remove("disabled");
+      }
+      if (
+        container.scrollLeft + container.clientWidth * 1.45 >=
+        container.scrollWidth
+      ) {
+        rightArrow.classList.add("disabled");
+      } else {
+        rightArrow.classList.remove("disabled");
+      }
+    };
+
+    // update arrow when clicked
+    leftArrow.addEventListener("click", () => {
+      container.addEventListener("scroll", updateArrows);
+      container.scrollBy({
+        left: -container.clientWidth * 0.4,
+        behavior: "smooth",
       });
-    }
+    });
+    rightArrow.addEventListener("click", () => {
+      container.addEventListener("scroll", updateArrows);
+      container.scrollBy({
+        left: container.clientWidth * 0.4,
+        behavior: "smooth",
+      });
+    });
   },
   components: {
     Nav,
@@ -116,8 +136,10 @@ export default {
 .wrapper .carousel .fa-chevron-left {
   position: absolute;
   top: 32%;
-  padding: 0.8vw 1vw;
+  padding: 1vw;
   font-size: 2vw;
+  width: 2vw;
+  height: 2vw;
   color: var(--color-text);
   background-color: white;
   box-shadow: 1px 2px 4px #c3c3c3;
@@ -134,10 +156,14 @@ export default {
   right: 0;
   margin-right: 2vw;
 }
-.wrapper .carousel .fa-chevron-right:hover,
-.wrapper .carousel .fa-chevron-left:hover {
+.wrapper .carousel .fa-chevron-right:hover:not(.disabled), /* not(.disabled) means only apply when no disabled*/
+.wrapper .carousel .fa-chevron-left:hover:not(.disabled) {
   color: white;
   background-color: var(--color-blue1);
+}
+.wrapper .carousel .fa-chevron-right.disabled,
+.wrapper .carousel .fa-chevron-left.disabled {
+  cursor: not-allowed;
 }
 
 /* title */

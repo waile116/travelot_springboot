@@ -7,20 +7,20 @@
     <div class="right">
       <p v-if="!isLogin" @click="toLogin">登录</p>
       <button v-if="!isLogin" @click="toRegister">注册</button>
-      <p v-if="isLogin" @click="toProfile">
-        {{ this.user.username }}<i class="fa fa-chevron-right"></i>
-      </p>
-      <p v-if="isLogin" @click="toOrderList">
-        我的订单<i class="fa fa-chevron-right"></i>
+      <p v-if="isLogin" @click="toLogout">
+        退出登录<i class="fa fa-chevron-right"></i>
       </p>
     </div>
   </div>
+  Admin page
 </template>
 
 <script>
-import Menu from "./Menu.vue";
+import Nav from "../components/Nav.vue";
+
 export default {
-  name: "Nav",
+  name: "Admin",
+
   data() {
     return {
       user: {},
@@ -33,19 +33,15 @@ export default {
       this.isLogin = true;
     }
   },
-  components: { Menu },
+  components: {
+    Nav,
+  },
   methods: {
-    toLogin() {
-      this.$router.push({ path: "/login" });
-    },
-    toRegister() {
-      this.$router.push({ path: "/register" });
-    },
-    toProfile() {
-      this.$router.push({ path: "/profile" });
-    },
-    toOrderList() {
-      this.$router.push({ path: "/orderList" });
+    toLogout() {
+      this.$removeSessionStorage("user");
+      this.$router.push({
+        path: "/login",
+      });
     },
   },
 };

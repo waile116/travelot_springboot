@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
-    @Insert("insert into user values(#{userId},#{username},CONCAT('user_',#{username}),#{userSex},null,#{password},NOW(),NOW())")
+    @Insert("insert into user values(#{userId},#{username},CONCAT('user_',#{username}),#{userSex},null,#{password},NOW(),NOW(), 0)")
     public int saveUser(User user);
     @Update("update user set user_img = #{userImg}, update_t = NOW() where id = #{userId}")
     public int updateUserImgById(User user);

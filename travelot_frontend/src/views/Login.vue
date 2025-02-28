@@ -108,13 +108,19 @@ export default {
           } else {
             this.$setSessionStorage("user", user);
             console.log("Login success");
-            // if user come from register page, redirect to index
-            if (this.prePath == "/register") {
-              this.$router.push({
-                path: "/index",
-              });
+
+            // go to admin page
+            if (user.isAdmin) {
+              this.$router.push({ path: "/admin" });
             } else {
-              this.$router.go(-1);
+              // if user come from register page, redirect to index
+              if (this.prePath == "/register") {
+                this.$router.push({
+                  path: "/index",
+                });
+              } else {
+                this.$router.go(-1);
+              }
             }
           }
         })

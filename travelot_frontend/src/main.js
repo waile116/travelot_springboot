@@ -34,26 +34,38 @@ app.config.globalProperties.$removeLocalStorage = removeLocalStorage;
 
 // add router guard
 router.beforeEach((to, from, next) => {
-  const user = sessionStorage.getItem("user");
-  // redirect to login if the user is not authenticated to access vertain website
-  if (
-    !(
-      to.path === "/" ||
-      to.path === "/index" ||
-      to.path === "/stateList" ||
-      to.path === "/stateInfo" ||
-      to.path === "/attraction" ||
-      to.path === "/hotel" ||
-      to.path === "/food" ||
-      to.path === "/login" ||
-      to.path === "/register"
+  const user = JSON.parse(sessionStorage.getItem("user")); //convert JSON string to object
+
+  if (to.meta.requiresAdmin) {
+    // if user is admin, go to admin page
+    if (user && user.isAdmin) next();
+    else next("index");
+  } else {
+    // if user no login, go to login page
+    if (
+      !user &&
+      !(
+        to.path === "/" ||
+        to.path === "/index" ||
+        to.path === "/stateList" ||
+        to.path === "/stateInfo" ||
+        to.path === "/attraction" ||
+        to.path === "/hotel" ||
+        to.path === "/food" ||
+        to.path === "/login" ||
+        to.path === "/register"
+      )
     )
-  ) {
-    if (!user) {
-      return router.push("/login").then(() => location.reload());
-    }
+      next("login");
+    next();
   }
-  next();
+  // if (to.meta.requiresAdmin) {
+  //   // if user is admin, continue
+  //   if (user && user.isAdmin) next();
+  //   // if user is login but not admin, redirect to index
+  //   else if (user) next("/index");
+  // } else {
+  // }
 });
 
 app.use(router).mount("#app");

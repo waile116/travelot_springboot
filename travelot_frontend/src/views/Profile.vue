@@ -32,7 +32,6 @@
           </ul>
         </div>
         <ul class="tool">
-          <li @click="toOrderList"><p>我的订单</p></li>
           <li @click="toLogout"><p>退出登录</p></li>
         </ul>
       </div>
