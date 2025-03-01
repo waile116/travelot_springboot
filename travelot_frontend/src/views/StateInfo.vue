@@ -126,14 +126,14 @@ export default {
   position: relative;
 }
 
-/*carousel container*/
+/***************carousel container*****************/
 .wrapper .carousel {
   display: flex;
   flex-direction: column;
   margin: 1.5vw 4vw 0;
 }
 
-/* carousel arrow */
+/*************** carousel arrow *****************/
 .wrapper .carousel .fa-chevron-right,
 .wrapper .carousel .fa-chevron-left {
   position: absolute;
@@ -162,7 +162,7 @@ export default {
   background-color: var(--color-blue1);
 }
 
-/* title */
+/*************** title *****************/
 .wrapper .carousel p {
   font-size: 2vw;
 }
@@ -171,7 +171,7 @@ export default {
   margin-bottom: 2vw;
 }
 
-/* card container */
+/*************** card container *****************/
 .wrapper .carousel .card {
   display: flex;
   justify-content: flex-start;
@@ -180,7 +180,7 @@ export default {
   scroll-snap-type: x mandatory; /*automatically move to snap point*/
 }
 
-/* each individual card */
+/*************** each individual card *****************/
 .wrapper .carousel .card li {
   scroll-snap-align: start; /*snap at start of elements*/
   flex: 0 0 auto; /*grow/shrink/basis */
@@ -232,13 +232,13 @@ export default {
   padding: 0 0.25vw;
 }
 
-/* hide scrollbar */
+/*************** hide scrollbar *****************/
 .wrapper .carousel .card::-webkit-scrollbar {
   background-color: transparent;
   height: 10px;
 }
 
-/* card background transition*/
+/*************** card background transition*****************/
 .wrapper .carousel .card li img {
   height: 60%;
   width: 100%;
@@ -265,7 +265,7 @@ export default {
   transform: scale(1.1);
 }
 
-/* card text and arrow transition*/
+/*************** card text and arrow transition*****************/
 .wrapper .carousel .card li div {
   position: relative;
   color: var(--color-text2);

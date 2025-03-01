@@ -43,13 +43,10 @@ export default {
   data() {
     return {
       selectedRegion: "west coast", //default
-      stateId: this.$route.query.stateId,
-      state: {},
       stateArr: [],
     };
   },
   created() {
-    //根据orderTypeId查询商家信息
     this.$axios
       .post("StateController/listState")
       .then((response) => {
@@ -67,15 +64,6 @@ export default {
       return this.stateArr.filter(
         (state) => state.region === this.selectedRegion
       );
-    },
-    isWestCoast() {
-      return this.stateArr.filter((item) => item.region === "west coast");
-    },
-    isEastCoast() {
-      return this.stateArr.filter((item) => item.region === "east coast");
-    },
-    isEast() {
-      return this.stateArr.filter((item) => item.region === "east");
     },
   },
   methods: {
@@ -96,7 +84,7 @@ export default {
   margin: 1.5vw 2vw 0 4vw;
 }
 
-/* title */
+/*************** title *****************/
 .wrapper .carousel .region {
   display: flex;
   font-size: 1.5vw;
@@ -110,7 +98,7 @@ export default {
   color: var(--color-text);
 }
 
-/* card container */
+/*************** card container *****************/
 .wrapper .carousel .card {
   display: flex;
   justify-content: flex-start;
@@ -121,7 +109,7 @@ export default {
   margin-bottom: 2vw;
 }
 
-/* each individual card */
+/*************** each individual card *****************/
 .wrapper .carousel .card li {
   flex: 0 0 auto; /*grow/shrink/basis */
   margin: 1vw 2vw 1vw 0;
@@ -139,13 +127,13 @@ export default {
   padding: 1vw 1.5vw 0;
 }
 
-/* hide scrollbar */
+/*************** hide scrollbar *****************/
 .wrapper .carousel .card::-webkit-scrollbar {
   background-color: transparent;
   height: 10px;
 }
 
-/* title transition*/
+/*************** title transition *****************/
 .wrapper .carousel .region p {
   margin: 0 3vw 1vw 0.1vw;
   cursor: pointer;
@@ -178,7 +166,7 @@ export default {
   transform: translateX(-5%) translateY(100%);
 }
 
-/* card background transition*/
+/*************** card background transition*****************/
 .wrapper .carousel .card li::before {
   content: "";
   position: absolute;
@@ -207,7 +195,7 @@ export default {
   transform: scale(1.1);
 }
 
-/* card text and arrow transition */
+/*************** card text and arrow transition *****************/
 .wrapper .carousel .card li .title {
   font-size: 1.5vw;
 }
