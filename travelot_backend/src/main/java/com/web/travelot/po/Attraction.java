@@ -6,7 +6,7 @@ public class Attraction {
     private String name;
     private String description;
     private String location;
-    private Double price;
+    private String price;
     private String open_t;
     private Double rating;
     private String attr_img;
@@ -51,11 +51,11 @@ public class Attraction {
         this.location = location;
     }
 
-    public Double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -75,11 +75,11 @@ public class Attraction {
         this.rating = rating;
     }
 
-    public String getAttrImg() {
+    public String getAttractionImg() {
         return attr_img;
     }
 
-    public void setAttrImg(String attr_img) {
+    public void setAttractionImg(String attr_img) {
         this.attr_img = attr_img;
     }
 }

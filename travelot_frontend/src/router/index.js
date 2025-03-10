@@ -10,7 +10,8 @@ import StateInfo from "../views/StateInfo.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import NotFound from "../views/NotFound.vue";
-import Admin from "../views/Admin.vue";
+import Admin from "../views/admin/Admin.vue";
+import Insert from "../views/admin/Insert.vue";
 
 const routes = [
   {
@@ -72,6 +73,14 @@ const routes = [
     path: "/admin",
     name: "Admin",
     component: Admin,
+    meta: {
+      requiresAdmin: true,
+    },
+  },
+  {
+    path: "/admin/insert",
+    name: "Insert",
+    component: Insert,
     meta: {
       requiresAdmin: true,
     },

@@ -210,7 +210,7 @@ export default {
   transition: color 0.2s ease-in-out;
 }
 
-/* tool background transition */
+/*************** tool background transition *****************/
 .wrapper .container .box .tool li::before {
   content: "";
   position: absolute;
@@ -227,7 +227,7 @@ export default {
   transform: translateX(-50%) scale(1);
 }
 
-/* tool text transition*/
+/*************** tool text transition*****************/
 .container .box .tool li:hover {
   background-color: transparent;
   color: white;

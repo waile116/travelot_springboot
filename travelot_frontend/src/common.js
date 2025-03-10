@@ -1,13 +1,9 @@
 //获取当前时间（XXXX-XX-XX）
 export function getCurDate() {
-  var now = new Date();
-  var year = now.getFullYear();
-  var month = now.getMonth() + 1;
-  var day = now.getDate();
-  month = month < 10 ? "0" + month : month;
-  day = day < 10 ? "0" + day : day;
-  return year + "-" + month + "-" + day;
+  var today = new Date();
+  return today.toISOString().split("T")[0];
 }
+
 //向sessionStorage中存储一个JSON对象
 export function setSessionStorage(keyStr, value) {
   sessionStorage.setItem(keyStr, JSON.stringify(value));

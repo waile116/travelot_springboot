@@ -26,7 +26,11 @@ body,
 #app {
   width: 100%;
   height: 100%;
-  font-family: "微软雅黑";
+  font-family: "Manrope";
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  color: var(--color-text);
 }
 
 ul,

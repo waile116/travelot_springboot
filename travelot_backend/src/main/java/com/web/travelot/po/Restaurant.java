@@ -1,6 +1,6 @@
 package com.web.travelot.po;
 
-public class Hotel {
+public class Restaurant {
     private Integer id;
     private Integer state_id;
     private String name;
@@ -9,13 +9,13 @@ public class Hotel {
     private String price;
     private String open_t;
     private Double rating;
-    private String hotel_img;
+    private String restaurant_img;
 
-    public Integer getHotelId() {
+    public Integer getRestaurantId() {
         return id;
     }
 
-    public void setHotelId(Integer id) {
+    public void setRestaurantId(Integer id) {
         this.id = id;
     }
 
@@ -75,11 +75,11 @@ public class Hotel {
         this.rating = rating;
     }
 
-    public String getHotelImg() {
-        return hotel_img;
+    public String getRestaurantImg() {
+        return restaurant_img;
     }
 
-    public void setHotelImg(String hotel_img) {
-        this.hotel_img = hotel_img;
+    public void setRestaurantImg(String restaurant_img) {
+        this.restaurant_img = restaurant_img;
     }
 }

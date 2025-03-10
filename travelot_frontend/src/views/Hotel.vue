@@ -2,15 +2,43 @@
   <div class="wrapper">
     <Nav></Nav>
     <div class="carousel">
-      <div class="select">
-        <select v-model="state" @change="listHotel">
-          <option v-for="state in stateArr" :key="state.stateId" :value="state">
-            {{ state.name }}
-          </option>
-        </select>
-        <input type="date" v-model="date" />
-        <div>{{ date }}</div>
-      </div>
+      <ul class="select">
+        <li class="state">
+          <label
+            ><p>州属</p>
+            <select v-model="state" @change="listHotel">
+              <option
+                v-for="state in stateArr"
+                :key="state.stateId"
+                :value="state"
+              >
+                {{ state.name }}
+              </option>
+            </select>
+          </label>
+        </li>
+        <li class="date">
+          <label
+            ><p>入住日期</p>
+            <input
+              type="date"
+              v-model="startDate"
+              value="startDate"
+              @change="calNight"
+            />
+          </label>
+          <p>共 {{ night }} 晚</p>
+          <label>
+            <p>退房日期</p>
+            <input
+              type="date"
+              v-model="endDate"
+              :min="startDate"
+              @change="calNight"
+            />
+          </label>
+        </li>
+      </ul>
       <div class="hotel">
         <p>{{ state.name }}热门酒店</p>
         <ul class="card" ref="scrollContainer">
@@ -47,7 +75,9 @@ export default {
   name: "Hotel",
   data() {
     return {
-      date: "",
+      startDate: this.getCurDate(),
+      endDate: this.getNextDate(),
+      night: 1,
       stateArr: [],
       state: "",
       hotelArr: [],
@@ -70,8 +100,8 @@ export default {
     Nav,
   },
   methods: {
+    //get hotel list with stateId
     listHotel() {
-      //get hotel list with stateId
       this.$axios
         .get(`HotelController/listHotelById/${this.state.stateId}`)
         .then((response) => {
@@ -80,6 +110,35 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+
+    getCurDate() {
+      const tdy = new Date();
+      return tdy.toISOString().split("T")[0]; // Format YYYY-MM-DD
+    },
+
+    getNextDate() {
+      const tmr = new Date();
+      tmr.setDate(tmr.getDate() + 1);
+      return tmr.toISOString().split("T")[0]; // Format YYYY-MM-DD
+    },
+
+    calNight() {
+      if (this.startDate && this.endDate) {
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
+        const difference = (end - start) / (1000 * 60 * 60 * 24); // convert milliseconds to days
+        this.night = difference > 0 ? difference : 0;
+      }
+    },
+  },
+  watch: {
+    // auto update end date when start date change
+    startDate(newVal) {
+      const tmr = new Date(newVal);
+      tmr.setDate(tmr.getDate() + 1);
+      console.log("End date updated");
+      this.endDate = tmr.toISOString().split("T")[0];
     },
   },
 };
@@ -98,15 +157,60 @@ export default {
 /*************** selection tab *****************/
 .wrapper .carousel .select {
   display: flex;
+  margin-bottom: 1vw;
+}
+
+.wrapper .carousel .select li {
+  display: flex;
+  justify-content: space-between;
+  border: solid 1px black;
+  padding: 1vw 1.5vw;
+  height: 100%;
+  border-radius: 0.5vw;
+  border: 1px solid #c3c3c3;
+  outline: none;
+}
+
+.wrapper .carousel .select li label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wrapper .carousel .select p {
+  font-size: 1.2vw;
+  margin-right: 1vw;
+}
+
+.wrapper .carousel .select .state {
+  margin-right: 5vw;
+}
+
+.wrapper .carousel .select select,
+input {
+  font-size: 1.2vw;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 8vw;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+  width: 8vw;
 }
 
 /*************** title *****************/
 .wrapper .carousel p {
   font-size: 2vw;
-}
-
-.wrapper .carousel li:last-child {
-  margin-bottom: 2vw;
 }
 
 /*************** card container *****************/
@@ -120,7 +224,7 @@ export default {
 .wrapper .carousel .card li {
   display: flex;
   margin: 1vw 2vw 1vw 0;
-  height: 18vw;
+  height: 16vw;
   width: 100%;
   border-radius: 1vw;
   box-shadow: 3px 3px 3px #c3c3c3;
@@ -128,6 +232,10 @@ export default {
   position: relative;
   z-index: 1;
   overflow: hidden;
+}
+
+.wrapper .carousel .card li:last-child {
+  margin-bottom: 2vw;
 }
 
 .wrapper .carousel .card li .info {

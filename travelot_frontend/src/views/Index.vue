@@ -19,7 +19,7 @@
         <p>热门景点</p>
         <ul class="card">
           <li v-for="attraction in attractionArr" @click="">
-            <img :src="attraction.attrImg" />
+            <img :src="attraction.attractionImg" />
             <p class="title">{{ attraction.name }}</p>
             <div class="rating">
               评分

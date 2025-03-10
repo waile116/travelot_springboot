@@ -8,7 +8,7 @@
           <i class="fa fa-chevron-left"></i>
           <i class="fa fa-chevron-right"></i>
           <li v-for="attraction in attractionArr" @click="">
-            <img :src="attraction.attrImg" />
+            <img :src="attraction.attractionImg" />
             <p class="title">{{ attraction.name }}</p>
             <div class="rating">
               评分
