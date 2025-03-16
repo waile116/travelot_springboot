@@ -23,27 +23,25 @@
             <input
               type="date"
               v-model="startDate"
-              value="startDate"
+              :min="minStartDate"
               @change="calNight"
             />
           </label>
-          <p>共 {{ night }} 晚</p>
           <label>
             <p>退房日期</p>
             <input
               type="date"
               v-model="endDate"
-              :min="startDate"
+              :min="minEndDate"
               @change="calNight"
             />
           </label>
+          <p>共 {{ night }} 晚</p>
         </li>
       </ul>
       <div class="hotel">
         <p>{{ state.name }}热门酒店</p>
-        <ul class="card" ref="scrollContainer">
-          <!-- <i class="fa fa-chevron-left"></i>
-          <i class="fa fa-chevron-right"></i> -->
+        <ul class="card">
           <li v-for="hotel in hotelArr" @click="">
             <img :src="hotel.hotelImg" />
             <div class="info">
@@ -75,8 +73,10 @@ export default {
   name: "Hotel",
   data() {
     return {
+      minStartDate: this.getCurDate(),
       startDate: this.getCurDate(),
       endDate: this.getNextDate(),
+      minEndDate: this.getNextDate(),
       night: 1,
       stateArr: [],
       state: "",
@@ -137,7 +137,6 @@ export default {
     startDate(newVal) {
       const tmr = new Date(newVal);
       tmr.setDate(tmr.getDate() + 1);
-      console.log("End date updated");
       this.endDate = tmr.toISOString().split("T")[0];
     },
   },

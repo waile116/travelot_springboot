@@ -16,11 +16,11 @@
               /5
             </div>
             <div class="ticket">
-              <span v-if="attraction.price !== 0">门票</span>
+              <span v-if="attraction.price !== '0'">门票</span>
               <p class="price">
-                {{ attraction.price === 0 ? "免费" : `¥${attraction.price}` }}
+                {{ attraction.price === "0" ? "免费" : `¥${attraction.price}` }}
               </p>
-              <span v-if="attraction.price !== 0">起</span>
+              <span v-if="attraction.price !== '0'">起</span>
             </div>
           </li>
         </ul>
@@ -39,11 +39,11 @@
               /5
             </div>
             <div class="ticket">
-              <span v-if="hotel.price !== 0">门票</span>
+              <span>门票</span>
               <p class="price">
-                {{ hotel.price === 0 ? "免费" : `¥${hotel.price}` }}
+                {{ `¥${hotel.price}` }}
               </p>
-              <span v-if="hotel.price !== 0">起</span>
+              <span>起</span>
             </div>
           </li>
         </ul>

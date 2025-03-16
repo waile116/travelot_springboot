@@ -1,8 +1,10 @@
 package com.web.travelot.mapper;
 
 import com.web.travelot.po.Attraction;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -12,4 +14,13 @@ public interface AttractionMapper {
     public List<Attraction> listAttractionRandom();
     @Select("select * from attraction where state_id=#{stateId} order by id")
     public List<Attraction> listAttractionById(Integer stateId);
+    @Select("select * from attraction where id=#{attractionId}")
+    public Attraction getAttractionById(Integer attractionId);
+    @Insert("insert into attraction (state_id, name, description, location, price, open_t, rating, attr_img, create_t, update_t) values " +
+            "(#{stateId}, #{name}, #{desc}, #{location}, #{price}, #{openTime}, #{rating}, #{attractionImg}, NOW(), NOW())")
+    public int saveAttraction(Attraction attraction);
+    @Update("UPDATE attraction SET state_id=#{stateId}, name=#{name}, description=#{desc}, location=#{location}, " +
+            "price=#{price}, open_t=#{openTime}, rating=#{rating}, attr_img=#{attractionImg}, update_t=NOW() " +
+            "WHERE id=#{attractionId}")
+    public int updateAttraction(Attraction attraction);
 }

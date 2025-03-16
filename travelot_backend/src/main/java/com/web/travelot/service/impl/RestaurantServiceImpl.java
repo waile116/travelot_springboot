@@ -14,12 +14,25 @@ public class RestaurantServiceImpl implements RestaurantService {
     private RestaurantMapper restaurantMapper;
 
     @Override
+    public List<Restaurant> listRestaurantRandom(){
+        return restaurantMapper.listRestaurantRandom();
+    };
+    @Override
     public List<Restaurant> listRestaurantById(Integer stateId){
         return restaurantMapper.listRestaurantById(stateId);
     };
 
     @Override
+    public Restaurant getRestaurantById(Integer restaurantId){
+        return restaurantMapper.getRestaurantById(restaurantId);
+    };
+    @Override
     public int saveRestaurant(Restaurant restaurant){
-        return restaurantMapper.saveRestaurant(restaurant);
+        // if id exists, update, else save
+        if (restaurant.getRestaurantId() != null) {
+            return restaurantMapper.updateRestaurant(restaurant);
+        } else {
+            return restaurantMapper.saveRestaurant(restaurant);
+        }
     };
 }

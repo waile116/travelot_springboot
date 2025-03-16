@@ -4,9 +4,6 @@
       <div class="left">
         <img src="../../assets/logo.png" alt="logo" />
       </div>
-      <ul class="menu">
-        <li @click="toInsert">添加数据</li>
-      </ul>
       <div class="right">
         <p v-if="!isLogin" @click="toLogin">登录</p>
         <button v-if="!isLogin" @click="toRegister">注册</button>
@@ -16,6 +13,9 @@
       </div>
     </div>
     <div class="content">
+      <p class="insert" @click="toInsert">
+        添加数据<i class="fa fa-chevron-right"></i>
+      </p>
       <div class="category">
         <!-- :class is vue's class binding, when category matches, it will render  class "active"-->
         <p
@@ -55,27 +55,16 @@
 
       <div class="data">
         <ul class="card">
-          <li v-for="item in dataArr">
-            <img
-              :src="
-                category === 'attraction'
-                  ? item.attractionImg
-                  : category === 'hotel'
-                  ? item.hotelImg
-                  : item.restaurantImg
-              "
-            />
+          <li
+            v-for="item in dataArr"
+            @click="toUpdate(category, item[category + 'Id'])"
+          >
+            <img :src="item[category + 'Img']" />
             <table class="info">
               <tr>
                 <td style="width: 10%">id</td>
                 <td>
-                  {{
-                    category === "attraction"
-                      ? item.attractionId
-                      : category === "hotel"
-                      ? item.hotelId
-                      : item.restaurantId
-                  }}
+                  {{ item[category + "Id"] }}
                 </td>
               </tr>
               <tr>
@@ -143,6 +132,27 @@ export default {
       });
   },
   methods: {
+    // fetch data based on selected category
+    fetchData(category) {
+      // changing state and category will update this.state and this.category, and will list different category
+      this.category = category;
+
+      const url = `${
+        this.category.charAt(0).toUpperCase() + this.category.slice(1)
+      }Controller/list${
+        this.category.charAt(0).toUpperCase() + this.category.slice(1)
+      }ById/${this.state.stateId}`;
+
+      this.$axios
+        .get(url)
+        .then((response) => {
+          this.dataArr = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
     toLogout() {
       this.$removeSessionStorage("user");
       this.$router.push({
@@ -156,28 +166,8 @@ export default {
       });
     },
 
-    // fetch data based on selected category
-    fetchData(category) {
-      // changing state and category will update this.state and this.category, and will list different category
-      this.category = category;
-
-      let url = "";
-      if (category === "hotel") {
-        url = `HotelController/listHotelById/${this.state.stateId}`;
-      } else if (category === "attraction") {
-        url = `AttractionController/listAttractionById/${this.state.stateId}`;
-      } else if (category === "restaurant") {
-        url = `RestaurantController/listRestaurantById/${this.state.stateId}`;
-      }
-
-      this.$axios
-        .get(url)
-        .then((response) => {
-          this.dataArr = response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    toUpdate(category, id) {
+      this.$router.push({ path: "/admin/update", query: { category, id } });
     },
   },
 };
@@ -262,6 +252,19 @@ export default {
   margin: 1.5vw 4vw 0 4vw;
 }
 
+.wrapper .content .insert {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.5vw;
+}
+
+.wrapper .content .insert i {
+  align-items: center;
+  margin-left: 1vw;
+}
+
 /*************** category *****************/
 .wrapper .content .category {
   display: flex;
@@ -333,16 +336,17 @@ select {
 .wrapper .content .data .card li {
   display: flex;
   margin: 1vw 2vw 1vw 0;
-  height: 17vw;
+  height: 20vw;
   width: 100%;
   border-radius: 1vw;
   box-shadow: 3px 3px 3px #c3c3c3;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .wrapper .content .data .card li img {
   height: 100%;
-  width: 20vw;
+  width: 25vw;
   object-fit: cover;
   border-radius: 1vw 0 0 1vw;
 }

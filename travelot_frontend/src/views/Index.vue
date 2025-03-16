@@ -4,9 +4,9 @@
     <ul class="carousel">
       <li class="state">
         <p>马来西亚州属</p>
-        <ul class="card" ref="scrollContainer">
-          <i class="fa fa-chevron-left disabled" ref="leftArrow"></i>
-          <i class="fa fa-chevron-right" ref="rightArrow"></i>
+        <ul class="card" ref="c1">
+          <i class="fa fa-chevron-left disabled" id="l1" ref="l1"></i>
+          <i class="fa fa-chevron-right" id="r1" ref="r1"></i>
           <li v-for="state in stateArr" @click="toStateInfo(state.stateId)">
             <img :src="state.stateImg" />
             <p class="title">{{ state.name }}</p>
@@ -15,9 +15,11 @@
           </li>
         </ul>
       </li>
-      <li class="attraction">
+      <li class="content">
         <p>热门景点</p>
-        <ul class="card">
+        <ul class="card" ref="c2">
+          <i class="fa fa-chevron-left disabled" id="l2" ref="l2"></i>
+          <i class="fa fa-chevron-right" id="r2" ref="r2"></i>
           <li v-for="attraction in attractionArr" @click="">
             <img :src="attraction.attractionImg" />
             <p class="title">{{ attraction.name }}</p>
@@ -27,11 +29,56 @@
               /5
             </div>
             <div class="ticket">
-              <span v-if="attraction.price !== 0">门票</span>
+              <span v-if="attraction.price !== '0'">门票</span>
               <p class="price">
-                {{ attraction.price === 0 ? "免费" : `¥${attraction.price}` }}
+                {{ attraction.price === "0" ? "免费" : `¥${attraction.price}` }}
               </p>
-              <span v-if="attraction.price !== 0">起</span>
+              <span v-if="attraction.price !== '0'">起</span>
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="content">
+        <p>热门酒店</p>
+        <ul class="card" ref="c3">
+          <i class="fa fa-chevron-left disabled" id="l3" ref="l3"></i>
+          <i class="fa fa-chevron-right" id="r3" ref="r3"></i>
+          <li v-for="hotel in hotelArr" @click="">
+            <img :src="hotel.hotelImg" />
+            <p class="title">{{ hotel.name }}</p>
+            <div class="rating">
+              评分
+              <p class="score">{{ hotel.rating }}</p>
+              /5
+            </div>
+            <div class="ticket">
+              每晚
+              <p class="price">
+                {{ `¥${hotel.price}` }}
+              </p>
+              起
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="content">
+        <p>热门餐厅</p>
+        <ul class="card" ref="c4">
+          <i class="fa fa-chevron-left disabled" id="l4" ref="l4"></i>
+          <i class="fa fa-chevron-right" id="r4" ref="r4"></i>
+          <li v-for="restaurant in restaurantArr" @click="">
+            <img :src="restaurant.restaurantImg" />
+            <p class="title">{{ restaurant.name }}</p>
+            <div class="rating">
+              评分
+              <p class="score">{{ restaurant.rating }}</p>
+              /5
+            </div>
+            <div class="ticket">
+              人均
+              <p class="price">
+                {{ `¥${restaurant.price}` }}
+              </p>
             </div>
           </li>
         </ul>
@@ -47,8 +94,13 @@ export default {
   name: "Index",
   data() {
     return {
+      container: [],
+      leftArrow: [],
+      rightArrow: [],
       stateArr: [],
       attractionArr: [],
+      hotelArr: [],
+      restaurantArr: [],
     };
   },
   created() {
@@ -68,43 +120,74 @@ export default {
       .catch((error) => {
         console.error(error);
       });
+    this.$axios
+      .get("HotelController/listHotelRandom")
+      .then((response) => {
+        this.hotelArr = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    this.$axios
+      .get("RestaurantController/listRestaurantRandom")
+      .then((response) => {
+        this.restaurantArr = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
   mounted() {
-    //horizontal scroll
-    const container = this.$refs.scrollContainer;
-    const rightArrow = this.$refs.rightArrow;
-    const leftArrow = this.$refs.leftArrow;
+    //assign container and arrows into array
+    this.container = [
+      this.$refs.c1,
+      this.$refs.c2,
+      this.$refs.c3,
+      this.$refs.c4,
+    ];
 
-    const updateArrows = () => {
-      // if reach threshold, add or remove the label
-      if (container.scrollLeft <= container.scrollWidth * 0.004) {
-        leftArrow.classList.add("disabled");
-      } else {
-        leftArrow.classList.remove("disabled");
-      }
-      if (
-        container.scrollLeft + container.clientWidth * 1.45 >=
-        container.scrollWidth
-      ) {
-        rightArrow.classList.add("disabled");
-      } else {
-        rightArrow.classList.remove("disabled");
-      }
-    };
+    this.leftArrow = [
+      this.$refs.l1,
+      this.$refs.l2,
+      this.$refs.l3,
+      this.$refs.l4,
+    ];
 
-    // update arrow when clicked
-    leftArrow.addEventListener("click", () => {
-      container.addEventListener("scroll", updateArrows);
-      container.scrollBy({
-        left: -container.clientWidth * 0.4,
-        behavior: "smooth",
+    this.rightArrow = [
+      this.$refs.r1,
+      this.$refs.r2,
+      this.$refs.r3,
+      this.$refs.r4,
+    ];
+
+    // add event listener for each arrows, and update everytime
+    this.leftArrow.forEach((l, index) => {
+      l.addEventListener("click", () => {
+        this.container[index].scrollBy({
+          left: -this.container[index].clientWidth * 0.4,
+          behavior: "smooth",
+        });
+        setTimeout(() => {
+          this.container[index].addEventListener(
+            "scroll",
+            this.updateArrows(this.container[index], l, this.rightArrow[index])
+          );
+        }, 600);
       });
     });
-    rightArrow.addEventListener("click", () => {
-      container.addEventListener("scroll", updateArrows);
-      container.scrollBy({
-        left: container.clientWidth * 0.4,
-        behavior: "smooth",
+
+    this.rightArrow.forEach((r, index) => {
+      r.addEventListener("click", () => {
+        this.container[index].scrollBy({
+          left: this.container[index].clientWidth * 0.4,
+          behavior: "smooth",
+        });
+        setTimeout(() => {
+          this.container[index].addEventListener(
+            "scroll",
+            this.updateArrows(this.container[index], this.leftArrow[index], r)
+          );
+        }, 600);
       });
     });
   },
@@ -115,6 +198,20 @@ export default {
     toStateInfo(id) {
       this.$router.push({ path: "/stateInfo", query: { id: id } });
     },
+
+    updateArrows(c, l, r) {
+      // if reach threshold, add or remove the label
+      if (c.scrollLeft <= c.clientWidth * 0.01 + 1) {
+        l.classList.add("disabled");
+      } else {
+        l.classList.remove("disabled");
+      }
+      if (c.scrollLeft + c.clientWidth >= c.scrollWidth - 11) {
+        r.classList.add("disabled");
+      } else {
+        r.classList.remove("disabled");
+      }
+    },
   },
 };
 </script>
@@ -124,18 +221,17 @@ export default {
   position: relative;
 }
 
-/*carousel container*/
+/*************** carousel container *****************/
 .wrapper .carousel {
   display: flex;
   flex-direction: column;
   margin: 1.5vw 4vw 0;
 }
 
-/* carousel arrow */
+/*************** carousel arrow *****************/
 .wrapper .carousel .fa-chevron-right,
 .wrapper .carousel .fa-chevron-left {
   position: absolute;
-  top: 32%;
   padding: 1vw;
   font-size: 2vw;
   width: 2vw;
@@ -156,6 +252,22 @@ export default {
   right: 0;
   margin-right: 2vw;
 }
+.wrapper .carousel #l1,
+#r1 {
+  top: 18%;
+}
+.wrapper .carousel #l2,
+#r2 {
+  top: 42%;
+}
+.wrapper .carousel #l3,
+#r3 {
+  top: 64%;
+}
+.wrapper .carousel #l4,
+#r4 {
+  top: 86%;
+}
 .wrapper .carousel .fa-chevron-right:hover:not(.disabled), /* not(.disabled) means only apply when no disabled*/
 .wrapper .carousel .fa-chevron-left:hover:not(.disabled) {
   color: white;
@@ -166,7 +278,7 @@ export default {
   cursor: not-allowed;
 }
 
-/* title */
+/*************** title *****************/
 .wrapper .carousel p {
   font-size: 2vw;
 }
@@ -175,7 +287,7 @@ export default {
   margin-bottom: 2vw;
 }
 
-/* CARD COMMON STYLE*/
+/*************** STATE CARD *****************/
 .wrapper .carousel .card {
   display: flex;
   justify-content: flex-start;
@@ -184,7 +296,6 @@ export default {
   scroll-snap-type: x mandatory; /*automatically move to snap point*/
 }
 
-/* each individual card */
 .wrapper .carousel .card li {
   scroll-snap-align: start; /*snap at start of elements*/
   flex: 0 0 auto; /*grow/shrink/basis */
@@ -210,8 +321,8 @@ export default {
   font-weight: 500;
 }
 
-/* ATTRACTION CARD */
-.wrapper .carousel .attraction .card div {
+/*************** CONTENT CARD *****************/
+.wrapper .carousel .content .card div {
   display: flex;
   align-items: flex-end;
   padding: 0.5vw 1.5vw 0;
@@ -220,11 +331,11 @@ export default {
   font-weight: 500;
 }
 
-.wrapper .carousel .attraction .card li {
+.wrapper .carousel .content .card li {
   height: 20vw;
 }
 
-.wrapper .carousel .attraction .card li .ticket {
+.wrapper .carousel .content .card li .ticket {
   position: absolute;
   top: auto;
   right: 0;
@@ -232,27 +343,27 @@ export default {
   padding: 1vw 1.5vw;
 }
 
-.wrapper .carousel .attraction .card li .rating .score {
+.wrapper .carousel .content .card li .rating .score {
   font-size: 1.25vw;
 }
 
-.wrapper .carousel .attraction .card li .ticket .price {
+.wrapper .carousel .content .card li .ticket .price {
   font-size: 1.5vw;
   font-weight: 700;
 }
 
-.wrapper .carousel .attraction .card li .rating .score,
-.wrapper .carousel .attraction .card li .ticket .price {
+.wrapper .carousel .content .card li .rating .score,
+.wrapper .carousel .content .card li .ticket .price {
   padding: 0 0.25vw;
 }
 
-/* hide scrollbar */
+/*************** hide scrollbar *****************/
 .wrapper .carousel .card::-webkit-scrollbar {
   background-color: transparent;
   height: 10px;
 }
 
-/* card background transition */
+/*************** card background transition *****************/
 .wrapper .carousel .card li img {
   height: 60%;
   width: 100%;
@@ -280,8 +391,8 @@ export default {
   transform: scale(1.1);
 }
 
-/* card text and arrow transition*/
-.wrapper .carousel .attraction .card li div {
+/*************** card text and arrow transition*****************/
+.wrapper .carousel .content .card li div {
   position: relative;
   color: var(--color-text2);
   transition: color 0.2s ease-in-out;
@@ -293,7 +404,7 @@ export default {
   color: var(--color-text);
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .attraction .card li .ticket .price {
+.wrapper .carousel .content .card li .ticket .price {
   position: relative;
   color: var(--color-text3);
   transition: color 0.2s ease-in-out;

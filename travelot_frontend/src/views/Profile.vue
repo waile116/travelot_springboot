@@ -8,7 +8,7 @@
           <div class="photo">
             <img :src="user.userImg" alt="profile picture" />
             <label class="change">
-              <input type="file" @change="FileUpload" accept="image/*" />
+              <input type="file" @change="UploadImg" accept="image/*" />
               <i class="fa fa-pencil-square-o"></i>
             </label>
           </div>
@@ -56,7 +56,7 @@ export default {
     Nav,
   },
   methods: {
-    FileUpload(event) {
+    UploadImg(event) {
       const file = event.target.files[0]; //get first selected file
       if (!file) return;
 

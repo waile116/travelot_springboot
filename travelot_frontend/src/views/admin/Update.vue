@@ -8,27 +8,6 @@
       </div>
     </div>
     <div class="content">
-      <div class="category">
-        <!-- :class is vue's class binding, when category matches, it will render  class "active"-->
-        <p
-          :class="{ active: category === 'attraction' }"
-          @click="category = 'attraction'"
-        >
-          景点
-        </p>
-        <p
-          :class="{ active: category === 'hotel' }"
-          @click="category = 'hotel'"
-        >
-          酒店
-        </p>
-        <p
-          :class="{ active: category === 'restaurant' }"
-          @click="category = 'restaurant'"
-        >
-          餐厅
-        </p>
-      </div>
       <div class="photo">
         <img :src="data.img" />
         <label class="change">
@@ -66,20 +45,21 @@
           <td><input v-model="data.rating" type="text" /></td>
         </tr>
       </table>
-      <button @click="insertData">保存</button>
+      <button @click="updateData">保存</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Insert",
+  name: "Update",
 
   data() {
     return {
       user: {},
       isLogin: false,
-      category: "attraction",
+      category: this.$route.query["category"],
+      id: this.$route.query["id"],
       data: {
         stateId: "",
         name: "",
@@ -97,6 +77,20 @@ export default {
     if (this.user != null) {
       this.isLogin = true;
     }
+
+    const url = `${
+      this.category.charAt(0).toUpperCase() + this.category.slice(1)
+    }Controller/get${
+      this.category.charAt(0).toUpperCase() + this.category.slice(1)
+    }ById/${this.id}`;
+
+    this.$axios
+      .get(url)
+      .then((response) => {
+        this.data = response.data.result;
+        this.data.img = response.data.result[this.category + "Img"]; // give categoryImg to img to make it general
+      })
+      .catch((error) => console.error(error));
   },
   methods: {
     uploadImg(event) {
@@ -110,12 +104,13 @@ export default {
       };
     },
 
-    insertData() {
+    updateData() {
+      console.log(this.category !== "hotel");
       const url = `${
         this.category.charAt(0).toUpperCase() + this.category.slice(1)
       }Controller/save${
         this.category.charAt(0).toUpperCase() + this.category.slice(1)
-      }/-1/${this.data.stateId}/${this.data.name}/${this.data.desc}/${
+      }/${this.id}/${this.data.stateId}/${this.data.name}/${this.data.desc}/${
         this.data.location
       }/${this.data.price}/${
         this.category !== "hotel" ? this.data.openTime + "/" : ""
@@ -135,6 +130,13 @@ export default {
     toAdmin() {
       this.$router.push({
         path: "/admin",
+      });
+    },
+
+    toLogout() {
+      this.$removeSessionStorage("user");
+      this.$router.push({
+        path: "/login",
       });
     },
   },
@@ -180,25 +182,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   margin: 1.5vw 4vw 0 4vw;
-}
-
-/*************** category *****************/
-.wrapper .content .category {
-  display: flex;
-  font-size: 1.5vw;
-  color: var(--color-text2);
-  align-items: center;
-  margin-bottom: 1vw;
-}
-
-.wrapper .content .category p {
-  margin-right: 2vw;
-  cursor: pointer;
-}
-
-.wrapper .content .category .active {
-  font-size: 2vw;
-  color: var(--color-text);
 }
 
 /*************** photo box *****************/
