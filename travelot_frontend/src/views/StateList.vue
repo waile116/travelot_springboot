@@ -48,9 +48,9 @@ export default {
   },
   created() {
     this.$axios
-      .post("StateController/listState")
+      .get("StateController/listState")
       .then((response) => {
-        this.stateArr = response.data;
+        this.stateArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);

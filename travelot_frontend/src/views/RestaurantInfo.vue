@@ -8,7 +8,7 @@
 import Nav from "../components/Nav.vue";
 
 export default {
-  name: "Food",
+  name: "RestaurantInfo",
   components: {
     Nav,
   },

@@ -1,6 +1,7 @@
 package com.web.travelot.mapper;
 
 import com.web.travelot.po.Hotel;
+import com.web.travelot.po.Room;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -23,4 +24,7 @@ public interface HotelMapper {
             "price=#{price}, rating=#{rating}, hotel_img=#{hotelImg}, update_t=NOW() " +
             "WHERE id=#{hotelId}")
     public int updateHotel(Hotel hotel);
+
+    @Select("select * from room where hotel_id=#{hotelId} order by price")
+    public List<Room> listRoomById(Integer hotelId);
 }

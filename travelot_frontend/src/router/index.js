@@ -1,12 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Index from "../views/Index.vue";
-import Attraction from "../views/Attraction.vue";
-import Hotel from "../views/Hotel.vue";
-import Food from "../views/Food.vue";
-import Profile from "../views/Profile.vue";
-import OrderList from "../views/OrderList.vue";
 import StateList from "../views/StateList.vue";
 import StateInfo from "../views/StateInfo.vue";
+import AttractionList from "../views/AttractionList.vue";
+import AttractionInfo from "../views/AttractionInfo.vue";
+import HotelList from "../views/HotelList.vue";
+import HotelInfo from "../views/HotelInfo.vue";
+import RestaurantList from "../views/RestaurantList.vue";
+import RestaurantInfo from "../views/RestaurantInfo.vue";
+import Profile from "../views/Profile.vue";
+import OrderList from "../views/OrderList.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import NotFound from "../views/NotFound.vue";
@@ -26,19 +29,44 @@ const routes = [
     component: Index,
   },
   {
-    path: "/attraction",
-    name: "Attraction",
-    component: Attraction,
+    path: "/stateList",
+    name: "StateList",
+    component: StateList,
   },
   {
-    path: "/hotel",
-    name: "Hotel",
-    component: Hotel,
+    path: "/stateInfo",
+    name: "StateInfo",
+    component: StateInfo,
   },
   {
-    path: "/food",
-    name: "Food",
-    component: Food,
+    path: "/attractionList",
+    name: "AttractionList",
+    component: AttractionList,
+  },
+  {
+    path: "/attractionInfo",
+    name: "AttractionInfo",
+    component: AttractionInfo,
+  },
+  {
+    path: "/hotelList",
+    name: "HotelList",
+    component: HotelList,
+  },
+  {
+    path: "/hotelInfo",
+    name: "HotelInfo",
+    component: HotelInfo,
+  },
+  {
+    path: "/restaurantList",
+    name: "RestaurantList",
+    component: RestaurantList,
+  },
+  {
+    path: "/restaurantInfo",
+    name: "RestaurantInfo",
+    component: RestaurantInfo,
   },
   {
     path: "/profile",
@@ -49,16 +77,6 @@ const routes = [
     path: "/orderList",
     name: "OrderList",
     component: OrderList,
-  },
-  {
-    path: "/stateList",
-    name: "StateList",
-    component: StateList,
-  },
-  {
-    path: "/stateInfo",
-    name: "StateInfo",
-    component: StateInfo,
   },
   {
     path: "/login",

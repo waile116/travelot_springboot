@@ -24,17 +24,17 @@ export default {
     },
     toAttraction() {
       this.$router.push({
-        path: "/attraction",
+        path: "/attractionList",
       });
     },
     toHotel() {
       this.$router.push({
-        path: "/hotel",
+        path: "/hotelList",
       });
     },
     toFood() {
       this.$router.push({
-        path: "/food",
+        path: "/restaurantList",
       });
     },
   },

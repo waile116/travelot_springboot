@@ -4,6 +4,21 @@ export function getCurDate() {
   return today.toISOString().split("T")[0];
 }
 
+// update arrows for each container
+export function updateArrows(c, l, r) {
+  // if reach threshold, add or remove the label
+  if (c.scrollLeft <= c.clientWidth * 0.01 + 1) {
+    l.classList.add("disabled");
+  } else {
+    l.classList.remove("disabled");
+  }
+  if (c.scrollLeft + c.clientWidth >= c.scrollWidth - 11) {
+    r.classList.add("disabled");
+  } else {
+    r.classList.remove("disabled");
+  }
+}
+
 //向sessionStorage中存储一个JSON对象
 export function setSessionStorage(keyStr, value) {
   sessionStorage.setItem(keyStr, JSON.stringify(value));

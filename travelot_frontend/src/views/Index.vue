@@ -89,6 +89,7 @@
 
 <script>
 import Nav from "../components/Nav.vue";
+import { updateArrows } from "../common.js";
 
 export default {
   name: "Index",
@@ -107,7 +108,7 @@ export default {
     this.$axios
       .get("StateController/listState")
       .then((response) => {
-        this.stateArr = response.data;
+        this.stateArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -115,7 +116,7 @@ export default {
     this.$axios
       .get("AttractionController/listAttractionRandom")
       .then((response) => {
-        this.attractionArr = response.data;
+        this.attractionArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -123,7 +124,7 @@ export default {
     this.$axios
       .get("HotelController/listHotelRandom")
       .then((response) => {
-        this.hotelArr = response.data;
+        this.hotelArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -131,7 +132,7 @@ export default {
     this.$axios
       .get("RestaurantController/listRestaurantRandom")
       .then((response) => {
-        this.restaurantArr = response.data;
+        this.restaurantArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -170,7 +171,7 @@ export default {
         setTimeout(() => {
           this.container[index].addEventListener(
             "scroll",
-            this.updateArrows(this.container[index], l, this.rightArrow[index])
+            updateArrows(this.container[index], l, this.rightArrow[index])
           );
         }, 600);
       });
@@ -185,7 +186,7 @@ export default {
         setTimeout(() => {
           this.container[index].addEventListener(
             "scroll",
-            this.updateArrows(this.container[index], this.leftArrow[index], r)
+            updateArrows(this.container[index], this.leftArrow[index], r)
           );
         }, 600);
       });
@@ -197,20 +198,6 @@ export default {
   methods: {
     toStateInfo(id) {
       this.$router.push({ path: "/stateInfo", query: { id: id } });
-    },
-
-    updateArrows(c, l, r) {
-      // if reach threshold, add or remove the label
-      if (c.scrollLeft <= c.clientWidth * 0.01 + 1) {
-        l.classList.add("disabled");
-      } else {
-        l.classList.remove("disabled");
-      }
-      if (c.scrollLeft + c.clientWidth >= c.scrollWidth - 11) {
-        r.classList.add("disabled");
-      } else {
-        r.classList.remove("disabled");
-      }
     },
   },
 };

@@ -49,9 +49,9 @@ router.beforeEach((to, from, next) => {
         to.path === "/index" ||
         to.path === "/stateList" ||
         to.path === "/stateInfo" ||
-        to.path === "/attraction" ||
-        to.path === "/hotel" ||
-        to.path === "/food" ||
+        to.path === "/attractionList" ||
+        to.path === "/hotelList" ||
+        to.path === "/restaurantList" ||
         to.path === "/login" ||
         to.path === "/register"
       )

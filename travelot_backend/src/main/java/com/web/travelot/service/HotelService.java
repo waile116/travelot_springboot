@@ -1,5 +1,6 @@
 package com.web.travelot.service;
 import com.web.travelot.po.Hotel;
+import com.web.travelot.po.Room;
 
 import java.util.List;
 
@@ -8,5 +9,5 @@ public interface HotelService {
     public List<Hotel> listHotelById(Integer stateId);
     public Hotel getHotelById(Integer hotelId);
     public int saveHotel(Hotel hotel);
-
+    public List<Room> listRoomById(Integer hotelId);
 }

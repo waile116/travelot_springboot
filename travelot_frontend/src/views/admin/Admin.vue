@@ -121,7 +121,7 @@ export default {
 
     //get state with stateId
     this.$axios
-      .post("StateController/listState")
+      .get("StateController/listState")
       .then((response) => {
         this.stateArr = response.data;
         this.state = this.stateArr[0]; //default value

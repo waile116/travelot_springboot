@@ -42,21 +42,24 @@
       <div class="hotel">
         <p>{{ state.name }}热门酒店</p>
         <ul class="card">
-          <li v-for="hotel in hotelArr" @click="">
+          <li v-for="hotel in hotelArr" @click="toHotelInfo(hotel.hotelId)">
             <img :src="hotel.hotelImg" />
             <div class="info">
-              <p class="title">{{ hotel.name }}</p>
-              <div class="rating">
-                评分
-                <p class="score">{{ hotel.rating }}</p>
-                /5
+              <div class="header">
+                <p class="title">{{ hotel.name }}</p>
+                <div class="rating">
+                  <p>评分</p>
+                  <p class="score">{{ hotel.rating }}</p>
+                  <p>/5</p>
+                </div>
+                <div class="location">
+                  <i class="fa fa-map-marker"></i>
+                  <p>{{ hotel.location }}</p>
+                </div>
               </div>
-              <div class="ticket">
-                <span v-if="hotel.price !== 0">门票</span>
-                <p class="price">
-                  {{ hotel.price === 0 ? "免费" : `¥${hotel.price}` }}
-                </p>
-                <span v-if="hotel.price !== 0">起</span>
+              <div class="cost">
+                <p class="price">{{ `¥${hotel.price}` }}</p>
+                <p class="total">总额：{{ `¥${hotel.price * night}` }}</p>
               </div>
             </div>
           </li>
@@ -70,7 +73,7 @@
 import Nav from "../components/Nav.vue";
 
 export default {
-  name: "Hotel",
+  name: "HotelList",
   data() {
     return {
       minStartDate: this.getCurDate(),
@@ -86,9 +89,9 @@ export default {
   created() {
     //get state with stateId
     this.$axios
-      .post("StateController/listState")
+      .get("StateController/listState")
       .then((response) => {
-        this.stateArr = response.data;
+        this.stateArr = response.data.result;
         this.state = this.stateArr[0]; //default value
         this.listHotel(); // list hotel right after getting state info
       })
@@ -105,7 +108,7 @@ export default {
       this.$axios
         .get(`HotelController/listHotelById/${this.state.stateId}`)
         .then((response) => {
-          this.hotelArr = response.data;
+          this.hotelArr = response.data.result;
         })
         .catch((error) => {
           console.error(error);
@@ -130,6 +133,10 @@ export default {
         const difference = (end - start) / (1000 * 60 * 60 * 24); // convert milliseconds to days
         this.night = difference > 0 ? difference : 0;
       }
+    },
+
+    toHotelInfo(id) {
+      this.$router.push({ path: "/hotelInfo", query: { id: id } });
     },
   },
   watch: {
@@ -239,35 +246,53 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .wrapper .carousel .card li .info {
   flex: 3;
-  padding: 1vw 1.5vw;
+  padding: 1vw 2vw;
   display: flex;
   flex-direction: column;
-  font-size: 1vw;
+  justify-content: space-between;
   font-weight: 500;
 }
 
-.wrapper .carousel .card li .info .title {
+.wrapper .carousel .card li .info p {
+  font-size: 1vw;
+}
+
+.wrapper .carousel .card li .info .header .title {
   font-size: 1.5vw;
 }
 
-.wrapper .carousel .card li .info .rating,
-.ticket {
+.wrapper .carousel .card li .info .header .rating,
+.wrapper .carousel .card li .info .header .location {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  margin-top: 0.5vw;
 }
 
-.wrapper .carousel .card li .info .rating .score {
+.wrapper .carousel .card li .info .header .rating .score {
   font-size: 1.25vw;
 }
 
-.wrapper .carousel .card li .info .ticket .price {
+.wrapper .carousel .card li .info .header .location {
+  width: 30vw;
+}
+
+.wrapper .carousel .card li .info .header .location i {
+  font-size: 1.5vw;
+  margin-right: 0.8vw;
+}
+
+.wrapper .carousel .card li .info .cost .price {
   font-size: 1.5vw;
   font-weight: 700;
 }
 
-.wrapper .carousel .card li .rating .score,
-.wrapper .carousel .card li .ticket .price {
+.wrapper .carousel .card li .info .header .rating .score,
+.wrapper .carousel .card li .info .cost {
   padding: 0 0.25vw;
+}
+
+.wrapper .carousel .card li .info .cost {
+  align-self: flex-end;
 }
 
 /*************** hide scrollbar *****************/
@@ -305,26 +330,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /*************** card text and arrow transition*****************/
-.wrapper .carousel .card li div {
+.wrapper .carousel .card li div,
+.wrapper .carousel .card li .info .total {
   position: relative;
   color: var(--color-text2);
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .card li .title,
-.wrapper .carousel .card li .rating .score {
+.wrapper .carousel .card li .header .title,
+.wrapper .carousel .card li .header .rating .score {
   position: relative;
   color: var(--color-text);
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .card li .ticket .price {
+.wrapper .carousel .card li .info .price {
   position: relative;
   color: var(--color-text3);
   transition: color 0.2s ease-in-out;
 }
 .wrapper .carousel .card li:hover .title,
 .wrapper .carousel .card li:hover div,
-.wrapper .carousel .card li:hover .rating .score,
-.wrapper .carousel .card li:hover .ticket .price {
+.wrapper .carousel .card li:hover .info .rating .score,
+.wrapper .carousel .card li:hover .info .price,
+.wrapper .carousel .card li:hover .info .total {
   background-color: transparent;
   color: white;
 }

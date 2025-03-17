@@ -2,6 +2,7 @@ package com.web.travelot.controller;
 
 import com.web.travelot.po.CommonResult;
 import com.web.travelot.po.Hotel;
+import com.web.travelot.po.Room;
 import com.web.travelot.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +17,15 @@ public class HotelController {
     private HotelService hotelService;
 
     @RequestMapping("/listHotelRandom")
-    public List<Hotel> listHotelRandom() throws Exception{
-        return hotelService.listHotelRandom();
+    public CommonResult<List<Hotel>> listHotelRandom() throws Exception{
+        List<Hotel> result = hotelService.listHotelRandom();
+        return new CommonResult<>(200, "success", result);
     };
 
     @RequestMapping("/listHotelById/{stateId}")
-    public List<Hotel> listHotelById(@PathVariable("stateId") Integer stateId) throws Exception{
-        return hotelService.listHotelById(stateId);
+    public CommonResult<List<Hotel>> listHotelById(@PathVariable("stateId") Integer stateId) throws Exception{
+        List<Hotel> result = hotelService.listHotelById(stateId);
+        return new CommonResult<>(200, "success", result);
     };
 
     @RequestMapping("/getHotelById/{hotelId}")
@@ -55,4 +58,10 @@ public class HotelController {
         int result = hotelService.saveHotel(hotel);
         return new CommonResult<>(200, "Insert hotel success", result);
     }
+
+    @RequestMapping("/listRoomById/{hotelId}")
+    public CommonResult<List<Room>> listRoomById(@PathVariable("hotelId") Integer hotelId) throws Exception{
+        List<Room> result = hotelService.listRoomById(hotelId);
+        return new CommonResult<>(200, "success", result);
+    };
 }

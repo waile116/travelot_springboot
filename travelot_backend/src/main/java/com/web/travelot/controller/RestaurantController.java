@@ -16,12 +16,14 @@ public class RestaurantController {
     public RestaurantService restaurantService;
 
     @RequestMapping("/listRestaurantRandom")
-    public List<Restaurant> listRestaurantRandom() throws Exception{
-        return restaurantService.listRestaurantRandom();
+    public CommonResult<List<Restaurant>> listRestaurantRandom() throws Exception{
+        List<Restaurant> result = restaurantService.listRestaurantRandom();
+        return new CommonResult<>(200, "success", result);
     };
     @RequestMapping("/listRestaurantById/{stateId}")
-    public List<Restaurant> listRestaurantById(@PathVariable("stateId") Integer stateId) throws Exception{
-        return restaurantService.listRestaurantById(stateId);
+    public CommonResult<List<Restaurant>> listRestaurantById(@PathVariable("stateId") Integer stateId) throws Exception{
+        List<Restaurant> result = restaurantService.listRestaurantById(stateId);
+        return new CommonResult<>(200, "success", result);
     };
 
     @RequestMapping("/getRestaurantById/{restaurantId}")

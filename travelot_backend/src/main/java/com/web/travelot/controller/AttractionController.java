@@ -17,13 +17,15 @@ public class AttractionController {
     private AttractionService attractionService;
 
     @RequestMapping("/listAttractionRandom")
-    public List<Attraction> listAttractionRandom() throws Exception{
-        return attractionService.listAttractionRandom();
+    public CommonResult<List<Attraction>> listAttractionRandom() throws Exception{
+        List<Attraction> result = attractionService.listAttractionRandom();
+        return new CommonResult<>(200, "success", result);
     };
 
     @RequestMapping("/listAttractionById/{stateId}")
-    public List<Attraction> listAttractionById(@PathVariable("stateId") Integer stateId) throws Exception{
-        return attractionService.listAttractionById(stateId);
+    public CommonResult<List<Attraction>> listAttractionById(@PathVariable("stateId") Integer stateId) throws Exception{
+        List<Attraction> result = attractionService.listAttractionById(stateId);
+        return new CommonResult<>(200, "success", result);
     };
 
     @RequestMapping("/getAttractionById/{attractionId}")

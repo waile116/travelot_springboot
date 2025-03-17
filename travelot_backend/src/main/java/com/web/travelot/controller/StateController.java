@@ -1,5 +1,6 @@
 package com.web.travelot.controller;
 
+import com.web.travelot.po.CommonResult;
 import com.web.travelot.po.State;
 import com.web.travelot.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,14 @@ public class StateController {
     private StateService stateService;
 
     @RequestMapping("/listState")
-    public List<State> listState() throws Exception{
-        return stateService.listState();
+    public CommonResult<List<State>> listState() throws Exception{
+        List<State> result = stateService.listState();
+        return new CommonResult<>(200, "success", result);
     };
 
     @RequestMapping("/getStateById/{stateId}")
-    public State getStateById(@PathVariable("stateId") Integer stateId) throws Exception{
-        return stateService.getStateById(stateId);
+    public CommonResult<State> getStateById(@PathVariable("stateId") Integer stateId) throws Exception{
+        State result = stateService.getStateById(stateId);
+        return new CommonResult<>(200, "success", result);
     };
 }

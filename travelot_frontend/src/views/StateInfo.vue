@@ -1,12 +1,17 @@
 <template>
   <div class="wrapper">
     <Nav></Nav>
+    <div class="header">
+      <p>{{ state.name }}</p>
+      <img :src="state.stateImg" />
+      <div class="map">this is map</div>
+    </div>
     <ul class="carousel">
-      <li class="attraction">
-        <p>{{ state.name }}热门景点</p>
-        <ul class="card" ref="scrollContainer">
-          <i class="fa fa-chevron-left"></i>
-          <i class="fa fa-chevron-right"></i>
+      <li class="content">
+        <p>热门景点</p>
+        <ul class="card" ref="c1">
+          <i class="fa fa-chevron-left disabled" id="l1" ref="l1"></i>
+          <i class="fa fa-chevron-right" id="r1" ref="r1"></i>
           <li v-for="attraction in attractionArr" @click="">
             <img :src="attraction.attractionImg" />
             <p class="title">{{ attraction.name }}</p>
@@ -25,11 +30,11 @@
           </li>
         </ul>
       </li>
-      <li class="hotel">
-        <p>{{ state.name }}热门酒店</p>
-        <ul class="card" ref="scrollContainer">
-          <i class="fa fa-chevron-left"></i>
-          <i class="fa fa-chevron-right"></i>
+      <li class="content">
+        <p>热门酒店</p>
+        <ul class="card" ref="c2">
+          <i class="fa fa-chevron-left disabled" id="l2" ref="l2"></i>
+          <i class="fa fa-chevron-right" id="r2" ref="r2"></i>
           <li v-for="hotel in hotelArr" @click="">
             <img :src="hotel.hotelImg" />
             <p class="title">{{ hotel.name }}</p>
@@ -39,11 +44,33 @@
               /5
             </div>
             <div class="ticket">
-              <span>门票</span>
+              每晚
               <p class="price">
                 {{ `¥${hotel.price}` }}
               </p>
-              <span>起</span>
+              起
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="content">
+        <p>热门餐厅</p>
+        <ul class="card" ref="c3">
+          <i class="fa fa-chevron-left disabled" id="l3" ref="l3"></i>
+          <i class="fa fa-chevron-right" id="r3" ref="r3"></i>
+          <li v-for="restaurant in restaurantArr" @click="">
+            <img :src="restaurant.restaurantImg" />
+            <p class="title">{{ restaurant.name }}</p>
+            <div class="rating">
+              评分
+              <p class="score">{{ restaurant.rating }}</p>
+              /5
+            </div>
+            <div class="ticket">
+              人均
+              <p class="price">
+                {{ `¥${restaurant.price}` }}
+              </p>
             </div>
           </li>
         </ul>
@@ -54,6 +81,7 @@
 
 <script>
 import Nav from "../components/Nav.vue";
+import { updateArrows } from "../common.js";
 
 export default {
   name: "StateInfo",
@@ -63,6 +91,7 @@ export default {
       state: {},
       attractionArr: [],
       hotelArr: [],
+      restaurantArr: [],
     };
   },
   created() {
@@ -70,7 +99,7 @@ export default {
     this.$axios
       .get("StateController/getStateById/" + this.stateId)
       .then((response) => {
-        this.state = response.data;
+        this.state = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -80,7 +109,7 @@ export default {
     this.$axios
       .get(`AttractionController/listAttractionById/${this.stateId}`)
       .then((response) => {
-        this.attractionArr = response.data;
+        this.attractionArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -90,30 +119,60 @@ export default {
     this.$axios
       .get(`HotelController/listHotelById/${this.stateId}`)
       .then((response) => {
-        this.hotelArr = response.data;
+        this.hotelArr = response.data.result;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    //get restaurant list with stateId
+    this.$axios
+      .get(`RestaurantController/listRestaurantById/${this.stateId}`)
+      .then((response) => {
+        this.restaurantArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
       });
   },
   mounted() {
-    //horizontal scroll
-    const container = this.$refs.scrollContainer;
-    const rightArrow = document.querySelector(
-      ".wrapper .carousel .fa-chevron-right"
-    );
-    const leftArrow = document.querySelector(
-      ".wrapper .carousel .fa-chevron-left"
-    );
-    if (rightArrow && leftArrow) {
-      rightArrow.addEventListener("click", () => {
-        container.scrollBy({ left: 600, behavior: "smooth" });
-      });
+    //assign container and arrows into array
+    this.container = [this.$refs.c1, this.$refs.c2, this.$refs.c3];
 
-      leftArrow.addEventListener("click", () => {
-        container.scrollBy({ left: -600, behavior: "smooth" });
+    this.leftArrow = [this.$refs.l1, this.$refs.l2, this.$refs.l3];
+
+    this.rightArrow = [this.$refs.r1, this.$refs.r2, this.$refs.r3];
+
+    // add event listener for each arrows, and update everytime
+    this.leftArrow.forEach((l, index) => {
+      l.addEventListener("click", () => {
+        this.container[index].scrollBy({
+          left: -this.container[index].clientWidth * 0.4,
+          behavior: "smooth",
+        });
+        setTimeout(() => {
+          this.container[index].addEventListener(
+            "scroll",
+            updateArrows(this.container[index], l, this.rightArrow[index])
+          );
+        }, 600);
       });
-    }
+    });
+
+    this.rightArrow.forEach((r, index) => {
+      r.addEventListener("click", () => {
+        this.container[index].scrollBy({
+          left: this.container[index].clientWidth * 0.4,
+          behavior: "smooth",
+        });
+        setTimeout(() => {
+          this.container[index].addEventListener(
+            "scroll",
+            updateArrows(this.container[index], this.leftArrow[index], r)
+          );
+        }, 600);
+      });
+    });
   },
   components: {
     Nav,
@@ -124,6 +183,35 @@ export default {
 <style scoped>
 .wrapper {
   position: relative;
+}
+
+/***************header container*****************/
+.wrapper .header {
+  position: relative;
+  display: flex;
+  margin: 0 9vw;
+  border-radius: 0 0 1vw 1vw;
+  overflow: hidden;
+}
+
+.wrapper .header img {
+  width: 70%;
+  height: 25vw;
+  object-fit: cover;
+}
+
+.wrapper .header .map {
+  width: 30%;
+  background-color: red;
+}
+
+.wrapper .header p {
+  position: absolute;
+  font-size: 2vw;
+  color: white;
+  z-index: 4;
+  bottom: 0;
+  margin: 1vw 2vw;
 }
 
 /***************carousel container*****************/
@@ -156,10 +244,26 @@ export default {
   right: 0;
   margin-right: 2vw;
 }
-.wrapper .carousel .fa-chevron-right:hover,
-.wrapper .carousel .fa-chevron-left:hover {
+.wrapper .carousel .fa-chevron-right:hover:not(.disabled), /* not(.disabled) means only apply when no disabled*/
+.wrapper .carousel .fa-chevron-left:hover:not(.disabled) {
   color: white;
   background-color: var(--color-blue1);
+}
+.wrapper .carousel .fa-chevron-right.disabled,
+.wrapper .carousel .fa-chevron-left.disabled {
+  cursor: not-allowed;
+}
+.wrapper .carousel #l1,
+#r1 {
+  top: 38%;
+}
+.wrapper .carousel #l2,
+#r2 {
+  top: 62%;
+}
+.wrapper .carousel #l3,
+#r3 {
+  top: 85%;
 }
 
 /*************** title *****************/
