@@ -123,7 +123,7 @@ export default {
     this.$axios
       .get("StateController/listState")
       .then((response) => {
-        this.stateArr = response.data;
+        this.stateArr = response.data.result;
         this.state = this.stateArr[0]; //default value
         this.fetchData(this.category); // list data right after getting state info
       })
@@ -146,7 +146,7 @@ export default {
       this.$axios
         .get(url)
         .then((response) => {
-          this.dataArr = response.data;
+          this.dataArr = response.data.result;
         })
         .catch((error) => {
           console.error(error);

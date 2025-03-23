@@ -6,7 +6,7 @@
       <img :src="state.stateImg" />
       <div class="map">this is map</div>
     </div>
-    <ul class="carousel">
+    <ul class="container">
       <li class="content">
         <p>热门景点</p>
         <ul class="card" ref="c1">
@@ -35,7 +35,7 @@
         <ul class="card" ref="c2">
           <i class="fa fa-chevron-left disabled" id="l2" ref="l2"></i>
           <i class="fa fa-chevron-right" id="r2" ref="r2"></i>
-          <li v-for="hotel in hotelArr" @click="">
+          <li v-for="hotel in hotelArr" @click="toHotelInfo(hotel.hotelId)">
             <img :src="hotel.hotelImg" />
             <p class="title">{{ hotel.name }}</p>
             <div class="rating">
@@ -177,6 +177,11 @@ export default {
   components: {
     Nav,
   },
+  methods: {
+    toHotelInfo(id) {
+      this.$router.push({ path: "/hotelInfo", query: { id: id } });
+    },
+  },
 };
 </script>
 
@@ -189,7 +194,7 @@ export default {
 .wrapper .header {
   position: relative;
   display: flex;
-  margin: 0 9vw;
+  margin: 0 4vw 2vw;
   border-radius: 0 0 1vw 1vw;
   overflow: hidden;
 }
@@ -215,15 +220,15 @@ export default {
 }
 
 /***************carousel container*****************/
-.wrapper .carousel {
+.wrapper .container {
   display: flex;
   flex-direction: column;
   margin: 1.5vw 4vw 0;
 }
 
 /*************** carousel arrow *****************/
-.wrapper .carousel .fa-chevron-right,
-.wrapper .carousel .fa-chevron-left {
+.wrapper .container .fa-chevron-right,
+.wrapper .container .fa-chevron-left {
   position: absolute;
   top: 16%;
   padding: 0.8vw 1vw;
@@ -236,47 +241,47 @@ export default {
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .fa-chevron-left {
+.wrapper .container .fa-chevron-left {
   left: 0;
   margin-left: 2vw;
 }
-.wrapper .carousel .fa-chevron-right {
+.wrapper .container .fa-chevron-right {
   right: 0;
   margin-right: 2vw;
 }
-.wrapper .carousel .fa-chevron-right:hover:not(.disabled), /* not(.disabled) means only apply when no disabled*/
-.wrapper .carousel .fa-chevron-left:hover:not(.disabled) {
+.wrapper .container .fa-chevron-right:hover:not(.disabled), /* not(.disabled) means only apply when no disabled*/
+.wrapper .container .fa-chevron-left:hover:not(.disabled) {
   color: white;
   background-color: var(--color-blue1);
 }
-.wrapper .carousel .fa-chevron-right.disabled,
-.wrapper .carousel .fa-chevron-left.disabled {
+.wrapper .container .fa-chevron-right.disabled,
+.wrapper .container .fa-chevron-left.disabled {
   cursor: not-allowed;
 }
-.wrapper .carousel #l1,
+.wrapper .container #l1,
 #r1 {
   top: 38%;
 }
-.wrapper .carousel #l2,
+.wrapper .container #l2,
 #r2 {
   top: 62%;
 }
-.wrapper .carousel #l3,
+.wrapper .container #l3,
 #r3 {
   top: 85%;
 }
 
 /*************** title *****************/
-.wrapper .carousel p {
+.wrapper .container p {
   font-size: 2vw;
 }
 
-.wrapper .carousel li:last-child {
+.wrapper .container li:last-child {
   margin-bottom: 2vw;
 }
 
 /*************** card container *****************/
-.wrapper .carousel .card {
+.wrapper .container .card {
   display: flex;
   justify-content: flex-start;
   overflow-x: scroll; /*make overflow scrollable*/
@@ -285,7 +290,7 @@ export default {
 }
 
 /*************** each individual card *****************/
-.wrapper .carousel .card li {
+.wrapper .container .card li {
   scroll-snap-align: start; /*snap at start of elements*/
   flex: 0 0 auto; /*grow/shrink/basis */
   margin: 1vw 2vw 1vw 0;
@@ -300,7 +305,7 @@ export default {
   overflow: hidden;
 }
 
-.wrapper .carousel .card li div {
+.wrapper .container .card li div {
   display: flex;
   align-items: flex-end;
   padding: 0.5vw 1.5vw 0;
@@ -309,12 +314,12 @@ export default {
   font-weight: 500;
 }
 
-.wrapper .carousel .card li .title {
+.wrapper .container .card li .title {
   padding: 0.5vw 1.5vw 0;
   font-size: 1.5vw;
 }
 
-.wrapper .carousel .card li .ticket {
+.wrapper .container .card li .ticket {
   position: absolute;
   top: auto;
   right: 0;
@@ -322,35 +327,35 @@ export default {
   padding: 1vw 1.5vw;
 }
 
-.wrapper .carousel .card li .rating .score {
+.wrapper .container .card li .rating .score {
   font-size: 1.25vw;
 }
 
-.wrapper .carousel .card li .ticket .price {
+.wrapper .container .card li .ticket .price {
   font-size: 1.5vw;
   font-weight: 700;
 }
 
-.wrapper .carousel .card li .rating .score,
-.wrapper .carousel .card li .ticket .price {
+.wrapper .container .card li .rating .score,
+.wrapper .container .card li .ticket .price {
   padding: 0 0.25vw;
 }
 
 /*************** hide scrollbar *****************/
-.wrapper .carousel .card::-webkit-scrollbar {
+.wrapper .container .card::-webkit-scrollbar {
   background-color: transparent;
   height: 10px;
 }
 
 /*************** card background transition*****************/
-.wrapper .carousel .card li img {
+.wrapper .container .card li img {
   height: 60%;
   width: 100%;
   object-fit: cover;
   border-radius: 1vw 1vw 0 0;
   transition: transform 0.3s ease-in-out;
 }
-.wrapper .carousel .card li::before {
+.wrapper .container .card li::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -362,34 +367,34 @@ export default {
   background-color: var(--color-blue1);
   z-index: -1;
 }
-.wrapper .carousel .card li:hover::before {
+.wrapper .container .card li:hover::before {
   transform: translateX(0);
 }
-.wrapper .carousel .card li:hover img {
+.wrapper .container .card li:hover img {
   transform: scale(1.1);
 }
 
 /*************** card text and arrow transition*****************/
-.wrapper .carousel .card li div {
+.wrapper .container .card li div {
   position: relative;
   color: var(--color-text2);
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .card li .title,
-.wrapper .carousel .card li .rating .score {
+.wrapper .container .card li .title,
+.wrapper .container .card li .rating .score {
   position: relative;
   color: var(--color-text);
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .card li .ticket .price {
+.wrapper .container .card li .ticket .price {
   position: relative;
   color: var(--color-text3);
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .card li:hover .title,
-.wrapper .carousel .card li:hover div,
-.wrapper .carousel .card li:hover .rating .score,
-.wrapper .carousel .card li:hover .ticket .price {
+.wrapper .container .card li:hover .title,
+.wrapper .container .card li:hover div,
+.wrapper .container .card li:hover .rating .score,
+.wrapper .container .card li:hover .ticket .price {
   background-color: transparent;
   color: white;
 }

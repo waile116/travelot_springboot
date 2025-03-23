@@ -10,9 +10,6 @@
       <p v-if="isLogin" @click="toProfile">
         {{ this.user.username }}<i class="fa fa-chevron-right"></i>
       </p>
-      <p v-if="isLogin" @click="toOrderList">
-        我的订单<i class="fa fa-chevron-right"></i>
-      </p>
     </div>
   </div>
 </template>
@@ -43,9 +40,6 @@ export default {
     },
     toProfile() {
       this.$router.push({ path: "/profile" });
-    },
-    toOrderList() {
-      this.$router.push({ path: "/orderList" });
     },
   },
 };

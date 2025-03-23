@@ -94,6 +94,7 @@ export default {
   },
   created() {
     this.user = this.$getSessionStorage("user");
+    //check if login
     if (this.user != null) {
       this.isLogin = true;
     }

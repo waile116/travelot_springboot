@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <Nav></Nav>
-    <div class="carousel">
+    <div class="container">
       <div class="region">
         <!-- :class is vue's class binding, when selected region matches, it will render  class "active"-->
         <p
@@ -78,39 +78,39 @@ export default {
 .wrapper {
   position: relative;
 }
-.wrapper .carousel {
+.wrapper .container {
   display: flex;
   flex-direction: column;
   margin: 1.5vw 2vw 0 4vw;
 }
 
 /*************** title *****************/
-.wrapper .carousel .region {
+.wrapper .container .region {
   display: flex;
   font-size: 1.5vw;
   color: var(--color-text2);
   align-items: center;
 }
 
-.wrapper .carousel .region .active {
+.wrapper .container .region .active {
   display: flex;
   font-size: 2vw;
   color: var(--color-text);
 }
 
 /*************** card container *****************/
-.wrapper .carousel .card {
+.wrapper .container .card {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
 }
 
-.wrapper .carousel .card:last-child {
+.wrapper .container .card:last-child {
   margin-bottom: 2vw;
 }
 
 /*************** each individual card *****************/
-.wrapper .carousel .card li {
+.wrapper .container .card li {
   flex: 0 0 auto; /*grow/shrink/basis */
   margin: 1vw 2vw 1vw 0;
   padding-bottom: 1vw;
@@ -123,29 +123,29 @@ export default {
   z-index: 1;
   overflow: hidden;
 }
-.wrapper .carousel .card li p {
+.wrapper .container .card li p {
   padding: 1vw 1.5vw 0;
 }
 
 /*************** hide scrollbar *****************/
-.wrapper .carousel .card::-webkit-scrollbar {
+.wrapper .container .card::-webkit-scrollbar {
   background-color: transparent;
   height: 10px;
 }
 
 /*************** title transition *****************/
-.wrapper .carousel .region p {
+.wrapper .container .region p {
   margin: 0 3vw 1vw 0.1vw;
   cursor: pointer;
   position: relative;
   transition: transform 0.3s ease-in-out;
 }
-.wrapper .carousel .region p:hover {
+.wrapper .container .region p:hover {
   transform: scale(1.1);
 }
 
-.wrapper .carousel .region p::before,
-.wrapper .carousel .region .active::before {
+.wrapper .container .region p::before,
+.wrapper .container .region .active::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -158,16 +158,16 @@ export default {
   background-color: var(--color-text2);
 }
 
-.wrapper .carousel .region .active::before {
+.wrapper .container .region .active::before {
   background-color: var(--color-text);
 }
 
-.wrapper .carousel .region p:hover::before {
+.wrapper .container .region p:hover::before {
   transform: translateX(-5%) translateY(100%);
 }
 
 /*************** card background transition*****************/
-.wrapper .carousel .card li::before {
+.wrapper .container .card li::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -179,11 +179,11 @@ export default {
   background-color: var(--color-blue1);
   z-index: -1;
 }
-.wrapper .carousel .card li:hover::before {
+.wrapper .container .card li:hover::before {
   transform: translateX(0);
 }
 
-.wrapper .carousel .card li img {
+.wrapper .container .card li img {
   height: 60%;
   width: 100%;
   object-fit: cover;
@@ -191,25 +191,25 @@ export default {
   transition: transform 0.3s ease-in-out;
 }
 
-.wrapper .carousel .card li:hover img {
+.wrapper .container .card li:hover img {
   transform: scale(1.1);
 }
 
 /*************** card text and arrow transition *****************/
-.wrapper .carousel .card li .title {
+.wrapper .container .card li .title {
   font-size: 1.5vw;
 }
-.wrapper .carousel .card li .desc {
+.wrapper .container .card li .desc {
   font-size: 1vw;
   font-weight: 500;
 }
-.wrapper .carousel .card li .title,
-.wrapper .carousel .card li .desc {
+.wrapper .container .card li .title,
+.wrapper .container .card li .desc {
   position: relative;
   color: var(--color-text);
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .card li i {
+.wrapper .container .card li i {
   position: absolute;
   top: auto;
   bottom: 0;
@@ -222,9 +222,9 @@ export default {
   margin-right: 0;
   transition: color 0.2s ease-in-out;
 }
-.wrapper .carousel .card li:hover .title,
-.wrapper .carousel .card li:hover .desc,
-.wrapper .carousel .card li:hover i {
+.wrapper .container .card li:hover .title,
+.wrapper .container .card li:hover .desc,
+.wrapper .container .card li:hover i {
   color: white;
 }
 </style>

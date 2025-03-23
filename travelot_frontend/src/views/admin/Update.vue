@@ -105,7 +105,6 @@ export default {
     },
 
     updateData() {
-      console.log(this.category !== "hotel");
       const url = `${
         this.category.charAt(0).toUpperCase() + this.category.slice(1)
       }Controller/save${

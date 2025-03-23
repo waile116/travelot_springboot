@@ -1,16 +1,25 @@
 <template>
   <div class="wrapper">
-    <Nav></Nav>
+    <div class="nav">
+      <div class="left">
+        <p v-if="isLogin" @click="toBack">
+          <i class="fa fa-chevron-left"></i>返回
+        </p>
+      </div>
+    </div>
     <div class="container">
       <div class="box">
         <p class="title">个人信息设置</p>
         <div class="content">
           <div class="photo">
-            <img :src="user.userImg" alt="profile picture" />
-            <label class="change">
-              <input type="file" @change="UploadImg" accept="image/*" />
-              <i class="fa fa-pencil-square-o"></i>
-            </label>
+            <div class="pic">
+              <img :src="pic" alt="profile picture" />
+              <label class="change">
+                <input type="file" @change="UploadImg" accept="image/*" />
+                <i class="fa fa-pencil-square-o"></i>
+              </label>
+            </div>
+            <button v-if="pic != user.userImg" @click="updateImg">保存</button>
           </div>
           <ul class="info">
             <li>
@@ -32,6 +41,7 @@
           </ul>
         </div>
         <ul class="tool">
+          <li @click="toOrderList"><p>我的订单</p></li>
           <li @click="toLogout"><p>退出登录</p></li>
         </ul>
       </div>
@@ -46,11 +56,18 @@ export default {
   name: "Profile",
   data() {
     return {
+      isLogin: false,
       user: {},
+      pic: "",
     };
   },
   created() {
     this.user = this.$getSessionStorage("user");
+    // check if login
+    if (this.user != null) {
+      this.isLogin = true;
+    }
+    this.pic = this.user.userImg;
   },
   components: {
     Nav,
@@ -63,29 +80,35 @@ export default {
       const reader = new FileReader();
       reader.readAsDataURL(file); //converts file into base64 string
       reader.onload = () => {
-        this.user.userImg = reader.result;
-
-        this.$axios
-          .post(`UserController/updateUserImgById/${this.user.userId}`, {
-            userImg: this.user.userImg,
-          }) //send image as JSON body because too big
-          .then((response) => {
-            console.log(response.data.message);
-
-            //update user in session storage
-            this.$axios
-              .get(
-                `UserController/getUserByIdPass/${this.user.userId}/${this.user.password}`
-              )
-              .then((response) => {
-                let user = response.data.result;
-                this.$setSessionStorage("user", user);
-              });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        this.pic = reader.result;
       };
+    },
+    updateImg() {
+      this.$axios
+        .post(`UserController/updateUserImgById/${this.user.userId}`, {
+          userImg: this.pic,
+        }) //send image as JSON body because too big
+        .then((response) => {
+          console.log(response.data.message);
+
+          //update user in session storage
+          this.$axios
+            .get(
+              `UserController/getUserByIdPass/${this.user.userId}/${this.user.password}`
+            )
+            .then((response) => {
+              let user = response.data.result;
+              this.$setSessionStorage("user", user);
+            });
+          alert("保存成功");
+          this.$router.go();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    toBack() {
+      this.$router.go(-1);
     },
     toOrderList() {
       this.$router.push({ path: "/orderList" });
@@ -103,6 +126,37 @@ export default {
 <style scoped>
 .wrapper {
   position: relative;
+}
+
+/*************** nav bar *****************/
+.wrapper .nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4vw;
+  background-color: var(--color-blue1);
+  height: 6vw;
+}
+
+.wrapper .nav .left {
+  display: flex;
+}
+
+.wrapper .nav .left p {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-family: var(--font-family);
+  font-size: 1.5vw;
+  line-height: 25px;
+  cursor: pointer;
+  margin: 0 2vw;
+  position: relative;
+}
+
+.wrapper .nav .left p i {
+  font-size: 1.5vw;
+  margin-right: 1vw;
 }
 
 /*************** profile box *****************/
@@ -141,7 +195,8 @@ export default {
   padding: 1vw 1vw 1vw 0;
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .wrapper .container .box .content .photo img {
@@ -155,10 +210,21 @@ export default {
 .wrapper .container .box .content .photo .change {
   cursor: pointer;
   font-size: 1.5vw;
-  position: absolute;
-  bottom: 0;
-  right: 40%;
   padding-bottom: 1vw;
+}
+
+.wrapper .container .box .content .photo button {
+  margin: 1vw 0 1vw 2vw;
+  width: 6vw;
+  height: 2vw;
+  background-color: var(--color-orange);
+  border: none;
+  outline: none;
+  border-radius: 0.5vw;
+  font-size: 1vw;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
 }
 
 .wrapper .container .box .content .photo .change input[type="file"] {
