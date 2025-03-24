@@ -127,6 +127,7 @@ export default {
         .then((response) => {
           console.log(response.data.message);
           alert("保存成功");
+          this.$router.go(-1);
         })
         .catch((error) => {
           console.error(error);

@@ -23,6 +23,7 @@
           <li v-for="attraction in attractionArr" @click="">
             <img :src="attraction.attractionImg" />
             <p class="title">{{ attraction.name }}</p>
+            <p class="statename">{{ stateArr[attraction.stateId - 1].name }}</p>
             <div class="rating">
               评分
               <p class="score">{{ attraction.rating }}</p>
@@ -320,11 +321,13 @@ export default {
   line-height: 0.8;
   font-weight: 500;
 }
-
 .wrapper .container .content .card li {
   height: 20vw;
 }
-
+.wrapper .container .content .card .statename {
+  font-size: 1vw;
+  padding: 0.5vw 1.5vw 0;
+}
 .wrapper .container .content .card li .ticket {
   position: absolute;
   top: auto;
@@ -389,6 +392,7 @@ export default {
 }
 .wrapper .container .card li .title,
 .wrapper .container .card li .desc,
+.wrapper .container .card li .statename,
 .wrapper .container .card li .rating .score {
   position: relative;
   color: var(--color-text);
@@ -414,6 +418,7 @@ export default {
 }
 .wrapper .container .card li:hover .title,
 .wrapper .container .card li:hover .desc,
+.wrapper .container .card li:hover .statename,
 .wrapper .container .card li:hover .fa-chevron-right,
 .wrapper .container .card li:hover div,
 .wrapper .container .card li:hover .rating .score,
