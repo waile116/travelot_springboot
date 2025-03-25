@@ -1,12 +1,9 @@
 package com.web.travelot.controller;
 
-import com.web.travelot.po.Attraction;
-import com.web.travelot.po.CommonResult;
-import com.web.travelot.po.Restaurant;
+import com.web.travelot.po.*;
 import com.web.travelot.service.AttractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
@@ -16,19 +13,19 @@ public class AttractionController {
     @Autowired
     private AttractionService attractionService;
 
-    @RequestMapping("/listAttractionRandom")
+    @GetMapping("/listAttractionRandom")
     public CommonResult<List<Attraction>> listAttractionRandom() throws Exception{
         List<Attraction> result = attractionService.listAttractionRandom();
         return new CommonResult<>(200, "success", result);
     };
 
-    @RequestMapping("/listAttractionById/{stateId}")
+    @GetMapping("/listAttractionById/{stateId}")
     public CommonResult<List<Attraction>> listAttractionById(@PathVariable("stateId") Integer stateId) throws Exception{
         List<Attraction> result = attractionService.listAttractionById(stateId);
         return new CommonResult<>(200, "success", result);
     };
 
-    @RequestMapping("/getAttractionById/{attractionId}")
+    @GetMapping("/getAttractionById/{attractionId}")
     public CommonResult<Attraction> getAttractionById(@PathVariable("attractionId") Integer attractionId) throws Exception{
         Attraction result = attractionService.getAttractionById(attractionId);
         return new CommonResult<>(200, "success", result);
@@ -60,4 +57,15 @@ public class AttractionController {
         int result = attractionService.saveAttraction(attraction);
         return new CommonResult<>(200, "Insert attraction success", result);
     }
+
+    @GetMapping("/listTicket")
+    public CommonResult<List<Ticket>> listTicket() throws Exception{
+        List<Ticket> result = attractionService.listTicket();
+        return new CommonResult<>(200, "success", result);
+    };
+    @GetMapping("/listTicketById/{attractionId}")
+    public CommonResult<List<Ticket>> listTicketById(@PathVariable("attractionId") Integer attractionId) throws Exception{
+        List<Ticket> result = attractionService.listTicketById(attractionId);
+        return new CommonResult<>(200, "success", result);
+    };
 }

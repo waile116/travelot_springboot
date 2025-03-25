@@ -1,12 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="nav">
-      <div class="left">
-        <p v-if="isLogin" @click="toBack">
-          <i class="fa fa-chevron-left"></i>返回
-        </p>
-      </div>
-    </div>
+    <Nav2></Nav2>
     <div class="container">
       <div class="date">
         <label
@@ -35,15 +29,15 @@
           <img :src="hotel.hotelImg" />
           <div class="map">this is map</div>
         </div>
+        <p class="description">{{ hotel.desc }}</p>
         <div class="location">
           <i class="fa fa-map-marker"></i>
           <p>{{ hotel.location }}</p>
         </div>
-        <p class="description">{{ hotel.desc }}</p>
         <ul class="card">
           <li v-for="room in roomArr" @click="">
             <img :src="room.roomImg" />
-            <div class="info">
+            <div class="detail">
               <div class="header">
                 <p class="title">{{ room.name }}</p>
               </div>
@@ -63,7 +57,7 @@
 </template>
 
 <script>
-import Nav from "../components/Nav.vue";
+import Nav2 from "../components/Nav2.vue";
 
 export default {
   name: "HotelInfo",
@@ -108,7 +102,7 @@ export default {
       });
   },
   components: {
-    Nav,
+    Nav2,
   },
   methods: {
     getCurDate() {
@@ -130,10 +124,6 @@ export default {
         this.night = difference > 0 ? difference : 0;
       }
     },
-
-    toBack() {
-      this.$router.go(-1);
-    },
   },
 };
 </script>
@@ -142,38 +132,6 @@ export default {
 .wrapper {
   position: relative;
 }
-
-/*************** nav bar *****************/
-.wrapper .nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4vw;
-  background-color: var(--color-blue1);
-  height: 6vw;
-}
-
-.wrapper .nav .left {
-  display: flex;
-}
-
-.wrapper .nav .left p {
-  display: flex;
-  align-items: center;
-  color: white;
-  font-family: var(--font-family);
-  font-size: 1.5vw;
-  line-height: 25px;
-  cursor: pointer;
-  margin: 0 2vw;
-  position: relative;
-}
-
-.wrapper .nav .left p i {
-  font-size: 1.5vw;
-  margin-right: 1vw;
-}
-
 /*************** container *****************/
 .wrapper .container {
   display: flex;
@@ -296,35 +254,37 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: 1;
   overflow: hidden;
 }
-.wrapper .container .room .card li .info .title {
-  padding: 1vw 1.5vw 0;
+.wrapper .container .room .card li .detail {
+  padding: 1vw 1.5vw;
+  box-sizing: border-box;
+}
+.wrapper .container .room .card li .detail .title {
   margin-bottom: 0;
   font-size: 1.5vw;
   color: var(--color-text);
 }
-.wrapper .container .room .card li .info .cost {
+.wrapper .container .room .card li .detail .cost {
   justify-self: flex-end;
-  padding: 0.5vw 1.5vw;
 }
-.wrapper .container .room .card li .info .cost .price {
+.wrapper .container .room .card li .detail .cost .price {
   font-size: 1.5vw;
   font-weight: 700;
   text-align: end;
   color: var(--color-text3);
 }
-.wrapper .container .room .card li .info .cost .total {
+.wrapper .container .room .card li .detail .cost .total {
   font-size: 1vw;
   font-weight: normal;
   color: var(--color-text2);
 }
-.wrapper .container .room .card li .info .reserve {
+.wrapper .container .room .card li .detail .reserve {
   padding: 0 1.5vw 1vw;
   position: absolute;
   top: auto;
   right: 0;
   bottom: 0;
 }
-.wrapper .container .room .card li .info .reserve button {
+.wrapper .container .room .card li .detail .reserve button {
   width: 6vw;
   height: 2vw;
   background-color: var(--color-orange);
@@ -356,7 +316,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /*************** button transition *****************/
-.wrapper .container .room .card li .info .reserve button::before {
+.wrapper .container .room .card li .detail .reserve button::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -369,7 +329,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: -1;
 }
 
-.wrapper .container .room .card li .info .reserve button:hover::before {
+.wrapper .container .room .card li .detail .reserve button:hover::before {
   transform: translateX(0);
 }
 </style>

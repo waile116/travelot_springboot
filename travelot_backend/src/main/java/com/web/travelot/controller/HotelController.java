@@ -16,19 +16,19 @@ public class HotelController {
     @Autowired
     private HotelService hotelService;
 
-    @RequestMapping("/listHotelRandom")
+    @GetMapping("/listHotelRandom")
     public CommonResult<List<Hotel>> listHotelRandom() throws Exception{
         List<Hotel> result = hotelService.listHotelRandom();
         return new CommonResult<>(200, "success", result);
     };
 
-    @RequestMapping("/listHotelById/{stateId}")
+    @GetMapping("/listHotelById/{stateId}")
     public CommonResult<List<Hotel>> listHotelById(@PathVariable("stateId") Integer stateId) throws Exception{
         List<Hotel> result = hotelService.listHotelById(stateId);
         return new CommonResult<>(200, "success", result);
     };
 
-    @RequestMapping("/getHotelById/{hotelId}")
+    @GetMapping("/getHotelById/{hotelId}")
     public CommonResult<Hotel> getHotelById(@PathVariable("hotelId") Integer hotelId) throws Exception{
         Hotel result = hotelService.getHotelById(hotelId);
         return new CommonResult<>(200, "success", result);
@@ -59,7 +59,12 @@ public class HotelController {
         return new CommonResult<>(200, "Insert hotel success", result);
     }
 
-    @RequestMapping("/listRoomById/{hotelId}")
+    @GetMapping("/listRoom")
+    public CommonResult<List<Room>> listRoom() throws Exception{
+        List<Room> result = hotelService.listRoom();
+        return new CommonResult<>(200, "success", result);
+    };
+    @GetMapping("/listRoomById/{hotelId}")
     public CommonResult<List<Room>> listRoomById(@PathVariable("hotelId") Integer hotelId) throws Exception{
         List<Room> result = hotelService.listRoomById(hotelId);
         return new CommonResult<>(200, "success", result);

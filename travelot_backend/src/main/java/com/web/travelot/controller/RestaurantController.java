@@ -15,18 +15,18 @@ public class RestaurantController {
     @Autowired
     public RestaurantService restaurantService;
 
-    @RequestMapping("/listRestaurantRandom")
+    @GetMapping("/listRestaurantRandom")
     public CommonResult<List<Restaurant>> listRestaurantRandom() throws Exception{
         List<Restaurant> result = restaurantService.listRestaurantRandom();
         return new CommonResult<>(200, "success", result);
     };
-    @RequestMapping("/listRestaurantById/{stateId}")
+    @GetMapping("/listRestaurantById/{stateId}")
     public CommonResult<List<Restaurant>> listRestaurantById(@PathVariable("stateId") Integer stateId) throws Exception{
         List<Restaurant> result = restaurantService.listRestaurantById(stateId);
         return new CommonResult<>(200, "success", result);
     };
 
-    @RequestMapping("/getRestaurantById/{restaurantId}")
+    @GetMapping("/getRestaurantById/{restaurantId}")
     public CommonResult<Restaurant> getRestaurantById(@PathVariable("restaurantId") Integer restaurantId) throws Exception{
         Restaurant result = restaurantService.getRestaurantById(restaurantId);
         return new CommonResult<>(200, "success", result);

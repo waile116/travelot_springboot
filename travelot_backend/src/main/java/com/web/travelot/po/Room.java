@@ -17,11 +17,11 @@ public class Room {
         this.id = id;
     }
 
-    public Integer getHotel_id() {
+    public Integer getHotelId() {
         return hotel_id;
     }
 
-    public void setHotel_id(Integer hotel_id) {
+    public void setHotelId(Integer hotel_id) {
         this.hotel_id = hotel_id;
     }
 

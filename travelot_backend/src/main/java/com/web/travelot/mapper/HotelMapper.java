@@ -25,6 +25,8 @@ public interface HotelMapper {
             "WHERE id=#{hotelId}")
     public int updateHotel(Hotel hotel);
 
+    @Select("select * from room")
+    public List<Room> listRoom();
     @Select("select * from room where hotel_id=#{hotelId} order by price")
     public List<Room> listRoomById(Integer hotelId);
 }

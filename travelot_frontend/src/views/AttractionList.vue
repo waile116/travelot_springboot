@@ -46,13 +46,15 @@
                 </div>
               </div>
               <div class="cost">
-                <p v-if="attraction.price !== '0'">门票</p>
+                <p v-if="getMinPrice(attraction.attractionId) !== 0">门票</p>
                 <p class="price">
                   {{
-                    attraction.price === "0" ? "免费" : `¥${attraction.price}`
+                    getMinPrice(attraction.attractionId) === 0
+                      ? "免费"
+                      : `¥${getMinPrice(attraction.attractionId)}`
                   }}
                 </p>
-                <p v-if="attraction.price !== '0'">起</p>
+                <p v-if="getMinPrice(attraction.attractionId) !== 0">起</p>
               </div>
             </div>
             <div class="arrow">
@@ -74,9 +76,10 @@ export default {
     return {
       stateArr: [],
       state: "",
-      filter: [],
       attractionArr: [],
+      ticketArr: [],
       query: "",
+      filter: [],
     };
   },
   created() {
@@ -87,6 +90,16 @@ export default {
         this.stateArr = response.data.result;
         this.state = this.stateArr[0]; //default value
         this.listAttraction(); // list attraction right after getting state info
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    // get ticket list
+    this.$axios
+      .get("AttractionController/listTicket")
+      .then((response) => {
+        this.ticketArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -118,6 +131,21 @@ export default {
           attraction.name.includes(this.query)
         );
       }
+    },
+
+    getMinPrice(id) {
+      const filter = this.ticketArr.filter(
+        (ticket) => ticket.attractionId === id
+      );
+
+      if (filter.length === 0) return 0; // if no tickets return 0
+
+      // get minimum ticket price
+      const minPrice = Math.min(
+        ...filter.map((ticket) => Number(ticket.price))
+      );
+
+      return minPrice === 0 ? 0 : minPrice;
     },
 
     toAttractionInfo(id) {

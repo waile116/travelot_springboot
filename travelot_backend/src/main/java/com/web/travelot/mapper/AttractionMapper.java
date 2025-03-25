@@ -1,6 +1,7 @@
 package com.web.travelot.mapper;
 
 import com.web.travelot.po.Attraction;
+import com.web.travelot.po.Ticket;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -23,4 +24,8 @@ public interface AttractionMapper {
             "price=#{price}, open_t=#{openTime}, rating=#{rating}, attr_img=#{attractionImg}, update_t=NOW() " +
             "WHERE id=#{attractionId}")
     public int updateAttraction(Attraction attraction);
+    @Select("select * from ticket")
+    public List<Ticket> listTicket();
+    @Select("select * from ticket where attraction_id=#{attractionId} order by price")
+    public List<Ticket> listTicketById(Integer attractionId);
 }

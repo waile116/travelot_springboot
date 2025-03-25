@@ -36,6 +36,10 @@ public class HotelServiceImpl implements HotelService{
     };
 
     @Override
+    public List<Room> listRoom(){
+        return hotelMapper.listRoom();
+    }
+    @Override
     public List<Room> listRoomById(Integer hotelId){
         return hotelMapper.listRoomById(hotelId);
     }

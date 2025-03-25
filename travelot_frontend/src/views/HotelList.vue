@@ -64,8 +64,15 @@
                 </div>
               </div>
               <div class="cost">
-                <p class="price">{{ `¥${hotel.price}` }}</p>
-                <p class="total">总额：{{ `¥${hotel.price * night}` }}</p>
+                <div>
+                  <p class="price">
+                    {{ `¥${getMinPrice(hotel.hotelId)}` }}
+                  </p>
+                  <p v-if="getMinPrice(hotel.hotelId) !== -1">起</p>
+                </div>
+                <p class="total">
+                  总额：{{ `¥${getMinPrice(hotel.hotelId) * night}` }}
+                </p>
               </div>
             </div>
           </li>
@@ -90,8 +97,9 @@ export default {
       stateArr: [],
       state: "",
       hotelArr: [],
-      filter: [],
+      roomArr: [],
       query: "",
+      filter: [],
     };
   },
   created() {
@@ -102,6 +110,16 @@ export default {
         this.stateArr = response.data.result;
         this.state = this.stateArr[0]; //default value
         this.listHotel(); // list hotel right after getting state info
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    // get room list
+    this.$axios
+      .get("HotelController/listRoom")
+      .then((response) => {
+        this.roomArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -153,6 +171,17 @@ export default {
           hotel.name.includes(this.query)
         );
       }
+    },
+
+    getMinPrice(id) {
+      const filter = this.roomArr.filter((room) => room.hotelId === id);
+      console.log(this.roomArr);
+      if (filter.length === 0) return -1; // if no rooms return -1
+
+      // get minimum room price
+      const minPrice = Math.min(...filter.map((room) => Number(room.price)));
+
+      return minPrice === 0 ? -1 : minPrice;
     },
 
     toHotelInfo(id) {
@@ -342,6 +371,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 1.5vw;
   font-weight: 700;
   text-align: end;
+  margin-right: 0.5vw;
 }
 .wrapper .container .card li .info .header .rating .score,
 .wrapper .container .card li .info .cost {
@@ -349,6 +379,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .wrapper .container .card li .info .cost {
   align-self: flex-end;
+}
+.wrapper .container .card li .info .cost div {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 /*************** hide scrollbar *****************/

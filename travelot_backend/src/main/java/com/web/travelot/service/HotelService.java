@@ -9,5 +9,6 @@ public interface HotelService {
     public List<Hotel> listHotelById(Integer stateId);
     public Hotel getHotelById(Integer hotelId);
     public int saveHotel(Hotel hotel);
+    public List<Room> listRoom();
     public List<Room> listRoomById(Integer hotelId);
 }

@@ -16,11 +16,19 @@
         </ul>
       </li>
       <li class="content">
-        <p>热门景点</p>
+        <div class="header">
+          <p>热门景点</p>
+          <p class="more" @click="toAttractionList">
+            查看更多<i class="fa fa-chevron-right"></i>
+          </p>
+        </div>
         <ul class="card" ref="c2">
           <i class="fa fa-chevron-left disabled" id="l2" ref="l2"></i>
           <i class="fa fa-chevron-right" id="r2" ref="r2"></i>
-          <li v-for="attraction in attractionArr" @click="">
+          <li
+            v-for="attraction in attractionArr.slice(0, 16)"
+            @click="toAttractionInfo(attraction.attractionId)"
+          >
             <img :src="attraction.attractionImg" />
             <p class="title">{{ attraction.name }}</p>
             <p class="statename">{{ stateArr[attraction.stateId - 1].name }}</p>
@@ -40,13 +48,24 @@
         </ul>
       </li>
       <li class="content">
-        <p>热门酒店</p>
+        <div class="header">
+          <p>热门酒店</p>
+          <p class="more" @click="toHotelList">
+            查看更多<i class="fa fa-chevron-right"></i>
+          </p>
+        </div>
         <ul class="card" ref="c3">
           <i class="fa fa-chevron-left disabled" id="l3" ref="l3"></i>
           <i class="fa fa-chevron-right" id="r3" ref="r3"></i>
-          <li v-for="hotel in hotelArr" @click="toHotelInfo(hotel.hotelId)">
+          <li
+            v-for="hotel in hotelArr.slice(0, 16)"
+            @click="toHotelInfo(hotel.hotelId)"
+          >
             <img :src="hotel.hotelImg" />
             <p class="title">{{ hotel.name }}</p>
+            <p class="statename" v-if="stateArr.length > 1">
+              {{ stateArr[hotel.stateId - 1].name }}
+            </p>
             <div class="rating">
               评分
               <p class="score">{{ hotel.rating }}</p>
@@ -63,13 +82,24 @@
         </ul>
       </li>
       <li class="content">
-        <p>热门餐厅</p>
+        <div class="header">
+          <p>热门餐厅</p>
+          <p class="more" @click="toRestaurantList">
+            查看更多<i class="fa fa-chevron-right"></i>
+          </p>
+        </div>
         <ul class="card" ref="c4">
           <i class="fa fa-chevron-left disabled" id="l4" ref="l4"></i>
           <i class="fa fa-chevron-right" id="r4" ref="r4"></i>
-          <li v-for="restaurant in restaurantArr" @click="">
+          <li
+            v-for="restaurant in restaurantArr.slice(0, 16)"
+            @click="toRestaurantInfo(restaurant.restaurantId)"
+          >
             <img :src="restaurant.restaurantImg" />
             <p class="title">{{ restaurant.name }}</p>
+            <p class="statename" v-if="stateArr.length > 1">
+              {{ stateArr[restaurant.stateId - 1].name }}
+            </p>
             <div class="rating">
               评分
               <p class="score">{{ restaurant.rating }}</p>
@@ -200,8 +230,23 @@ export default {
     toStateInfo(id) {
       this.$router.push({ path: "/stateInfo", query: { id: id } });
     },
+    toAttractionList() {
+      this.$router.push({ path: "/attractionList" });
+    },
+    toAttractionInfo(id) {
+      this.$router.push({ path: "/attractionInfo", query: { id: id } });
+    },
+    toHotelList() {
+      this.$router.push({ path: "/hotelList" });
+    },
     toHotelInfo(id) {
       this.$router.push({ path: "/hotelInfo", query: { id: id } });
+    },
+    toRestaurantList() {
+      this.$router.push({ path: "/restaurantList" });
+    },
+    toRestaurantInfo(id) {
+      this.$router.push({ path: "/restaurantInfo", query: { id: id } });
     },
   },
 };
@@ -220,8 +265,8 @@ export default {
 }
 
 /*************** carousel arrow *****************/
-.wrapper .container .fa-chevron-right,
-.wrapper .container .fa-chevron-left {
+.wrapper .container .card .fa-chevron-right,
+.wrapper .container .card .fa-chevron-left {
   position: absolute;
   padding: 1vw;
   font-size: 2vw;
@@ -235,45 +280,57 @@ export default {
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 }
-.wrapper .container .fa-chevron-left {
+.wrapper .container .card .fa-chevron-left {
   left: 0;
   margin-left: 2vw;
 }
-.wrapper .container .fa-chevron-right {
+.wrapper .container .card .fa-chevron-right {
   right: 0;
   margin-right: 2vw;
 }
 .wrapper .container #l1,
 #r1 {
-  top: 18%;
+  top: 17%;
 }
 .wrapper .container #l2,
 #r2 {
-  top: 42%;
+  top: 40%;
 }
 .wrapper .container #l3,
 #r3 {
-  top: 64%;
+  top: 63%;
 }
 .wrapper .container #l4,
 #r4 {
   top: 86%;
 }
-.wrapper .container .fa-chevron-right:hover:not(.disabled), /* not(.disabled) means only apply when no disabled*/
-.wrapper .container .fa-chevron-left:hover:not(.disabled) {
+.wrapper .container .card > .fa-chevron-right:hover:not(.disabled), /* not(.disabled) means only apply when no disabled*/
+.wrapper .container .card .fa-chevron-left:hover:not(.disabled) {
   color: white;
   background-color: var(--color-blue1);
 }
-.wrapper .container .fa-chevron-right.disabled,
-.wrapper .container .fa-chevron-left.disabled {
+.wrapper .container .card .fa-chevron-right.disabled,
+.wrapper .container .card .fa-chevron-left.disabled {
   cursor: not-allowed;
 }
 
 /*************** title *****************/
+.wrapper .container .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .wrapper .container p {
   font-size: 2vw;
 }
-
+.wrapper .container .header .more {
+  font-size: 1.5vw;
+  cursor: pointer;
+}
+.wrapper .container .header .more i {
+  margin-left: 0.5vw;
+  font-size: 1.5vw;
+}
 .wrapper .container li:last-child {
   margin-bottom: 2vw;
 }
@@ -291,7 +348,6 @@ export default {
   scroll-snap-align: start; /*snap at start of elements*/
   flex: 0 0 auto; /*grow/shrink/basis */
   margin: 1vw;
-  padding-bottom: 1vw;
   height: 25vw;
   width: 21vw;
   border-radius: 1vw;
@@ -302,7 +358,7 @@ export default {
   overflow: hidden;
 }
 .wrapper .container .card li p {
-  padding: 1vw 1.5vw 0;
+  padding: 0.5vw 1.5vw 0;
 }
 .wrapper .container .card li .title {
   font-size: 1.5vw;
@@ -321,19 +377,13 @@ export default {
   line-height: 0.8;
   font-weight: 500;
 }
-.wrapper .container .content .card li {
-  height: 20vw;
-}
 .wrapper .container .content .card .statename {
   font-size: 1vw;
   padding: 0.5vw 1.5vw 0;
 }
 .wrapper .container .content .card li .ticket {
-  position: absolute;
-  top: auto;
-  right: 0;
-  bottom: 0;
-  padding: 1vw 1.5vw;
+  justify-self: flex-end;
+  padding: 1vw 1.5vw 0;
 }
 
 .wrapper .container .content .card li .rating .score {

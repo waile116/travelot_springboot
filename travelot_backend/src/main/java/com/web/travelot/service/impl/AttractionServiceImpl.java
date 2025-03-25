@@ -1,7 +1,7 @@
 package com.web.travelot.service.impl;
 import java.util.List;
 
-import com.web.travelot.po.CommonResult;
+import com.web.travelot.po.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.web.travelot.po.Attraction;
@@ -34,4 +34,13 @@ public class AttractionServiceImpl implements AttractionService{
             return attractionMapper.saveAttraction(attraction);
         }
     };
+
+    @Override
+    public List<Ticket> listTicket(){
+        return attractionMapper.listTicket();
+    }
+    @Override
+    public List<Ticket> listTicketById(Integer attractionId){
+        return attractionMapper.listTicketById(attractionId);
+    }
 }
