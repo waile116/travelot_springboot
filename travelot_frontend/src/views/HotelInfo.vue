@@ -35,7 +35,7 @@
           <p>{{ hotel.location }}</p>
         </div>
         <ul class="card">
-          <li v-for="room in roomArr" @click="">
+          <li v-for="room in roomArr">
             <img :src="room.roomImg" />
             <div class="detail">
               <div class="header">
@@ -52,18 +52,22 @@
           </li>
         </ul>
       </div>
+      <!--parsing category to comment component-->
+      <Comment category="3" :target_id="hotelId"></Comment>
     </div>
   </div>
 </template>
 
 <script>
 import Nav2 from "../components/Nav2.vue";
+import Comment from "../components/Comment.vue";
 
 export default {
   name: "HotelInfo",
   data() {
     return {
       isLogin: false,
+
       hotelId: this.$route.query.id,
       hotel: "",
       minStartDate: this.getCurDate(),
@@ -100,9 +104,33 @@ export default {
       .catch((error) => {
         console.error(error);
       });
+
+    // get comment list with hotelId
+    this.$axios
+      .get(`CommentController/listCommentByTargetId/3/${this.hotelId}`)
+      .then((response) => {
+        this.commentArr = response.data.result;
+
+        // fetch user detail for each comment
+        this.commentArr.forEach((comment, index) => {
+          this.$axios
+            .get(`UserController/getUserById/${comment.userId}`)
+            .then((response) => {
+              // direct assignment
+              comment.username = response.data.result.username;
+              comment.userImg = response.data.result.userImg;
+              comment.createT = comment.createT.split("T")[0];
+            })
+            .catch((error) => console.error(error));
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
   components: {
     Nav2,
+    Comment,
   },
   methods: {
     getCurDate() {
@@ -146,7 +174,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 4vw;
+  height: 3vw;
   border-radius: 1vw;
   box-shadow: 3px 3px 3px #c3c3c3;
   outline: none;
@@ -164,7 +192,7 @@ export default {
 }
 
 .wrapper .container .date select,
-input {
+.wrapper .container .date input {
   font-size: 1.2vw;
   border: none;
   outline: none;
@@ -216,6 +244,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: absolute;
   font-size: 2vw;
   color: white;
+  text-shadow: 3px 0px 3px #000000;
   z-index: 4;
   bottom: 0;
   margin: 1vw 2vw;
@@ -235,6 +264,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
+  margin-bottom: 1vw;
 }
 
 .wrapper .container .room .card:last-child {
@@ -291,11 +321,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: none;
   outline: none;
   border-radius: 0.5vw;
-
   font-size: 1vw;
   font-weight: bold;
   color: white;
-
   cursor: pointer;
   position: relative;
   overflow: hidden;

@@ -58,7 +58,9 @@ router.beforeEach((to, from, next) => {
       )
     )
       next("login");
-    next();
+    else {
+      next();
+    }
   }
   // if (to.meta.requiresAdmin) {
   //   // if user is admin, continue

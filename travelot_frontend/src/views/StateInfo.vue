@@ -12,7 +12,10 @@
         <ul class="card" ref="c1">
           <i class="fa fa-chevron-left disabled" id="l1" ref="l1"></i>
           <i class="fa fa-chevron-right" id="r1" ref="r1"></i>
-          <li v-for="attraction in attractionArr" @click="">
+          <li
+            v-for="attraction in attractionArr"
+            @click="toAttractionInfo(attraction.attractionId)"
+          >
             <img :src="attraction.attractionImg" />
             <p class="title">{{ attraction.name }}</p>
             <div class="rating">
@@ -58,7 +61,10 @@
         <ul class="card" ref="c3">
           <i class="fa fa-chevron-left disabled" id="l3" ref="l3"></i>
           <i class="fa fa-chevron-right" id="r3" ref="r3"></i>
-          <li v-for="restaurant in restaurantArr" @click="">
+          <li
+            v-for="restaurant in restaurantArr"
+            @click="toRestaurantInfo(restaurant.restaurantId)"
+          >
             <img :src="restaurant.restaurantImg" />
             <p class="title">{{ restaurant.name }}</p>
             <div class="rating">
@@ -178,8 +184,14 @@ export default {
     Nav,
   },
   methods: {
+    toAttractionInfo(id) {
+      this.$router.push({ path: "/attractionInfo", query: { id: id } });
+    },
     toHotelInfo(id) {
       this.$router.push({ path: "/hotelInfo", query: { id: id } });
+    },
+    toRestaurantInfo(id) {
+      this.$router.push({ path: "/restaurantInfo", query: { id: id } });
     },
   },
 };
@@ -214,6 +226,7 @@ export default {
   position: absolute;
   font-size: 2vw;
   color: white;
+  text-shadow: 3px 0px 3px #000000;
   z-index: 4;
   bottom: 0;
   margin: 1vw 2vw;
@@ -260,7 +273,7 @@ export default {
 }
 .wrapper .container #l1,
 #r1 {
-  top: 38%;
+  top: 39%;
 }
 .wrapper .container #l2,
 #r2 {

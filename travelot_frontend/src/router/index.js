@@ -122,6 +122,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory("/"),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }; // go to top everytime goes to web page
+  },
 });
 
 //解决重复路由报异常问题

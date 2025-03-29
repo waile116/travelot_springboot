@@ -82,18 +82,6 @@ export default {
         path: "/login",
       });
     },
-    // check if userId is already registered
-    checkUserId() {
-      this.$axios
-        .get(`UserController/getUserCountById/${this.userId}`)
-        .then((response) => {
-          if (response.data.result > 0) {
-            this.userId = ""; //reset userId
-            this.isError = true;
-            this.errorMsg = "此手机号码已存在";
-          }
-        });
-    },
     // register user
     register() {
       if (this.userId == "") {
@@ -123,9 +111,9 @@ export default {
       }
 
       this.$axios
-        .get(`UserController/getUserCountById/${this.userId}`)
+        .get(`UserController/getUserById/${this.userId}`)
         .then((response) => {
-          if (response.data.result > 0) {
+          if (response.data.result) {
             this.isError = true;
             this.errorMsg = "此手机号码已存在";
             console.log("Register failed");

@@ -12,8 +12,8 @@ public interface UserMapper {
     public int saveUser(User user);
     @Update("update user set user_img = #{userImg}, update_t = NOW() where id = #{userId}")
     public int updateUserImgById(User user);
-    @Select("select * from user where id=#{userId} and password = #{password}")
+    @Select("select id, username, alias, sex, user_img, isAdmin from user where id=#{userId} and password = #{password}")
     public User getUserByIdPass(User user);
-    @Select("select count(*) from user where id=#{userId}")
-    public int getUserCountById(Integer userId);
+    @Select("select id, username, alias, sex, user_img, isAdmin from user where id=#{userId}")
+    public User getUserById(Integer userId);
 }

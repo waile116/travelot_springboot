@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getUserCountById(Integer userId) {
-        return userMapper.getUserCountById(userId);
+    public User getUserById(Integer userId) {
+        return userMapper.getUserById(userId);
     }
 }

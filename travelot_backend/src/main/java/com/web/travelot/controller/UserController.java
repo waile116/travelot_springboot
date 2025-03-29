@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/updateUserImgById/{userId}")
-    public CommonResult<Integer> saveUser(@PathVariable("userId") Integer userId,
+    public CommonResult<Integer> updateUserImgById(@PathVariable("userId") Integer userId,
                                           @RequestBody Map<String, String> requestBody) throws Exception {
 
         String userImg = requestBody.get("userImg");
@@ -50,9 +50,9 @@ public class UserController {
         return new CommonResult<>(200, "success", result);
     }
 
-    @GetMapping("/getUserCountById/{userId}")
-    public CommonResult<Integer> getUserCountById(@PathVariable("userId") Integer userId) throws Exception {
-        int result = userService.getUserCountById(userId);
+    @GetMapping("/getUserById/{userId}")
+    public CommonResult<User> getUserById(@PathVariable("userId") Integer userId) throws Exception {
+        User result = userService.getUserById(userId);
         return new CommonResult<>(200, "success", result);
     }
 }

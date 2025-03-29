@@ -15,7 +15,7 @@
             <div class="pic">
               <img :src="pic" alt="profile picture" />
               <label class="change">
-                <input type="file" @change="UploadImg" accept="image/*" />
+                <input type="file" @change="uploadImg" accept="image/*" />
                 <i class="fa fa-pencil-square-o"></i>
               </label>
             </div>
@@ -73,7 +73,7 @@ export default {
     Nav,
   },
   methods: {
-    UploadImg(event) {
+    uploadImg(event) {
       const file = event.target.files[0]; //get first selected file
       if (!file) return;
 
@@ -83,6 +83,7 @@ export default {
         this.pic = reader.result;
       };
     },
+
     updateImg() {
       this.$axios
         .post(`UserController/updateUserImgById/${this.user.userId}`, {
@@ -93,13 +94,12 @@ export default {
 
           //update user in session storage
           this.$axios
-            .get(
-              `UserController/getUserByIdPass/${this.user.userId}/${this.user.password}`
-            )
+            .get(`UserController/getUserById/${this.user.userId}`)
             .then((response) => {
               let user = response.data.result;
               this.$setSessionStorage("user", user);
             });
+
           alert("保存成功");
           this.$router.go();
         })

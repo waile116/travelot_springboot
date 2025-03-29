@@ -1,13 +1,13 @@
 <template>
   <div class="wrapper">
     <Nav2></Nav2>
+    <div class="img">
+      <p class="title">{{ attraction.name }}</p>
+      <img :src="attraction.attractionImg" />
+      <div class="map">this is map</div>
+    </div>
     <div class="container">
       <div class="attraction">
-        <div class="img">
-          <p class="title">{{ attraction.name }}</p>
-          <img :src="attraction.attractionImg" />
-          <div class="map">this is map</div>
-        </div>
         <p class="description">{{ attraction.desc }}</p>
         <div class="info">
           <i class="fa fa-map-marker"></i>
@@ -35,12 +35,14 @@
           </li>
         </ul>
       </div>
+      <Comment category="1" :target_id="attractionId"></Comment>
     </div>
   </div>
 </template>
 
 <script>
 import Nav2 from "../components/Nav2.vue";
+import Comment from "../components/Comment.vue";
 
 export default {
   name: "AttractionInfo",
@@ -81,6 +83,7 @@ export default {
   },
   components: {
     Nav2,
+    Comment,
   },
   methods: {
     getCurDate() {
@@ -111,6 +114,33 @@ export default {
   position: relative;
 }
 
+/*************** header container *****************/
+.wrapper .img {
+  margin: 0 4vw 2vw;
+  position: relative;
+  display: flex;
+  height: 25vw;
+  border-radius: 0 0 1vw 1vw;
+  overflow: hidden;
+}
+.wrapper .img p {
+  position: absolute;
+  font-size: 2vw;
+  color: white;
+  text-shadow: 3px 0px 3px #000000;
+  z-index: 4;
+  bottom: 0;
+  margin: 1vw 2vw;
+}
+.wrapper .img img {
+  flex: 7;
+  object-fit: cover;
+}
+.wrapper .img .map {
+  flex: 3;
+  background-color: red;
+}
+
 /*************** container *****************/
 .wrapper .container {
   display: flex;
@@ -136,32 +166,6 @@ export default {
   font-size: 1vw;
   margin-bottom: 1vw;
   font-weight: normal;
-}
-.wrapper .container .attraction .img {
-  margin-bottom: 2vw;
-  position: relative;
-  display: flex;
-  height: 25vw;
-  border-radius: 1vw;
-  overflow: hidden;
-}
-.wrapper .container .attraction .img p {
-  position: absolute;
-  font-size: 2vw;
-  color: white;
-  text-shadow: 3px 0px 3px #000000;
-  z-index: 4;
-  bottom: 0;
-  margin: 1vw 2vw;
-}
-.wrapper .container .attraction .img img {
-  flex: 7;
-  object-fit: cover;
-}
-
-.wrapper .container .attraction .img .map {
-  flex: 3;
-  background-color: red;
 }
 
 /*************** card container *****************/

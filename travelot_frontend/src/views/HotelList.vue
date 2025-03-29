@@ -175,7 +175,6 @@ export default {
 
     getMinPrice(id) {
       const filter = this.roomArr.filter((room) => room.hotelId === id);
-      console.log(this.roomArr);
       if (filter.length === 0) return -1; // if no rooms return -1
 
       // get minimum room price
