@@ -1,7 +1,7 @@
 package com.web.travelot.mapper;
 
-import com.web.travelot.po.Attraction;
 import com.web.travelot.po.Restaurant;
+import com.web.travelot.po.Food;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -24,4 +24,7 @@ public interface RestaurantMapper {
             "price=#{price}, open_t=#{openTime}, rating=#{rating}, restaurant_img=#{restaurantImg}, update_t=NOW() " +
             "WHERE id=#{restaurantId}")
     public int updateRestaurant(Restaurant restaurant);
+
+    @Select("select * from food where restaurant_id=#{restaurantId}")
+    public List<Food> listFoodById(Integer restaurantId);
 }

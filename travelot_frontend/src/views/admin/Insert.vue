@@ -37,34 +37,36 @@
         </label>
       </div>
       <table class="form">
-        <tr>
-          <td style="width: 15%">State Id:</td>
-          <td><input v-model="data.stateId" type="text" /></td>
-        </tr>
-        <tr>
-          <td>Name:</td>
-          <td><input v-model="data.name" type="text" /></td>
-        </tr>
-        <tr>
-          <td>Description:</td>
-          <td><input v-model="data.desc" type="text" /></td>
-        </tr>
-        <tr>
-          <td>Location:</td>
-          <td><input v-model="data.location" type="text" /></td>
-        </tr>
-        <tr>
-          <td>Price:</td>
-          <td><input v-model="data.price" type="text" /></td>
-        </tr>
-        <tr v-if="category !== 'hotel'">
-          <td>Opening Time:</td>
-          <td><input v-model="data.openTime" type="text" /></td>
-        </tr>
-        <tr>
-          <td>Rating:</td>
-          <td><input v-model="data.rating" type="text" /></td>
-        </tr>
+        <tbody>
+          <tr>
+            <td style="width: 15%">State Id:</td>
+            <td><input v-model="data.stateId" type="text" /></td>
+          </tr>
+          <tr>
+            <td>Name:</td>
+            <td><input v-model="data.name" type="text" /></td>
+          </tr>
+          <tr>
+            <td>Description:</td>
+            <td><input v-model="data.desc" type="text" /></td>
+          </tr>
+          <tr>
+            <td>Location:</td>
+            <td><input v-model="data.location" type="text" /></td>
+          </tr>
+          <tr>
+            <td>Price:</td>
+            <td><input v-model="data.price" type="text" /></td>
+          </tr>
+          <tr v-if="category !== 'hotel'">
+            <td>Opening Time:</td>
+            <td><input v-model="data.openTime" type="text" /></td>
+          </tr>
+          <tr>
+            <td>Rating:</td>
+            <td><input v-model="data.rating" type="text" /></td>
+          </tr>
+        </tbody>
       </table>
       <button @click="insertData">保存</button>
     </div>

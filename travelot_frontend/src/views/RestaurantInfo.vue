@@ -18,18 +18,14 @@
           <p>{{ restaurant.openTime }}</p>
         </div>
         <ul class="card">
-          <li v-for="ticket in ticketArr" @click="">
+          <li v-for="food in foodArr">
+            <img :src="food.foodImg" />
             <div class="detail">
               <div class="header">
-                <p class="title">{{ ticket.name }}</p>
-                <p class="desc">{{ ticket.desc }}</p>
-                <p class="sold">已售出{{ ticket.amount }}份</p>
+                <p class="title">{{ food.name }}</p>
               </div>
               <div class="cost">
-                <p class="price">{{ `¥${ticket.price}` }}</p>
-              </div>
-              <div class="reserve">
-                <button @click="">预 定</button>
+                <p class="price">{{ `¥${food.price}` }}</p>
               </div>
             </div>
           </li>
@@ -51,7 +47,7 @@ export default {
       isLogin: false,
       restaurantId: this.$route.query.id,
       restaurant: "",
-      ticketArr: [],
+      foodArr: [],
     };
   },
   created() {
@@ -71,11 +67,11 @@ export default {
         console.error(error);
       });
 
-    // get ticket list with restaurantId
+    // get food list with restaurantId
     this.$axios
-      .get(`AttractionController/listTicketById/${this.restaurantId}`)
+      .get(`RestaurantController/listFoodById/${this.restaurantId}`)
       .then((response) => {
-        this.ticketArr = response.data.result;
+        this.foodArr = response.data.result;
       })
       .catch((error) => {
         console.error(error);
@@ -172,7 +168,6 @@ export default {
 .wrapper .container .restaurant .card {
   display: flex;
   justify-content: flex-start;
-  flex-wrap: wrap;
 }
 
 .wrapper .container .restaurant .card:last-child {
@@ -183,22 +178,25 @@ export default {
 .wrapper .container .restaurant .card li {
   flex: 0 0 auto; /*grow/shrink/basis */
   margin: 1vw 2vw 1vw 0;
-  padding: 1vw 1.5vw;
   box-sizing: border-box;
   width: 21vw;
+  height: 20vw;
   border-radius: 1vw;
   box-shadow: 3px 3px 3px #c3c3c3;
   position: relative;
   z-index: 1;
   overflow: hidden;
 }
+.wrapper .container .restaurant .card li .detail {
+  padding: 1vw 1.5vw;
+  box-sizing: border-box;
+}
 .wrapper .container .restaurant .card li .detail .header .title {
   margin-bottom: 0;
   font-size: 1.5vw;
   color: var(--color-text);
 }
-.wrapper .container .restaurant .card li .detail .header .desc,
-.wrapper .container .restaurant .card li .detail .header .sold {
+.wrapper .container .restaurant .card li .detail .header .desc {
   font-size: 1vw;
   margin-top: 0.5vw;
   font-weight: normal;
@@ -218,30 +216,10 @@ export default {
   font-weight: normal;
   color: var(--color-text2);
 }
-.wrapper .container .restaurant .card li .detail .reserve {
-  justify-self: flex-end;
-}
-.wrapper .container .restaurant .card li .detail .reserve button {
-  width: 6vw;
-  height: 2vw;
-  background-color: var(--color-orange);
-  border: none;
-  outline: none;
-  border-radius: 0.5vw;
-
-  font-size: 1vw;
-  font-weight: bold;
-  color: white;
-
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
 
 /*************** card background transition*****************/
 .wrapper .container .restaurant .card li img {
-  height: 60%;
+  height: 65%;
   width: 100%;
   object-fit: cover;
   border-radius: 1vw 1vw 0 0;
@@ -250,23 +228,5 @@ export default {
 
 .wrapper .container .restaurant .card li:hover img {
   transform: scale(1.1);
-}
-
-/*************** button transition *****************/
-.wrapper .container .restaurant .card li .detail .reserve button::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  transform: translateX(-100%);
-  transition: transform 0.2s ease-in-out;
-  height: 100%;
-  width: 100%;
-  background-color: #d94500;
-  z-index: -1;
-}
-
-.wrapper .container .restaurant .card li .detail .reserve button:hover::before {
-  transform: translateX(0);
 }
 </style>

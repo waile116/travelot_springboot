@@ -61,36 +61,38 @@
           >
             <img :src="item[category + 'Img']" />
             <table class="info">
-              <tr>
-                <td style="width: 10%">id</td>
-                <td>
-                  {{ item[category + "Id"] }}
-                </td>
-              </tr>
-              <tr>
-                <td>stateid</td>
-                <td>{{ item.stateId }}</td>
-              </tr>
-              <tr>
-                <td>name</td>
-                <td>{{ item.name }}</td>
-              </tr>
-              <tr>
-                <td>desc</td>
-                <td>{{ item.desc }}</td>
-              </tr>
-              <tr>
-                <td>location</td>
-                <td>{{ item.location }}</td>
-              </tr>
-              <tr>
-                <td>price</td>
-                <td>{{ item.price }}</td>
-              </tr>
-              <tr>
-                <td>rating</td>
-                <td>{{ item.rating }}</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td style="width: 10%">id</td>
+                  <td>
+                    {{ item[category + "Id"] }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>stateid</td>
+                  <td>{{ item.stateId }}</td>
+                </tr>
+                <tr>
+                  <td>name</td>
+                  <td>{{ item.name }}</td>
+                </tr>
+                <tr>
+                  <td>desc</td>
+                  <td>{{ item.desc }}</td>
+                </tr>
+                <tr>
+                  <td>location</td>
+                  <td>{{ item.location }}</td>
+                </tr>
+                <tr>
+                  <td>price</td>
+                  <td>{{ item.price }}</td>
+                </tr>
+                <tr>
+                  <td>rating</td>
+                  <td>{{ item.rating }}</td>
+                </tr>
+              </tbody>
             </table>
           </li>
         </ul>

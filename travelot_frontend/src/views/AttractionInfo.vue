@@ -23,7 +23,7 @@
               <div class="header">
                 <p class="title">{{ ticket.name }}</p>
                 <p class="desc">{{ ticket.desc }}</p>
-                <p class="sold">已售出{{ ticket.amount }}份</p>
+                <p class="sold">已售出 {{ ticket.amount }} 份</p>
               </div>
               <div class="cost">
                 <p class="price">{{ `¥${ticket.price}` }}</p>
@@ -197,11 +197,20 @@ export default {
   font-size: 1.5vw;
   color: var(--color-text);
 }
-.wrapper .container .attraction .card li .detail .header .desc,
-.wrapper .container .attraction .card li .detail .header .sold {
+.wrapper .container .attraction .card li .detail .header .desc {
   font-size: 1vw;
   margin-top: 0.5vw;
   font-weight: normal;
+}
+.wrapper .container .attraction .card li .detail .header .sold {
+  text-align: center;
+  color: white;
+  background-color: var(--color-text2);
+  padding: 0.5vw;
+  width: 6vw;
+  border-radius: 0.5vw;
+  font-size: 1vw;
+  margin-top: 0.5vw;
 }
 .wrapper .container .attraction .card li .detail .cost {
   justify-self: flex-end;

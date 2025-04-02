@@ -40,6 +40,7 @@
             <div class="detail">
               <div class="header">
                 <p class="title">{{ room.name }}</p>
+                <p class="type">{{ room.type }}</p>
               </div>
               <div class="cost">
                 <p class="price">{{ `¥${room.price}` }}</p>
@@ -276,7 +277,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   flex: 0 0 auto; /*grow/shrink/basis */
   margin: 1vw 2vw 1vw 0;
   padding-bottom: 1vw;
-  height: 25vw;
+  height: 26vw;
   width: 21vw;
   border-radius: 1vw;
   box-shadow: 3px 3px 3px #c3c3c3;
@@ -285,13 +286,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   overflow: hidden;
 }
 .wrapper .container .room .card li .detail {
-  padding: 1vw 1.5vw;
+  padding: 0.25vw 1.5vw 1vw;
   box-sizing: border-box;
 }
 .wrapper .container .room .card li .detail .title {
   margin-bottom: 0;
   font-size: 1.5vw;
   color: var(--color-text);
+}
+.wrapper .container .room .card li .detail .type {
+  text-align: center;
+  color: white;
+  background-color: var(--color-text2);
+  padding: 0.5vw;
+  width: 4vw;
+  border-radius: 0.5vw;
+  font-size: 1vw;
 }
 .wrapper .container .room .card li .detail .cost {
   justify-self: flex-end;
@@ -308,7 +318,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: var(--color-text2);
 }
 .wrapper .container .room .card li .detail .reserve {
-  padding: 0 1.5vw 1vw;
+  padding: 0 1.5vw 0.7vw;
   position: absolute;
   top: auto;
   right: 0;

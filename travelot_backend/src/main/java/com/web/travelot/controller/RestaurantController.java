@@ -1,6 +1,7 @@
 package com.web.travelot.controller;
 
 import com.web.travelot.po.CommonResult;
+import com.web.travelot.po.Food;
 import com.web.travelot.po.Restaurant;
 import com.web.travelot.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,4 +59,10 @@ public class RestaurantController {
         int result = restaurantService.saveRestaurant(restaurant);
         return new CommonResult<>(200, "Insert restaurant success", result);
     }
+
+    @GetMapping("/listFoodById/{restaurantId}")
+    public CommonResult<List<Food>> listFoodById(@PathVariable("restaurantId") Integer restaurantId) throws Exception{
+        List<Food> result = restaurantService.listFoodById(restaurantId);
+        return new CommonResult<>(200, "success", result);
+    };
 }

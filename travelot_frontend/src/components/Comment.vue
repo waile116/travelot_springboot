@@ -263,7 +263,7 @@ export default {
 .wrapper .container .room .comment > li {
   padding: 2vw;
   border-radius: 1vw;
-  box-shadow: 2px 2px 3px #c3c3c3;
+  box-shadow: 3px 3px 3px #c3c3c3;
   margin-bottom: 1vw;
 }
 .wrapper .container .room .comment li .header {
