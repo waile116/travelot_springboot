@@ -5,6 +5,7 @@ import com.web.travelot.po.User;
 public interface UserService {
     public int saveUser(User user);
     public int updateUserImgById(User user);
+    public int updateUserPassword(User user);
     public User getUserByIdPass(User user);
     public User getUserById(Integer userId);
 }

@@ -26,8 +26,10 @@
       <div class="room">
         <div class="img">
           <p class="title">{{ hotel.name }}</p>
-          <img :src="hotel.hotelImg" />
-          <div class="map">this is map</div>
+          <img class="background" :src="hotel.hotelImg" />
+          <a class="map" :href="hotel.mapLink" target="_blank">
+            <img :src="hotel.mapImg" />
+          </a>
         </div>
         <p class="description">{{ hotel.desc }}</p>
         <div class="location">
@@ -250,14 +252,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   bottom: 0;
   margin: 1vw 2vw;
 }
-.wrapper .container .room .img img {
+.wrapper .container .room .img .background {
   flex: 7;
   object-fit: cover;
 }
-
 .wrapper .container .room .img .map {
   flex: 3;
-  background-color: red;
+  cursor: pointer;
+}
+.wrapper .container .room .img .map img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /*************** card container *****************/

@@ -21,8 +21,8 @@ public interface AttractionMapper {
             "(#{stateId}, #{name}, #{desc}, #{location}, #{price}, #{openTime}, #{rating}, #{attractionImg}, NOW(), NOW())")
     public int saveAttraction(Attraction attraction);
     @Update("UPDATE attraction SET state_id=#{stateId}, name=#{name}, description=#{desc}, location=#{location}, " +
-            "price=#{price}, open_t=#{openTime}, rating=#{rating}, attr_img=#{attractionImg}, update_t=NOW() " +
-            "WHERE id=#{attractionId}")
+            "price=#{price}, open_t=#{openTime}, rating=#{rating}, attr_img=#{attractionImg}, map_img=#{mapImg}, map_link=#{mapLink}, " +
+            "update_t=NOW() WHERE id=#{attractionId}")
     public int updateAttraction(Attraction attraction);
     @Select("select * from ticket")
     public List<Ticket> listTicket();

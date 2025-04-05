@@ -9,10 +9,21 @@
     </div>
     <div class="content">
       <div class="photo">
-        <img :src="data.img" />
         <label class="change">
-          <input type="file" @change="uploadImg" accept="image/*" />
-          <i class="fa fa-pencil-square-o"></i>
+          <img :src="data.img" />
+          <input
+            type="file"
+            @change="uploadImg($event, 'img')"
+            accept="image/*"
+          />
+        </label>
+        <label class="change">
+          <img :src="data.mapImg" />
+          <input
+            type="file"
+            @change="uploadImg($event, 'mapImg')"
+            accept="image/*"
+          />
         </label>
       </div>
       <table class="form">
@@ -45,6 +56,10 @@
             <td>Rating:</td>
             <td><input v-model="data.rating" type="text" /></td>
           </tr>
+          <tr>
+            <td>Map Link:</td>
+            <td><input v-model="data.mapLink" type="text" /></td>
+          </tr>
         </tbody>
       </table>
       <button @click="updateData">保存</button>
@@ -71,6 +86,8 @@ export default {
         openTime: "",
         rating: "",
         img: "",
+        mapImg: "",
+        mapLink: "",
       },
     };
   },
@@ -95,14 +112,14 @@ export default {
       .catch((error) => console.error(error));
   },
   methods: {
-    uploadImg(event) {
+    uploadImg(event, key) {
       const file = event.target.files[0]; //get first selected file
       if (!file) return;
 
       const reader = new FileReader();
       reader.readAsDataURL(file); //converts file into base64 string
       reader.onload = () => {
-        this.data.img = reader.result;
+        this.data[key] = reader.result;
       };
     },
 
@@ -118,7 +135,11 @@ export default {
       }${this.data.rating}`;
 
       this.$axios
-        .post(url, { img: this.data.img })
+        .post(url, {
+          img: this.data.img,
+          mapImg: this.data.mapImg,
+          mapLink: this.data.mapLink,
+        })
         .then((response) => {
           console.log(response.data.message);
           alert("保存成功");
@@ -132,13 +153,6 @@ export default {
     toAdmin() {
       this.$router.push({
         path: "/admin",
-      });
-    },
-
-    toLogout() {
-      this.$removeSessionStorage("user");
-      this.$router.push({
-        path: "/login",
       });
     },
   },
@@ -195,7 +209,7 @@ export default {
   display: flex;
 }
 
-.wrapper .content .photo img {
+.wrapper .content .photo .change img {
   width: 16vw;
   height: 12vw;
   border: 0.1vw solid #c3c3c3;
@@ -204,11 +218,6 @@ export default {
 
 .wrapper .content .photo .change {
   cursor: pointer;
-  font-size: 1.5vw;
-  position: absolute;
-  bottom: 0;
-  right: 39%;
-  padding-bottom: 1vw;
 }
 
 .wrapper .content .photo .change input[type="file"] {

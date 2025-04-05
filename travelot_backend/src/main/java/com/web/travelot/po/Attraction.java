@@ -10,6 +10,8 @@ public class Attraction {
     private String open_t;
     private Double rating;
     private String attr_img;
+    private String map_img;
+    private String map_link;
 
     public Integer getAttractionId() {
         return id;
@@ -81,5 +83,21 @@ public class Attraction {
 
     public void setAttractionImg(String attr_img) {
         this.attr_img = attr_img;
+    }
+
+    public String getMapImg() {
+        return map_img;
+    }
+
+    public void setMapImg(String map_img) {
+        this.map_img = map_img;
+    }
+
+    public String getMapLink() {
+        return map_link;
+    }
+
+    public void setMapLink(String map_link) {
+        this.map_link = map_link;
     }
 }

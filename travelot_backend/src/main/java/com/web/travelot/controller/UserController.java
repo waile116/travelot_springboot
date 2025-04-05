@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/UserController")
@@ -14,18 +15,22 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/saveUser/{userId}/{password}/{username}/{userSex}")
+    @PostMapping("/saveUser/{userId}/{password}/{userName}/{userAlias}/{userSex}")
     public CommonResult<Integer> saveUser(@PathVariable("userId") Integer userId,
                                           @PathVariable("password") String password,
-                                          @PathVariable("username") String username,
+                                          @PathVariable("userName") String userName,
+                                          @PathVariable("userAlias") String userAlias,
                                           @PathVariable("userSex") Integer userSex) throws Exception {
         User user = new User();
         user.setUserId(userId);
-        user.setUsername(username);
-        user.setPassword(password);
+        if(!"-1".equals(password)) {
+            user.setPassword(password);
+        }
+        user.setUserName(userName);
+        user.setUserAlias(userAlias);
         user.setUserSex(userSex);
         int result = userService.saveUser(user);
-        return new CommonResult<>(200, "Register success", result);
+        return new CommonResult<>(200, "Save user success", result);
     }
 
     @PostMapping("/updateUserImgById/{userId}")
@@ -37,7 +42,18 @@ public class UserController {
         user.setUserId(userId);
         user.setUserImg(userImg);
         int result = userService.updateUserImgById(user);
-        return new CommonResult<>(200, "UserImg update success", result);
+        return new CommonResult<>(200, "Update userImg success", result);
+    }
+
+    @PostMapping("/updateUserPassword/{userId}/{password}")
+    public CommonResult<Integer> updateUserPassword(@PathVariable("userId") Integer userId,
+                                                    @PathVariable("password") String password) throws Exception {
+
+        User user = new User();
+        user.setUserId(userId);
+        user.setPassword(password);
+        int result = userService.updateUserPassword(user);
+        return new CommonResult<>(200, "Update password success", result);
     }
 
     @GetMapping("/getUserByIdPass/{userId}/{password}")

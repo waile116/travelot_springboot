@@ -42,6 +42,8 @@ public class AttractionController {
                                                 @PathVariable("rating") Double rating,
                                                 @RequestBody Map<String, String> requestBody) throws Exception {
         String img = requestBody.get("img");
+        String mapImg = requestBody.get("mapImg");
+        String mapLink = requestBody.get("mapLink");
         Attraction attraction = new Attraction();
         if(attractionId > -1) {
             attraction.setAttractionId(attractionId);
@@ -53,7 +55,9 @@ public class AttractionController {
         attraction.setPrice(price);
         attraction.setOpenTime(openTime);
         attraction.setRating(rating);
+        attraction.setMapLink(mapLink);
         attraction.setAttractionImg(img);
+        attraction.setMapImg(mapImg);
         int result = attractionService.saveAttraction(attraction);
         return new CommonResult<>(200, "Insert attraction success", result);
     }

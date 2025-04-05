@@ -21,7 +21,7 @@ public interface HotelMapper {
             "(#{stateId}, #{name}, #{desc}, #{location}, #{price}, #{rating}, #{hotelImg}, NOW(), NOW())")
     public int saveHotel(Hotel hotel);
     @Update("UPDATE hotel SET state_id=#{stateId}, name=#{name}, description=#{desc}, location=#{location}, " +
-            "price=#{price}, rating=#{rating}, hotel_img=#{hotelImg}, update_t=NOW() " +
+            "price=#{price}, rating=#{rating}, hotel_img=#{hotelImg}, map_img=#{mapImg}, map_link=#{mapLink}, update_t=NOW() " +
             "WHERE id=#{hotelId}")
     public int updateHotel(Hotel hotel);
 

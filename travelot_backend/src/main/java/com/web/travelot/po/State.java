@@ -1,11 +1,13 @@
 package com.web.travelot.po;
 
 public class State{
-		private Integer id;
-        private String name;
-        private String description;
-        private String state_img;
-        private String region;
+    private Integer id;
+    private String name;
+    private String description;
+    private String state_img;
+    private String region;
+    private String map_img;
+    private String map_link;
 
         //backend parse stateId as a JSON file to frontend
     //frontend use stateId as a parameter to id in this case
@@ -47,5 +49,19 @@ public class State{
         this.region = region;
     }
 
+    public String getMapImg() {
+        return map_img;
+    }
 
+    public void setMapImg(String map_img) {
+        this.map_img = map_img;
+    }
+
+    public String getMapLink() {
+        return map_link;
+    }
+
+    public void setMapLink(String map_link) {
+        this.map_link = map_link;
+    }
 }

@@ -8,7 +8,7 @@
       <p v-if="!isLogin" @click="toLogin">登录</p>
       <button v-if="!isLogin" @click="toRegister">注册</button>
       <p v-if="isLogin" @click="toProfile">
-        {{ this.user.username }}<i class="fa fa-chevron-right"></i>
+        {{ this.user.userName }}<i class="fa fa-chevron-right"></i>
       </p>
     </div>
   </div>

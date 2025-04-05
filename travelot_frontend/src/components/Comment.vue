@@ -17,7 +17,7 @@
               <div class="user">
                 <img :src="comment.userImg" alt="avatar" />
                 <div class="name">
-                  <p>{{ comment.username }}</p>
+                  <p>{{ comment.userAlias }}</p>
                   <div class="star">
                     <i
                       v-for="index in 5"
@@ -145,7 +145,7 @@ export default {
             .get(`UserController/getUserById/${comment.userId}`)
             .then((response) => {
               // direct assignment
-              comment.username = response.data.result.username;
+              comment.userAlias = response.data.result.userAlias;
               comment.userImg = response.data.result.userImg;
               comment.createT = comment.createT.split("T")[0];
             })

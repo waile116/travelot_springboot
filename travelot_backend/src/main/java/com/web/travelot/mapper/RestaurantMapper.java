@@ -21,8 +21,8 @@ public interface RestaurantMapper {
             "(#{stateId}, #{name}, #{desc}, #{location}, #{price}, #{openTime}, #{rating}, #{restaurantImg}, NOW(), NOW())")
     public int saveRestaurant(Restaurant restaurant);
     @Update("UPDATE restaurant SET state_id=#{stateId}, name=#{name}, description=#{desc}, location=#{location}, " +
-            "price=#{price}, open_t=#{openTime}, rating=#{rating}, restaurant_img=#{restaurantImg}, update_t=NOW() " +
-            "WHERE id=#{restaurantId}")
+            "price=#{price}, open_t=#{openTime}, rating=#{rating}, restaurant_img=#{restaurantImg}, map_img=#{mapImg}, map_link=#{mapLink}, " +
+            "update_t=NOW() WHERE id=#{restaurantId}")
     public int updateRestaurant(Restaurant restaurant);
 
     @Select("select * from food where restaurant_id=#{restaurantId}")

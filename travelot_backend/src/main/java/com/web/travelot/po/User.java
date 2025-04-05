@@ -17,19 +17,15 @@ public class User {
         this.id = id;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getUsername() {
+    public String getUserName() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUserName(String username) {
         this.username = username;
     }
 
@@ -49,11 +45,11 @@ public class User {
         this.user_img = user_img;
     }
 
-    public String getAlias() {
+    public String getUserAlias() {
         return alias;
     }
 
-    public void setAlias(String alias) {
+    public void setUserAlias(String alias) {
         this.alias = alias;
     }
 

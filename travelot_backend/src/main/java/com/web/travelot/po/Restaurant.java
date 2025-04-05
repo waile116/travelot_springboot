@@ -10,6 +10,8 @@ public class Restaurant {
     private String open_t;
     private Double rating;
     private String restaurant_img;
+    private String map_img;
+    private String map_link;
 
     public Integer getRestaurantId() {
         return id;
@@ -81,5 +83,21 @@ public class Restaurant {
 
     public void setRestaurantImg(String restaurant_img) {
         this.restaurant_img = restaurant_img;
+    }
+
+    public String getMapImg() {
+        return map_img;
+    }
+
+    public void setMapImg(String map_img) {
+        this.map_img = map_img;
+    }
+
+    public String getMapLink() {
+        return map_link;
+    }
+
+    public void setMapLink(String map_link) {
+        this.map_link = map_link;
     }
 }

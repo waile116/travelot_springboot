@@ -44,6 +44,8 @@ public class RestaurantController {
                                                 @PathVariable("rating") Double rating,
                                                 @RequestBody Map<String, String> requestBody) throws Exception {
         String img = requestBody.get("img");
+        String mapImg = requestBody.get("mapImg");
+        String mapLink = requestBody.get("mapLink");
         Restaurant restaurant = new Restaurant();
         if(restaurantId > -1) {
             restaurant.setRestaurantId(restaurantId);
@@ -55,7 +57,9 @@ public class RestaurantController {
         restaurant.setPrice(price);
         restaurant.setOpenTime(openTime);
         restaurant.setRating(rating);
+        restaurant.setMapLink(mapLink);
         restaurant.setRestaurantImg(img);
+        restaurant.setMapImg(mapImg);
         int result = restaurantService.saveRestaurant(restaurant);
         return new CommonResult<>(200, "Insert restaurant success", result);
     }

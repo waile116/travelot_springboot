@@ -3,8 +3,10 @@
     <Nav></Nav>
     <div class="header">
       <p>{{ state.name }}</p>
-      <img :src="state.stateImg" />
-      <div class="map">this is map</div>
+      <img class="background" :src="state.stateImg" />
+      <a class="map" :href="state.mapLink" target="_blank">
+        <img :src="state.mapImg" />
+      </a>
     </div>
     <ul class="container">
       <li class="content">
@@ -207,21 +209,10 @@ export default {
   position: relative;
   display: flex;
   margin: 0 4vw 2vw;
+  height: 25vw;
   border-radius: 0 0 1vw 1vw;
   overflow: hidden;
 }
-
-.wrapper .header img {
-  width: 70%;
-  height: 25vw;
-  object-fit: cover;
-}
-
-.wrapper .header .map {
-  width: 30%;
-  background-color: red;
-}
-
 .wrapper .header p {
   position: absolute;
   font-size: 2vw;
@@ -230,6 +221,19 @@ export default {
   z-index: 4;
   bottom: 0;
   margin: 1vw 2vw;
+}
+.wrapper .header .background {
+  flex: 7;
+  object-fit: cover;
+}
+.wrapper .header .map {
+  flex: 3;
+  cursor: pointer;
+}
+.wrapper .header .map img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /***************carousel container*****************/

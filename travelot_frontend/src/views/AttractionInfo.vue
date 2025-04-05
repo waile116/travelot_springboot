@@ -3,8 +3,10 @@
     <Nav2></Nav2>
     <div class="img">
       <p class="title">{{ attraction.name }}</p>
-      <img :src="attraction.attractionImg" />
-      <div class="map">this is map</div>
+      <img class="background" :src="attraction.attractionImg" />
+      <a class="map" :href="attraction.mapLink" target="_blank">
+        <img :src="attraction.mapImg" />
+      </a>
     </div>
     <div class="container">
       <div class="attraction">
@@ -132,13 +134,18 @@ export default {
   bottom: 0;
   margin: 1vw 2vw;
 }
-.wrapper .img img {
+.wrapper .img .background {
   flex: 7;
   object-fit: cover;
 }
 .wrapper .img .map {
   flex: 3;
-  background-color: red;
+  cursor: pointer;
+}
+.wrapper .img .map img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /*************** container *****************/

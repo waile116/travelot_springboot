@@ -105,22 +105,23 @@ export default {
             // reset input
             this.userId = "";
             this.password = "";
-          } else {
-            this.$setSessionStorage("user", user);
-            console.log("Login success");
+            return;
+          }
 
-            // go to admin page
-            if (user.isAdmin) {
-              this.$router.push({ path: "/admin" });
+          this.$setSessionStorage("user", user);
+          console.log("Login success");
+
+          // go to admin page
+          if (user.isAdmin) {
+            this.$router.push({ path: "/admin" });
+          } else {
+            // if user come from register page, redirect to index
+            if (this.prePath == "/register") {
+              this.$router.push({
+                path: "/index",
+              });
             } else {
-              // if user come from register page, redirect to index
-              if (this.prePath == "/register") {
-                this.$router.push({
-                  path: "/index",
-                });
-              } else {
-                this.$router.go(-1);
-              }
+              this.$router.go(-1);
             }
           }
         })

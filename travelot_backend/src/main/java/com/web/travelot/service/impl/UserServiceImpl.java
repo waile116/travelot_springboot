@@ -13,12 +13,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int saveUser(User user) {
-        return userMapper.saveUser(user);
+        // if user exists, update, else save
+        if(userMapper.getUserById(user.getUserId()) != null){
+            return userMapper.updateUser(user);
+        }else {
+            return userMapper.saveUser(user);
+        }
     }
 
     @Override
     public int updateUserImgById(User user){
         return userMapper.updateUserImgById(user);
+    };
+    @Override
+    public int updateUserPassword(User user){
+        return userMapper.updateUserPassword(user);
     };
     @Override
     public User getUserByIdPass(User user) {

@@ -28,7 +28,7 @@
               />
             </li>
             <li>
-              <input type="text" v-model="username" placeholder="用户名称" />
+              <input type="text" v-model="userName" placeholder="用户名称" />
             </li>
             <li class="sex">
               <div class="title">性别：</div>
@@ -67,7 +67,7 @@ export default {
       userId: "",
       password: "",
       confirmPassword: "",
-      username: "",
+      userName: "",
       userSex: 1,
       isError: false,
       errorMsg: "",
@@ -99,7 +99,7 @@ export default {
         this.errorMsg = "密码不一致";
         return;
       }
-      if (this.username == "") {
+      if (this.userName == "") {
         this.isError = true;
         this.errorMsg = "请输入用户名";
         return;
@@ -121,23 +121,27 @@ export default {
             this.userId = "";
             this.password = "";
             this.confirmPassword = "";
-            this.username = "";
+            this.userName = "";
+            return;
           }
-        });
 
-      //update user table through backend
-      this.$axios
-        .post(
-          `UserController/saveUser/${this.userId}/${this.password}/${this.username}/${this.userSex}`
-        )
-        .then((response) => {
-          if (response.data.result > 0) {
-            alert("注册成功");
-            console.log(response.data.message);
-            this.$router.push("/login");
-          } else {
-            alert("注册失败");
-          }
+          //update user table through backend
+          this.$axios
+            .post(
+              `UserController/saveUser/${this.userId}/${this.password}/${this.userName}/user_${this.userName}/${this.userSex}`
+            )
+            .then((response) => {
+              if (response.data.result > 0) {
+                alert("注册成功");
+                console.log(response.data.message);
+                this.$router.push("/login");
+              } else {
+                alert("注册失败");
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         })
         .catch((error) => {
           console.error(error);
