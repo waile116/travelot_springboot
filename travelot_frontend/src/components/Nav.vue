@@ -33,13 +33,13 @@ export default {
   components: { Menu },
   methods: {
     toLogin() {
-      this.$router.push({ path: "/login" });
+      this.$router.push({ path: "/user/login" });
     },
     toRegister() {
-      this.$router.push({ path: "/register" });
+      this.$router.push({ path: "/user/register" });
     },
     toProfile() {
-      this.$router.push({ path: "/profile" });
+      this.$router.push({ path: "/user/profile" });
     },
   },
 };

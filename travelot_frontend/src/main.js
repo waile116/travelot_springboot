@@ -53,11 +53,11 @@ router.beforeEach((to, from, next) => {
         to.path === "/attractionList" ||
         to.path === "/hotelList" ||
         to.path === "/restaurantList" ||
-        to.path === "/login" ||
-        to.path === "/register"
+        to.path === "/user/login" ||
+        to.path === "/user/register"
       )
     )
-      next("login");
+      next("/user/login");
     else {
       next();
     }

@@ -2,6 +2,7 @@ package com.web.travelot.mapper;
 
 import com.web.travelot.po.Hotel;
 import com.web.travelot.po.Room;
+import com.web.travelot.po.Ticket;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -29,4 +30,11 @@ public interface HotelMapper {
     public List<Room> listRoom();
     @Select("select * from room where hotel_id=#{hotelId} order by price")
     public List<Room> listRoomById(Integer hotelId);
+
+    @Insert("insert into room (hotel_id, name, type, capacity, price, room_img, create_t, update_t) values " +
+            "(#{hotelId}, #{name}, #{type}, #{capacity}, #{price}, #{roomImg}, NOW(), NOW())")
+    public int saveRoom(Room room);
+    @Update("UPDATE room SET hotel_id=#{hotelId}, name=#{name}, type=#{type}, capacity=#{capacity}, " +
+            "price=#{price}, room_img=#{roomImg}, update_t=NOW() WHERE id=#{roomId}")
+    public int updateRoom(Room room);
 }

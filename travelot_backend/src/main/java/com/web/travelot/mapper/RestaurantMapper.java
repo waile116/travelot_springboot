@@ -2,6 +2,7 @@ package com.web.travelot.mapper;
 
 import com.web.travelot.po.Restaurant;
 import com.web.travelot.po.Food;
+import com.web.travelot.po.Ticket;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -27,4 +28,11 @@ public interface RestaurantMapper {
 
     @Select("select * from food where restaurant_id=#{restaurantId}")
     public List<Food> listFoodById(Integer restaurantId);
+
+    @Insert("insert into food (restaurant_id, name, price, food_img, create_t, update_t) values " +
+            "(#{restaurantId}, #{name}, #{price}, #{foodImg}, NOW(), NOW())")
+    public int saveFood(Food food);
+    @Update("UPDATE food SET restaurant_id=#{restaurantId}, name=#{name}, price=#{price}, " +
+            "food_img =#{foodImg}, update_t=NOW() WHERE id=#{foodId}")
+    public int updateFood(Food food);
 }

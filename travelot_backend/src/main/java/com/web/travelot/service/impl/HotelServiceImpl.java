@@ -2,6 +2,7 @@ package com.web.travelot.service.impl;
 import java.util.List;
 
 import com.web.travelot.po.Room;
+import com.web.travelot.po.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.web.travelot.po.Hotel;
@@ -43,4 +44,13 @@ public class HotelServiceImpl implements HotelService{
     public List<Room> listRoomById(Integer hotelId){
         return hotelMapper.listRoomById(hotelId);
     }
+    @Override
+    public int saveRoom(Room room){
+        // if id exists, update, else save
+        if (room.getRoomId() != null) {
+            return hotelMapper.updateRoom(room);
+        } else {
+            return hotelMapper.saveRoom(room);
+        }
+    };
 }

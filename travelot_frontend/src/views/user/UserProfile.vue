@@ -1,12 +1,5 @@
 <template>
   <div class="wrapper">
-    <div class="nav">
-      <div class="left">
-        <p v-if="isLogin" @click="toBack">
-          <i class="fa fa-chevron-left"></i>返回
-        </p>
-      </div>
-    </div>
     <div class="container">
       <div class="box">
         <p class="title">个人信息设置</p>
@@ -44,6 +37,14 @@
           <li @click="toOrderList">
             <i class="fa fa-file"></i>
             <p>我的订单</p>
+          </li>
+          <li @click="toFavouriteList">
+            <i class="fa fa-heart"></i>
+            <p>我的收藏</p>
+          </li>
+          <li @click="toCommentList">
+            <i class="fa fa-commenting"></i>
+            <p>我的评价</p>
           </li>
           <li @click="openInfo">
             <i class="fa fa-address-card"></i>
@@ -134,10 +135,8 @@
 </template>
 
 <script>
-import Nav from "../components/Nav.vue";
-
 export default {
-  name: "Profile",
+  name: "UserProfile",
   data() {
     return {
       isLogin: false,
@@ -167,9 +166,6 @@ export default {
     this.temp.userName = this.user.userName;
     this.temp.userAlias = this.user.userAlias;
     this.temp.userSex = this.user.userSex;
-  },
-  components: {
-    Nav,
   },
   methods: {
     uploadImg(event) {
@@ -328,12 +324,14 @@ export default {
           console.error(error);
         });
     },
-
-    toBack() {
-      this.$router.go(-1);
-    },
     toOrderList() {
-      this.$router.push({ path: "/orderList" });
+      this.$router.push({ path: "/user/orderList" });
+    },
+    toFavouriteList() {
+      this.$router.push({ path: "/user/favouriteList" });
+    },
+    toCommentList() {
+      this.$router.push({ path: "/user/commentList" });
     },
     toLogout() {
       this.$removeSessionStorage("user");

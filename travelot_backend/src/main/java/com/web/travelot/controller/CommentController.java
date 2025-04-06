@@ -32,17 +32,22 @@ public class CommentController {
         comment.setText(text);
         comment.setCommentImg(commentImg);
         int result = commentService.saveComment(comment);
-        return new CommonResult<>(200, "success", 0);
-        //return new CommonResult<>(200, "success", result);
+        return new CommonResult<>(200, "success", result);
     }
 
     @GetMapping("/listCommentByTargetId/{category}/{targetId}")
-    public CommonResult<List<Comment>> getCommentByIdPass(@PathVariable("category") Integer category,
+    public CommonResult<List<Comment>> listCommentByTargetId(@PathVariable("category") Integer category,
                                               @PathVariable("targetId") Integer targetId) throws Exception {
         Comment comment = new Comment();
         comment.setCategory(category);
         comment.setTargetId(targetId);
-        List<Comment> result = commentService.ListCommentByTargetId(comment);
+        List<Comment> result = commentService.listCommentByTargetId(comment);
+        return new CommonResult<>(200, "success", result);
+    }
+
+    @GetMapping("/listCommentByUserId/{userId}")
+    public CommonResult<List<Comment>> listCommentByUserId(@PathVariable("userId") Integer userId) throws Exception {
+        List<Comment> result = commentService.listCommentByUserId(userId);
         return new CommonResult<>(200, "success", result);
     }
 }

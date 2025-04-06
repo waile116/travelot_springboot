@@ -108,6 +108,7 @@ export default {
       .get("StateController/getStateById/" + this.stateId)
       .then((response) => {
         this.state = response.data.result;
+        console.log(this.state);
       })
       .catch((error) => {
         console.error(error);
@@ -225,6 +226,7 @@ export default {
 .wrapper .header .background {
   flex: 7;
   object-fit: cover;
+  z-index: 3;
 }
 .wrapper .header .map {
   flex: 3;
@@ -234,6 +236,10 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+.wrapper .header .map img:hover {
+  transform: scale(1.1);
 }
 
 /***************carousel container*****************/

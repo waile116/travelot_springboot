@@ -8,11 +8,11 @@ public class Ticket {
     private Integer price;
     private Integer amount;
 
-    public Integer getId() {
+    public Integer getTicketId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setTicketId(Integer id) {
         this.id = id;
     }
 

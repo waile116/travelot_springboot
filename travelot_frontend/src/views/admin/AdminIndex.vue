@@ -1,38 +1,26 @@
 <template>
   <div class="wrapper">
-    <div class="nav">
-      <div class="left">
-        <img src="../../assets/logo.png" alt="logo" />
-      </div>
-      <div class="right">
-        <p v-if="!isLogin" @click="toLogin">登录</p>
-        <button v-if="!isLogin" @click="toRegister">注册</button>
-        <p v-if="isLogin" @click="toLogout">
-          退出登录<i class="fa fa-chevron-right"></i>
-        </p>
-      </div>
-    </div>
     <div class="content">
-      <p class="insert" @click="toInsert">
-        添加数据<i class="fa fa-chevron-right"></i>
-      </p>
+      <div class="insert" @click="toInsert">
+        <p>添加数据<i class="fa fa-chevron-right"></i></p>
+      </div>
       <div class="category">
         <!-- :class is vue's class binding, when category matches, it will render  class "active"-->
         <p
-          :class="{ active: category === 'attraction' }"
-          @click="fetchData('attraction')"
+          :class="{ active: category === 'Attraction' }"
+          @click="fetchData('Attraction')"
         >
           景点
         </p>
         <p
-          :class="{ active: category === 'hotel' }"
-          @click="fetchData('hotel')"
+          :class="{ active: category === 'Hotel' }"
+          @click="fetchData('Hotel')"
         >
           酒店
         </p>
         <p
-          :class="{ active: category === 'restaurant' }"
-          @click="fetchData('restaurant')"
+          :class="{ active: category === 'Restaurant' }"
+          @click="fetchData('Restaurant')"
         >
           餐厅
         </p>
@@ -57,15 +45,15 @@
         <ul class="card">
           <li
             v-for="item in dataArr"
-            @click="toUpdate(category, item[category + 'Id'])"
+            @click="toUpdate(categoryL, item[categoryL + 'Id'])"
           >
-            <img :src="item[category + 'Img']" />
+            <img :src="item[categoryL + 'Img']" />
             <table class="info">
               <tbody>
                 <tr>
-                  <td style="width: 10%">id</td>
+                  <td style="width: 5vw">id</td>
                   <td>
-                    {{ item[category + "Id"] }}
+                    {{ item[categoryL + "Id"] }}
                   </td>
                 </tr>
                 <tr>
@@ -103,13 +91,14 @@
 
 <script>
 export default {
-  name: "Admin",
+  name: "AdminIndex",
 
   data() {
     return {
       user: {},
       isLogin: false,
-      category: "attraction",
+      category: "Attraction",
+      categoryL: "attraction",
       stateArr: [],
       state: "",
       dataArr: [],
@@ -138,12 +127,9 @@ export default {
     fetchData(category) {
       // changing state and category will update this.state and this.category, and will list different category
       this.category = category;
+      this.categoryL = category.charAt(0).toLowerCase() + category.slice(1);
 
-      const url = `${
-        this.category.charAt(0).toUpperCase() + this.category.slice(1)
-      }Controller/list${
-        this.category.charAt(0).toUpperCase() + this.category.slice(1)
-      }ById/${this.state.stateId}`;
+      const url = `${this.category}Controller/list${this.category}ById/${this.state.stateId}`;
 
       this.$axios
         .get(url)
@@ -154,14 +140,6 @@ export default {
           console.error(error);
         });
     },
-
-    toLogout() {
-      this.$removeSessionStorage("user");
-      this.$router.push({
-        path: "/login",
-      });
-    },
-
     toInsert() {
       this.$router.push({
         path: "/admin/insert",
@@ -176,77 +154,6 @@ export default {
 </script>
 
 <style scoped>
-/*************** nav bar *****************/
-.wrapper .nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4vw;
-  background-color: var(--color-blue1);
-  height: 6vw;
-}
-
-/*************** nav left side *****************/
-.wrapper .nav .left {
-  display: flex;
-}
-
-.wrapper .nav .left img {
-  object-fit: contain;
-  width: 10vw;
-  padding-right: 2vw;
-}
-
-/*************** nav menu *****************/
-.wrapper .nav .menu {
-  align-items: center;
-  color: white;
-  font-family: var(--font-family);
-  font-size: 1.5vw;
-  line-height: 25px;
-  cursor: pointer;
-  margin: 0 2vw;
-}
-
-/***************  nav right side *****************/
-.wrapper .nav .right {
-  display: flex;
-  align-items: center;
-}
-
-.wrapper .nav .right p {
-  display: flex;
-  align-items: center;
-  color: white;
-  font-family: var(--font-family);
-  font-size: 1.5vw;
-  line-height: 25px;
-  cursor: pointer;
-  margin: 0 2vw;
-}
-
-.wrapper .nav .right p i {
-  font-size: 1.5vw;
-  margin-left: 1vw;
-}
-
-.wrapper .nav .right button {
-  color: white;
-  font-family: var(--font-family);
-  font-weight: 700;
-  font-size: 1.5vw;
-  background-color: var(--color-orange);
-  padding: 1vw 2.5vw;
-
-  outline: none;
-  border: none;
-  border-radius: 1vw;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
 /*************** content *****************/
 .wrapper .content {
   display: flex;
@@ -258,11 +165,12 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  cursor: pointer;
   font-size: 1.5vw;
 }
-
-.wrapper .content .insert i {
+.wrapper .content .insert p {
+  cursor: pointer;
+}
+.wrapper .content .insert p i {
   align-items: center;
   margin-left: 1vw;
 }

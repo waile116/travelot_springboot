@@ -255,6 +255,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .wrapper .container .room .img .background {
   flex: 7;
   object-fit: cover;
+  z-index: 3;
 }
 .wrapper .container .room .img .map {
   flex: 3;
@@ -264,6 +265,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+.wrapper .container .room .img .map img:hover {
+  transform: scale(1.1);
 }
 
 /*************** card container *****************/

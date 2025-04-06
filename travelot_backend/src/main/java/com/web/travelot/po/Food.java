@@ -4,14 +4,14 @@ public class Food {
     private Integer id;
     private Integer restaurant_id;
     private String name;
-    private Double price;
+    private Integer price;
     private String food_img;
 
-    public Integer getId() {
+    public Integer getFoodId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setFoodId(Integer id) {
         this.id = id;
     }
 
@@ -31,11 +31,11 @@ public class Food {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

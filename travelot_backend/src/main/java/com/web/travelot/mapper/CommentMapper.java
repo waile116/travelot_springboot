@@ -15,4 +15,7 @@ public interface CommentMapper {
     public int saveComment(Comment comment);
     @Select("select * from comment where category = #{category} and target_id = #{targetId}")
     public List<Comment> listCommentByTargetId(Comment comment);
+
+    @Select("select * from comment where user_id = #{userId}")
+    public List<Comment> listCommentByUserId(Integer userId);
 }

@@ -133,6 +133,7 @@ export default {
 .wrapper .img .background {
   flex: 7;
   object-fit: cover;
+  z-index: 3;
 }
 .wrapper .img .map {
   flex: 3;
@@ -142,6 +143,10 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+.wrapper .img .map img:hover {
+  transform: scale(1.1);
 }
 
 /*************** container *****************/

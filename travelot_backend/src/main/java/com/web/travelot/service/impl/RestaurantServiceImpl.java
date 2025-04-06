@@ -3,6 +3,7 @@ package com.web.travelot.service.impl;
 import com.web.travelot.mapper.RestaurantMapper;
 import com.web.travelot.po.Food;
 import com.web.travelot.po.Restaurant;
+import com.web.travelot.po.Ticket;
 import com.web.travelot.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,4 +42,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     public List<Food> listFoodById(Integer restaurantId){
         return restaurantMapper.listFoodById(restaurantId);
     }
+
+    @Override
+    public int saveFood(Food food){
+        // if id exists, update, else save
+        if (food.getFoodId() != null) {
+            return restaurantMapper.updateFood(food);
+        } else {
+            return restaurantMapper.saveFood(food);
+        }
+    };
 }

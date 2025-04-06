@@ -9,11 +9,11 @@ public class Room {
     private Integer price;
     private String room_img;
 
-    public Integer getId() {
+    public Integer getRoomId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setRoomId(Integer id) {
         this.id = id;
     }
 

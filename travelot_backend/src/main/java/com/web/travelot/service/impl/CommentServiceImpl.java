@@ -17,7 +17,11 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.saveComment(comment);
     }
     @Override
-    public List<Comment> ListCommentByTargetId(Comment comment){
+    public List<Comment> listCommentByTargetId(Comment comment){
         return commentMapper.listCommentByTargetId(comment);
+    }
+    @Override
+    public List<Comment> listCommentByUserId(Integer userId){
+        return commentMapper.listCommentByUserId(userId);
     }
 }

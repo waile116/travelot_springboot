@@ -28,7 +28,7 @@
                   </div>
                 </div>
               </div>
-              <p class="comment-date">{{ comment.createT }}</p>
+              <p class="comment-date">发布于 {{ comment.createT }}</p>
             </div>
             <div class="body">
               <p class="comment-text">{{ comment.text }}</p>
@@ -265,6 +265,7 @@ export default {
   border-radius: 1vw;
   box-shadow: 3px 3px 3px #c3c3c3;
   margin-bottom: 1vw;
+  height: 14vw;
 }
 .wrapper .container .room .comment li .header {
   display: flex;
@@ -308,11 +309,10 @@ export default {
 }
 .wrapper .container .room .comment li .body .comment-img {
   display: flex;
-  margin-right: 8vw;
 }
 .wrapper .container .room .comment li .body .comment-img img {
   height: 8vw;
-  width: 8vw;
+  width: 20vw;
   border-radius: 0.5vw;
   object-fit: cover;
   cursor: pointer;

@@ -1,12 +1,5 @@
 <template>
   <div class="wrapper">
-    <div class="nav">
-      <div class="left">
-        <p v-if="isLogin" @click="toAdmin">
-          <i class="fa fa-chevron-left"></i>返回首页
-        </p>
-      </div>
-    </div>
     <div class="content">
       <div class="category">
         <!-- :class is vue's class binding, when category matches, it will render  class "active"-->
@@ -90,7 +83,7 @@
 
 <script>
 export default {
-  name: "Insert",
+  name: "AdminInsert",
 
   data() {
     return {
@@ -156,49 +149,11 @@ export default {
           console.error(error);
         });
     },
-
-    toAdmin() {
-      this.$router.push({
-        path: "/admin",
-      });
-    },
   },
 };
 </script>
 
 <style scoped>
-/*************** nav bar *****************/
-.wrapper .nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4vw;
-  background-color: var(--color-blue1);
-  height: 6vw;
-}
-
-/*************** nav left side *****************/
-.wrapper .nav .left {
-  display: flex;
-}
-
-.wrapper .nav .left p {
-  display: flex;
-  align-items: center;
-  color: white;
-  font-family: var(--font-family);
-  font-size: 1.5vw;
-  line-height: 25px;
-  cursor: pointer;
-  margin: 0 2vw;
-  position: relative;
-}
-
-.wrapper .nav .left p i {
-  font-size: 1.5vw;
-  margin-right: 1vw;
-}
-
 /*************** content *****************/
 .wrapper .content {
   display: flex;

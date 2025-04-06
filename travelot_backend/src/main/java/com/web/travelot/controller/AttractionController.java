@@ -72,4 +72,24 @@ public class AttractionController {
         List<Ticket> result = attractionService.listTicketById(attractionId);
         return new CommonResult<>(200, "success", result);
     };
+
+    @PostMapping("/saveTicket/{id}/{attractionId}/{name}/{desc}/{price}/{amount}")
+    public CommonResult<Integer> saveTicket(@PathVariable("id") Integer ticketId,
+                                                @PathVariable("attractionId") Integer attractionId,
+                                                @PathVariable("name") String name,
+                                                @PathVariable("desc") String desc,
+                                                @PathVariable("price") Integer price,
+                                                @PathVariable("amount") Integer amount) throws Exception {
+        Ticket ticket = new Ticket();
+        if(ticketId > -1) {
+            ticket.setTicketId(ticketId);
+        }
+        ticket.setAttractionId(attractionId);
+        ticket.setName(name);
+        ticket.setDesc(desc);
+        ticket.setPrice(price);
+        ticket.setAmount(amount);
+        int result = attractionService.saveTicket(ticket);
+        return new CommonResult<>(200, "Insert ticket success", result);
+    }
 }

@@ -73,4 +73,27 @@ public class HotelController {
         List<Room> result = hotelService.listRoomById(hotelId);
         return new CommonResult<>(200, "success", result);
     };
+
+    @PostMapping("/saveRoom/{id}/{hotelId}/{name}/{type}/{capacity}/{price}")
+    public CommonResult<Integer> saveRoom(@PathVariable("id") Integer roomId,
+                                                @PathVariable("hotelId") Integer hotelId,
+                                                @PathVariable("name") String name,
+                                                @PathVariable("type") String type,
+                                                @PathVariable("capacity") Integer capacity,
+                                                @PathVariable("price") Integer price,
+                                                @RequestBody Map<String, String> requestBody) throws Exception {
+        String img = requestBody.get("img");
+        Room room = new Room();
+        if(roomId > -1) {
+            room.setRoomId(roomId);
+        }
+        room.setHotelId(hotelId);
+        room.setName(name);
+        room.setType(type);
+        room.setCapacity(capacity);
+        room.setPrice(price);
+        room.setRoomImg(img);
+        int result = hotelService.saveRoom(room);
+        return new CommonResult<>(200, "Insert room success", result);
+    }
 }

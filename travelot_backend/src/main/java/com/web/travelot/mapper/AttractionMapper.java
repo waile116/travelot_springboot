@@ -28,4 +28,10 @@ public interface AttractionMapper {
     public List<Ticket> listTicket();
     @Select("select * from ticket where attraction_id=#{attractionId} order by price")
     public List<Ticket> listTicketById(Integer attractionId);
+    @Insert("insert into ticket (attraction_id, name, description, price, amount, create_t, update_t) values " +
+            "(#{attractionId}, #{name}, #{desc}, #{price}, #{amount}, NOW(), NOW())")
+    public int saveTicket(Ticket ticket);
+    @Update("UPDATE ticket SET attraction_id=#{attractionId}, name=#{name}, description=#{desc}, price=#{price}, " +
+            "amount=#{amount}, update_t=NOW() WHERE id=#{ticketId}")
+    public int updateTicket(Ticket ticket);
 }

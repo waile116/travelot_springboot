@@ -3,6 +3,7 @@ package com.web.travelot.controller;
 import com.web.travelot.po.CommonResult;
 import com.web.travelot.po.Food;
 import com.web.travelot.po.Restaurant;
+import com.web.travelot.po.Ticket;
 import com.web.travelot.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -69,4 +70,23 @@ public class RestaurantController {
         List<Food> result = restaurantService.listFoodById(restaurantId);
         return new CommonResult<>(200, "success", result);
     };
+
+    @PostMapping("/saveFood/{id}/{restaurantId}/{name}/{price}")
+    public CommonResult<Integer> saveFood(@PathVariable("id") Integer foodId,
+                                          @PathVariable("restaurantId") Integer restaurantId,
+                                          @PathVariable("name") String name,
+                                          @PathVariable("price") Integer price,
+                                          @RequestBody Map<String, String> requestBody) throws Exception {
+        String img = requestBody.get("img");
+        Food food = new Food();
+        if(foodId > -1) {
+            food.setFoodId(foodId);
+        }
+        food.setRestaurantId(restaurantId);
+        food.setName(name);
+        food.setPrice(price);
+        food.setFoodImg(img);
+        int result = restaurantService.saveFood(food);
+        return new CommonResult<>(200, "Insert food success", result);
+    }
 }

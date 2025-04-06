@@ -5,5 +5,7 @@ import java.util.List;
 
 public interface CommentService {
     public int saveComment(Comment comment);
-    public List<Comment> ListCommentByTargetId(Comment comment);
+    public List<Comment> listCommentByTargetId(Comment comment);
+    public List<Comment> listCommentByUserId(Integer userId);
+
 }

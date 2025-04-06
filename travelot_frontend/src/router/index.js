@@ -8,14 +8,18 @@ import HotelList from "../views/HotelList.vue";
 import HotelInfo from "../views/HotelInfo.vue";
 import RestaurantList from "../views/RestaurantList.vue";
 import RestaurantInfo from "../views/RestaurantInfo.vue";
-import Profile from "../views/Profile.vue";
-import OrderList from "../views/OrderList.vue";
-import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
+import User from "../views/User.vue";
+import UserLogin from "../views/user/UserLogin.vue";
+import UserRegister from "../views/user/UserRegister.vue";
+import UserProfile from "../views/user/UserProfile.vue";
+import UserOrderList from "../views/user/UserOrderList.vue";
+import UserCommentList from "../views/user/UserCommentList.vue";
+import UserFavouriteList from "../views/user/UserFavouriteList.vue";
+import Admin from "../views/Admin.vue";
+import AdminInsert from "../views/admin/AdminInsert.vue";
+import AdminUpdate from "../views/admin/AdminUpdate.vue";
+import AdminIndex from "../views/admin/AdminIndex.vue";
 import NotFound from "../views/NotFound.vue";
-import Admin from "../views/admin/Admin.vue";
-import Insert from "../views/admin/Insert.vue";
-import Update from "../views/admin/Update.vue";
 
 const routes = [
   {
@@ -69,48 +73,64 @@ const routes = [
     component: RestaurantInfo,
   },
   {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
-  },
-  {
-    path: "/orderList",
-    name: "OrderList",
-    component: OrderList,
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: Login,
-  },
-  {
-    path: "/register",
-    name: "Register",
-    component: Register,
+    path: "/user",
+    component: User,
+    children: [
+      {
+        path: "login",
+        name: "UserLogin",
+        component: UserLogin,
+      },
+      {
+        path: "register",
+        name: "UserRegister",
+        component: UserRegister,
+      },
+      {
+        path: "profile",
+        name: "UserProfile",
+        component: UserProfile,
+      },
+      {
+        path: "orderList",
+        name: "UserOrderList",
+        component: UserOrderList,
+      },
+      {
+        path: "commentList",
+        name: "UserCommentList",
+        component: UserCommentList,
+      },
+      {
+        path: "favouriteList",
+        name: "UserFavouriteList",
+        component: UserFavouriteList,
+      },
+    ],
   },
   {
     path: "/admin",
-    name: "Admin",
     component: Admin,
     meta: {
       requiresAdmin: true,
     },
-  },
-  {
-    path: "/admin/insert",
-    name: "Insert",
-    component: Insert,
-    meta: {
-      requiresAdmin: true,
-    },
-  },
-  {
-    path: "/admin/update",
-    name: "Update",
-    component: Update,
-    meta: {
-      requiresAdmin: true,
-    },
+    children: [
+      {
+        path: "",
+        name: "AdminIndex",
+        component: AdminIndex,
+      },
+      {
+        path: "insert",
+        name: "AdminInsert",
+        component: AdminInsert,
+      },
+      {
+        path: "update",
+        name: "AdminUpdate",
+        component: AdminUpdate,
+      },
+    ],
   },
   // catch all routes (show not found page)
   {

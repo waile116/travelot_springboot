@@ -1,24 +1,32 @@
 <template>
   <div class="wrapper">
-    <div class="header">
-      <div class="left">
-        <img src="../assets/logo.png" alt="logo" />
-      </div>
-      <div class="right">
-        <p @click="toRegister">注册</p>
-        <p @click="toIndex">首页</p>
-      </div>
-    </div>
     <div class="container">
       <div class="box">
         <div class="up">
-          <p class="title">手机号码登录</p>
+          <p class="title">用户注册</p>
           <ul class="form">
             <li>
               <input type="text" v-model="userId" placeholder="手机号码" />
             </li>
             <li>
               <input type="password" v-model="password" placeholder="密码" />
+            </li>
+            <li>
+              <input
+                type="password"
+                v-model="confirmPassword"
+                placeholder="确认密码"
+              />
+            </li>
+            <li>
+              <input type="text" v-model="userName" placeholder="用户名称" />
+            </li>
+            <li class="sex">
+              <div class="title">性别：</div>
+              <div class="select">
+                <input type="radio" name="sex" v-model="userSex" value="1" />男
+                <input type="radio" name="sex" v-model="userSex" value="0" />女
+              </div>
             </li>
           </ul>
           <div class="error" v-if="isError">
@@ -27,11 +35,11 @@
           </div>
         </div>
         <div class="down">
-          <div class="button-login">
-            <button @click="login">登 录</button>
+          <div class="button-register">
+            <button @click="register">注 册</button>
           </div>
           <div class="tnc">
-            <input type="checkbox" id="checkbox" class="checkbox" />
+            <input type="checkbox" class="checkbox" id="checkbox" />
             <p class="text">
               阅读并同意旅客之家的<span class="highlight">服务协议</span>
             </p>
@@ -44,38 +52,21 @@
 
 <script>
 export default {
-  name: "Login",
+  name: "UserRegister",
   data() {
     return {
       userId: "",
       password: "",
+      confirmPassword: "",
+      userName: "",
+      userSex: 1,
       isError: false,
       errorMsg: "",
-      prePath: "", //previous page url
     };
   },
-  // invoked before this page instances are created
-  // next() allow page to continue create instance
-  beforeRouteEnter(to, from, next) {
-    next((thisPage) => {
-      thisPage.prePath = from.path; //get previous page url
-    });
-  },
   methods: {
-    toIndex() {
-      this.$router.push({ path: "/index" });
-    },
-    toRegister() {
-      this.$router.push({
-        path: "/register",
-      });
-    },
-    // login user
-    login() {
-      this.isError = false;
-      //console.log(this.prePath);
-      // show error message
-      this.errorMsg = "";
+    // register user
+    register() {
       if (this.userId == "") {
         this.isError = true;
         this.errorMsg = "请输入手机号码";
@@ -86,44 +77,54 @@ export default {
         this.errorMsg = "请输入密码";
         return;
       }
+      if (this.password != this.confirmPassword) {
+        this.isError = true;
+        this.errorMsg = "密码不一致";
+        return;
+      }
+      if (this.userName == "") {
+        this.isError = true;
+        this.errorMsg = "请输入用户名";
+        return;
+      }
       if (!document.getElementById("checkbox").checked) {
         this.isError = true;
         this.errorMsg = "请阅读并同意旅客之家的服务协议";
         return;
       }
 
-      // get user id from backend
       this.$axios
-        .get(`UserController/getUserByIdPass/${this.userId}/${this.password}`)
+        .get(`UserController/getUserById/${this.userId}`)
         .then((response) => {
-          let user = response.data.result;
-
-          if (user == null) {
+          if (response.data.result) {
             this.isError = true;
-            this.errorMsg = "用户名或密码不正确";
-            console.log("Login failed");
-            // reset input
+            this.errorMsg = "此手机号码已存在";
+            console.log("Register failed");
+            //reset input
             this.userId = "";
             this.password = "";
+            this.confirmPassword = "";
+            this.userName = "";
             return;
           }
 
-          this.$setSessionStorage("user", user);
-          console.log("Login success");
-
-          // go to admin page
-          if (user.isAdmin) {
-            this.$router.push({ path: "/admin" });
-          } else {
-            // if user come from register page, redirect to index
-            if (this.prePath == "/register") {
-              this.$router.push({
-                path: "/index",
-              });
-            } else {
-              this.$router.go(-1);
-            }
-          }
+          //update user table through backend
+          this.$axios
+            .post(
+              `UserController/saveUser/${this.userId}/${this.password}/${this.userName}/user_${this.userName}/${this.userSex}`
+            )
+            .then((response) => {
+              if (response.data.result > 0) {
+                alert("注册成功");
+                console.log(response.data.message);
+                this.$router.push("/login");
+              } else {
+                alert("注册失败");
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         })
         .catch((error) => {
           console.error(error);
@@ -139,58 +140,7 @@ export default {
   width: 100%;
 }
 
-/*************** nav bar *****************/
-.wrapper .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4vw;
-  background-color: var(--color-blue1);
-}
-
-.wrapper .header .left {
-  display: flex;
-}
-
-.wrapper .header .left img {
-  object-fit: contain;
-  width: 10vw;
-  padding-right: 2vw;
-}
-
-.wrapper .header .right {
-  display: flex;
-}
-
-.wrapper .header .right p {
-  margin: 2vw 1.5vw;
-  color: white;
-  font-family: var(--font-family);
-  font-size: 1.5vw;
-  line-height: 25px;
-  cursor: pointer;
-  position: relative;
-}
-
-/*************** index button animation *****************/
-.wrapper .header .right p::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0%;
-  transform: translateX(-100%) translateY(100%) scale(0);
-  transition: transform 0.3s ease-in-out;
-  height: 0.2vw;
-  width: 130%;
-  border-radius: 2px;
-  background-color: white;
-}
-
-.wrapper .header .right p:hover::before {
-  transform: translateX(-10%) translateY(100%);
-}
-
-/*************** login box *****************/
+/*************** register box *****************/
 .wrapper .container {
   display: flex;
   justify-content: center;
@@ -207,6 +157,7 @@ export default {
   box-sizing: border-box;
   padding: 2vw;
   position: relative;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -240,6 +191,24 @@ export default {
   outline: none;
 }
 
+/*************** sex selection *****************/
+.wrapper .container .box .form .sex .title {
+  font-size: 1vw;
+  font-weight: normal;
+}
+.wrapper .container .box .form .sex .select {
+  display: flex;
+  align-items: center;
+  font-size: 1vw;
+  font-weight: normal;
+}
+.wrapper .container .box .form .sex .select input {
+  margin: 0 0.5vw 0 1vw;
+  width: 1.5vw;
+  cursor: pointer;
+  accent-color: var(--color-text);
+}
+
 /*************** error msg *****************/
 .wrapper .container .box .error {
   display: flex;
@@ -266,13 +235,13 @@ export default {
   border-radius: 5vw;
 }
 
-/*************** login button *****************/
-.wrapper .container .box .button-login {
+/*************** register button *****************/
+.wrapper .container .box .button-register {
   width: 100%;
   padding: 2vw 0 1vw;
 }
 
-.wrapper .container .box .button-login button {
+.wrapper .container .box .button-register button {
   width: 100%;
   height: 4vw;
   background-color: var(--color-orange);
@@ -310,8 +279,8 @@ export default {
   cursor: pointer;
 }
 
-/*************** login button animation *****************/
-.wrapper .container .box .button-login button::before {
+/*************** register button animation *****************/
+.wrapper .container .box .button-register button::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -324,12 +293,12 @@ export default {
   z-index: -1;
 }
 
-.wrapper .container .box .button-login button:hover::before {
+.wrapper .container .box .button-register button:hover::before {
   transform: translateX(0);
 }
 
-/*************** register button animation *****************/
-.wrapper .register::before {
+/*************** login button animation *****************/
+.wrapper .login::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -342,7 +311,7 @@ export default {
   background-color: var(--color-blue1);
 }
 
-.wrapper .register:hover::before {
+.wrapper .login:hover::before {
   transform: translateX(0%) translateY(100%);
 }
 </style>

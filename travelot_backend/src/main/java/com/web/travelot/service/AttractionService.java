@@ -12,4 +12,5 @@ public interface AttractionService {
     public List<Ticket> listTicket();
 
     public List<Ticket> listTicketById(Integer attractionId);
+    public int saveTicket(Ticket ticket);
 }
