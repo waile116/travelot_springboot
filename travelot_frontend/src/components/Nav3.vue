@@ -57,7 +57,7 @@ export default {
     toLogout() {
       this.$removeSessionStorage("user");
       this.$router.push({
-        path: "/login",
+        path: "/user/login",
       });
     },
   },

@@ -23,13 +23,21 @@
           />
         </label>
       </div>
-      <div class="room">
+      <div class="hotel">
         <div class="img">
           <p class="title">{{ hotel.name }}</p>
           <img class="background" :src="hotel.hotelImg" />
           <a class="map" :href="hotel.mapLink" target="_blank">
             <img :src="hotel.mapImg" />
           </a>
+        </div>
+        <div class="favourite">
+          <!--array of v-bind class-->
+          <i
+            class="fa"
+            :class="[getHeartClass, animateHeart ? 'animate-heart' : '']"
+            @click="setFav"
+          ></i>
         </div>
         <p class="description">{{ hotel.desc }}</p>
         <div class="location">
@@ -70,6 +78,7 @@ export default {
   data() {
     return {
       isLogin: false,
+      user: "",
 
       hotelId: this.$route.query.id,
       hotel: "",
@@ -79,6 +88,9 @@ export default {
       minEndDate: this.getNextDate(),
       night: 1,
       roomArr: [],
+
+      userFav: false,
+      animateHeart: false,
     };
   },
   created() {
@@ -130,10 +142,33 @@ export default {
       .catch((error) => {
         console.error(error);
       });
+
+    // get favourite with user, category and target id
+    this.$axios
+      .get(
+        `FavouriteController/getFavouriteById/${this.user.userId}/3/${this.hotelId}`
+      )
+      .then((response) => {
+        if (response.data.result) {
+          this.userFav = true;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
   components: {
     Nav2,
     Comment,
+  },
+  computed: {
+    getHeartClass() {
+      if (this.userFav) {
+        return "fa-heart";
+      } else {
+        return "fa-heart-o";
+      }
+    },
   },
   methods: {
     getCurDate() {
@@ -153,6 +188,41 @@ export default {
         const end = new Date(this.endDate);
         const difference = (end - start) / (1000 * 60 * 60 * 24); // convert milliseconds to days
         this.night = difference > 0 ? difference : 0;
+      }
+    },
+
+    setFav() {
+      this.userFav = !this.userFav; // save favourite when clicked
+      this.animateHeart = true;
+
+      // remove the animation class after it ends
+      setTimeout(() => {
+        this.animateHeart = false;
+      }, 1000); // set animation duration
+
+      if (this.userFav) {
+        this.$axios
+          .post(
+            `FavouriteController/saveFavourite/${this.user.userId}/3/${this.hotelId}`
+          )
+          .then((response) => {
+            console.log(response.data.message);
+            alert("收藏成功");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        this.$axios
+          .post(
+            `FavouriteController/removeFavourite/${this.user.userId}/3/${this.hotelId}`
+          )
+          .then((response) => {
+            console.log(response.data.message);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     },
   },
@@ -217,25 +287,53 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /*************** title, location and desc *****************/
-.wrapper .container .room .location {
+.wrapper .container .hotel .location {
   display: flex;
   align-items: center;
   margin-bottom: 1vw;
 }
-.wrapper .container .room .location i {
+.wrapper .container .hotel .location i {
   font-size: 1.5vw;
   margin-right: 0.8vw;
 }
-.wrapper .container .room .location p {
+.wrapper .container .hotel .location p {
   font-size: 1vw;
   font-weight: normal;
 }
-.wrapper .container .room .description {
+.wrapper .container .hotel .favourite {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 3vw 1vw;
+}
+.wrapper .container .hotel .favourite i {
+  font-size: 2vw;
+  cursor: pointer;
+  color: #e74c3c;
+  transition: transform 0.2s ease;
+}
+.animate-heart {
+  animation: pop 0.5s ease;
+}
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.4);
+  }
+  60% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.wrapper .container .hotel .description {
   font-size: 1vw;
   margin-bottom: 1vw;
   font-weight: normal;
 }
-.wrapper .container .room .img {
+.wrapper .container .hotel .img {
   margin-bottom: 2vw;
   position: relative;
   display: flex;
@@ -243,7 +341,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 1vw;
   overflow: hidden;
 }
-.wrapper .container .room .img p {
+.wrapper .container .hotel .img p {
   position: absolute;
   font-size: 2vw;
   color: white;
@@ -252,39 +350,39 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   bottom: 0;
   margin: 1vw 2vw;
 }
-.wrapper .container .room .img .background {
+.wrapper .container .hotel .img .background {
   flex: 7;
   object-fit: cover;
   z-index: 3;
 }
-.wrapper .container .room .img .map {
+.wrapper .container .hotel .img .map {
   flex: 3;
   cursor: pointer;
 }
-.wrapper .container .room .img .map img {
+.wrapper .container .hotel .img .map img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease-in-out;
 }
-.wrapper .container .room .img .map img:hover {
+.wrapper .container .hotel .img .map img:hover {
   transform: scale(1.1);
 }
 
 /*************** card container *****************/
-.wrapper .container .room .card {
+.wrapper .container .hotel .card {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   margin-bottom: 1vw;
 }
 
-.wrapper .container .room .card:last-child {
+.wrapper .container .hotel .card:last-child {
   margin-bottom: 2vw;
 }
 
 /*************** each individual card *****************/
-.wrapper .container .room .card li {
+.wrapper .container .hotel .card li {
   flex: 0 0 auto; /*grow/shrink/basis */
   margin: 1vw 2vw 1vw 0;
   padding-bottom: 1vw;
@@ -296,16 +394,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: 1;
   overflow: hidden;
 }
-.wrapper .container .room .card li .detail {
+.wrapper .container .hotel .card li .detail {
   padding: 0.25vw 1.5vw 1vw;
   box-sizing: border-box;
 }
-.wrapper .container .room .card li .detail .title {
+.wrapper .container .hotel .card li .detail .title {
   margin-bottom: 0;
   font-size: 1.5vw;
   color: var(--color-text);
 }
-.wrapper .container .room .card li .detail .type {
+.wrapper .container .hotel .card li .detail .type {
   text-align: center;
   color: white;
   background-color: var(--color-text2);
@@ -314,28 +412,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 0.5vw;
   font-size: 1vw;
 }
-.wrapper .container .room .card li .detail .cost {
+.wrapper .container .hotel .card li .detail .cost {
   justify-self: flex-end;
 }
-.wrapper .container .room .card li .detail .cost .price {
+.wrapper .container .hotel .card li .detail .cost .price {
   font-size: 1.5vw;
   font-weight: 700;
   text-align: end;
   color: var(--color-text3);
 }
-.wrapper .container .room .card li .detail .cost .total {
+.wrapper .container .hotel .card li .detail .cost .total {
   font-size: 1vw;
   font-weight: normal;
   color: var(--color-text2);
 }
-.wrapper .container .room .card li .detail .reserve {
+.wrapper .container .hotel .card li .detail .reserve {
   padding: 0 1.5vw 0.7vw;
   position: absolute;
   top: auto;
   right: 0;
   bottom: 0;
 }
-.wrapper .container .room .card li .detail .reserve button {
+.wrapper .container .hotel .card li .detail .reserve button {
   width: 6vw;
   height: 2vw;
   background-color: var(--color-orange);
@@ -352,7 +450,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /*************** card background transition*****************/
-.wrapper .container .room .card li img {
+.wrapper .container .hotel .card li img {
   height: 60%;
   width: 100%;
   object-fit: cover;
@@ -360,12 +458,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: transform 0.3s ease-in-out;
 }
 
-.wrapper .container .room .card li:hover img {
+.wrapper .container .hotel .card li:hover img {
   transform: scale(1.1);
 }
 
 /*************** button transition *****************/
-.wrapper .container .room .card li .detail .reserve button::before {
+.wrapper .container .hotel .card li .detail .reserve button::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -378,7 +476,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: -1;
 }
 
-.wrapper .container .room .card li .detail .reserve button:hover::before {
+.wrapper .container .hotel .card li .detail .reserve button:hover::before {
   transform: translateX(0);
 }
 </style>

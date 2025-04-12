@@ -10,6 +10,14 @@
     </div>
     <div class="container">
       <div class="attraction">
+        <div class="favourite">
+          <!--array of v-bind class-->
+          <i
+            class="fa"
+            :class="[getHeartClass, animateHeart ? 'animate-heart' : '']"
+            @click="setFav"
+          ></i>
+        </div>
         <p class="description">{{ attraction.desc }}</p>
         <div class="info">
           <i class="fa fa-map-marker"></i>
@@ -50,10 +58,14 @@ export default {
   name: "AttractionInfo",
   data() {
     return {
+      user: "",
       isLogin: false,
       attractionId: this.$route.query.id,
       attraction: "",
       ticketArr: [],
+
+      userFav: false,
+      animateHeart: false,
     };
   },
   created() {
@@ -82,10 +94,33 @@ export default {
       .catch((error) => {
         console.error(error);
       });
+
+    // get favourite with user, category and target id
+    this.$axios
+      .get(
+        `FavouriteController/getFavouriteById/${this.user.userId}/1/${this.attractionId}`
+      )
+      .then((response) => {
+        if (response.data.result) {
+          this.userFav = true;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
   components: {
     Nav2,
     Comment,
+  },
+  computed: {
+    getHeartClass() {
+      if (this.userFav) {
+        return "fa-heart";
+      } else {
+        return "fa-heart-o";
+      }
+    },
   },
   methods: {
     getCurDate() {
@@ -107,6 +142,41 @@ export default {
         this.night = difference > 0 ? difference : 0;
       }
     },
+
+    setFav() {
+      this.userFav = !this.userFav; // save favourite when clicked
+      this.animateHeart = true;
+
+      // remove the animation class after it ends
+      setTimeout(() => {
+        this.animateHeart = false;
+      }, 1000); // set animation duration
+
+      if (this.userFav) {
+        this.$axios
+          .post(
+            `FavouriteController/saveFavourite/${this.user.userId}/1/${this.attractionId}`
+          )
+          .then((response) => {
+            console.log(response.data.message);
+            alert("收藏成功");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        this.$axios
+          .post(
+            `FavouriteController/removeFavourite/${this.user.userId}/1/${this.attractionId}`
+          )
+          .then((response) => {
+            console.log(response.data.message);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    },
   },
 };
 </script>
@@ -118,7 +188,7 @@ export default {
 
 /*************** header container *****************/
 .wrapper .img {
-  margin: 0 4vw 2vw;
+  margin: 0 4vw;
   position: relative;
   display: flex;
   height: 25vw;
@@ -161,7 +231,7 @@ export default {
 }
 
 /*************** title, info and desc *****************/
-.wrapper .container .attraction .info {
+.wrapper .container .info {
   display: flex;
   align-items: center;
   margin-bottom: 1vw;
@@ -173,6 +243,34 @@ export default {
 .wrapper .container .attraction .info p {
   font-size: 1vw;
   font-weight: normal;
+}
+.wrapper .container .attraction .favourite {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 3vw 1vw;
+}
+.wrapper .container .attraction .favourite i {
+  font-size: 2vw;
+  cursor: pointer;
+  color: #e74c3c;
+  transition: transform 0.2s ease;
+}
+.animate-heart {
+  animation: pop 0.5s ease;
+}
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.4);
+  }
+  60% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 .wrapper .container .attraction .description {
   font-size: 1vw;
@@ -194,7 +292,7 @@ export default {
 /*************** each individual card *****************/
 .wrapper .container .attraction .card li {
   flex: 0 0 auto; /*grow/shrink/basis */
-  margin: 1vw 2vw 1vw 0;
+  margin: 1attractionvw 2vw 1vw 0;
   padding: 1vw 1.5vw;
   box-sizing: border-box;
   width: 21vw;

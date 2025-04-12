@@ -17,7 +17,7 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/saveComment/{userId}/{category}/{targetId}/{rating}/{text}")
-    public CommonResult<Integer> getCommentByIdPass(@PathVariable("userId") Integer userId,
+    public CommonResult<Integer> saveComment(@PathVariable("userId") Integer userId,
                                                           @PathVariable("category") Integer category,
                                                           @PathVariable("targetId") Integer targetId,
                                                           @PathVariable("rating") Double rating,
@@ -32,7 +32,7 @@ public class CommentController {
         comment.setText(text);
         comment.setCommentImg(commentImg);
         int result = commentService.saveComment(comment);
-        return new CommonResult<>(200, "success", result);
+        return new CommonResult<>(200, "Save comment success", result);
     }
 
     @GetMapping("/listCommentByTargetId/{category}/{targetId}")

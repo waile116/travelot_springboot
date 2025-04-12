@@ -18,6 +18,7 @@ public interface UserMapper {
     public int updateUserPassword(User user);
     @Select("select id, username, alias, sex, user_img, isAdmin from user where id=#{userId} and password = #{password}")
     public User getUserByIdPass(User user);
-    @Select("select id, username, alias, sex, user_img, isAdmin from user where id=#{userId}")
+
+    // 在 UserMapper.xml
     public User getUserById(Integer userId);
 }

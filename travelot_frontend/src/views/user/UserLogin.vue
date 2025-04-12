@@ -96,15 +96,17 @@ export default {
 
           // go to admin page
           if (user.isAdmin) {
-            this.$router.push({ path: "/admin" });
+            this.$router.push({ path: "/admin", replace: true });
           } else {
             // if user come from register/profile page, redirect to index
             if (
               this.prePath == "/user/register" ||
-              this.prePath == "/user/profile"
+              this.prePath == "/user/profile" ||
+              this.prePath == "/admin"
             ) {
               this.$router.push({
                 path: "/index",
+                replace: true, //replace current history instead of adding, so back to /login is not possible
               });
             } else {
               this.$router.go(-1);

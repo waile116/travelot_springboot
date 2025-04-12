@@ -378,7 +378,8 @@ select {
   transition: color 0.2s ease-in-out;
 }
 .wrapper .container .card li .header .title,
-.wrapper .container .card li .header .rating .score {
+.wrapper .container .card li .header .rating .score,
+.wrapper .container .card li .arrow {
   position: relative;
   color: var(--color-text);
   transition: color 0.2s ease-in-out;

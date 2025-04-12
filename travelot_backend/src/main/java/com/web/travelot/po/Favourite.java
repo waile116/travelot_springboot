@@ -2,22 +2,18 @@ package com.web.travelot.po;
 
 import java.time.LocalDateTime;
 
-public class Comment {
+public class Favourite {
     private Integer id;
     private Integer user_id;
     private Integer category;
     private Integer target_id;
-    private Double rating;
-    private String text;
-    private String comment_img;
     private LocalDateTime create_t;
-    private LocalDateTime update_t;
 
-    public Integer getCommentId() {
+    public Integer getFavouriteId() {
         return id;
     }
 
-    public void setCommentId(Integer id) {
+    public void setFavouriteId(Integer id) {
         this.id = id;
     }
 
@@ -45,30 +41,6 @@ public class Comment {
         this.target_id = target_id;
     }
 
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getCommentImg() {
-        return comment_img;
-    }
-
-    public void setCommentImg(String comment_img) {
-        this.comment_img = comment_img;
-    }
-
     public LocalDateTime getCreateT() {
         return create_t;
     }
@@ -76,13 +48,4 @@ public class Comment {
     public void setCreateT(LocalDateTime create_t) {
         this.create_t = create_t;
     }
-
-    public LocalDateTime getUpdateT() {
-        return update_t;
-    }
-
-    public void setUpdateT(LocalDateTime update_t) {
-        this.update_t = update_t;
-    }
-
 }

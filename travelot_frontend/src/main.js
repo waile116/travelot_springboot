@@ -40,7 +40,7 @@ router.beforeEach((to, from, next) => {
     // if user is admin, go to admin page
     if (user && user.isAdmin) next();
     // if user is not admin, go to index
-    else next("index");
+    else next("/index");
   } else {
     // if user no login, go to login page
     if (
