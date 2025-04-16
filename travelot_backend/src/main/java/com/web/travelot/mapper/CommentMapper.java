@@ -1,7 +1,6 @@
 package com.web.travelot.mapper;
 
 import com.web.travelot.po.Comment;
-import com.web.travelot.po.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

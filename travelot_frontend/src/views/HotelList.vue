@@ -48,7 +48,10 @@
       <div class="hotel">
         <p>{{ state.name }}热门酒店</p>
         <ul class="card">
-          <li v-for="hotel in filter" @click="toHotelInfo(hotel.hotelId)">
+          <li
+            v-for="hotel in filter"
+            @click="toHotelInfo(hotel.hotelId, startDate, endDate)"
+          >
             <img :src="hotel.hotelImg" />
             <div class="info">
               <div class="header">
@@ -183,8 +186,11 @@ export default {
       return minPrice === 0 ? -1 : minPrice;
     },
 
-    toHotelInfo(id) {
-      this.$router.push({ path: "/hotelInfo", query: { id: id } });
+    toHotelInfo(id, startDate, endDate) {
+      this.$router.push({
+        path: "/hotelInfo",
+        query: { id: id, startDate: startDate, endDate: endDate }, //parse startDate and endDate
+      });
     },
   },
   watch: {

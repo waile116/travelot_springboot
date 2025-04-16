@@ -8,6 +8,7 @@ import HotelList from "../views/HotelList.vue";
 import HotelInfo from "../views/HotelInfo.vue";
 import RestaurantList from "../views/RestaurantList.vue";
 import RestaurantInfo from "../views/RestaurantInfo.vue";
+import Payment from "../views/Payment.vue";
 import User from "../views/User.vue";
 import UserLogin from "../views/user/UserLogin.vue";
 import UserRegister from "../views/user/UserRegister.vue";
@@ -71,6 +72,11 @@ const routes = [
     path: "/restaurantInfo",
     name: "RestaurantInfo",
     component: RestaurantInfo,
+  },
+  {
+    path: "/payment",
+    name: "Payment",
+    component: Payment,
   },
   {
     path: "/user",

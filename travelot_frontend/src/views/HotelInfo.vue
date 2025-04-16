@@ -57,7 +57,7 @@
                 <p class="total">总额：{{ `¥${room.price * night}` }}</p>
               </div>
               <div class="reserve">
-                <button @click="">预 定</button>
+                <button @click="openOrder(room)">预 订</button>
               </div>
             </div>
           </li>
@@ -65,6 +65,66 @@
       </div>
       <!--parsing category to comment component-->
       <Comment category="3" :target_id="hotelId"></Comment>
+    </div>
+
+    <div v-if="showOrder" class="order-box">
+      <div class="order-content">
+        <div class="header">
+          <div></div>
+          <p>{{ hotel.name }}</p>
+          <i class="fa fa-close" @click="closeOrder"></i>
+        </div>
+        <div class="order-date">
+          <label
+            ><p>入住日期</p>
+            <input
+              type="date"
+              v-model="startDate"
+              :min="minStartDate"
+              @change="calNight"
+            />
+          </label>
+          <p>共 {{ night }} 晚</p>
+          <label>
+            <p>退房日期</p>
+            <input
+              type="date"
+              v-model="endDate"
+              :min="minEndDate"
+              @change="calNight"
+            />
+          </label>
+        </div>
+        <div class="order-info">
+          <div class="order-info-header">
+            <p>{{ orderRoom.name }}</p>
+            <div class="right">
+              <p class="price">
+                ¥{{ orderRoom.price * night * orderQuantity }}
+              </p>
+              <div class="order-info-quantity">
+                <i
+                  v-if="orderQuantity > 1"
+                  class="fa fa-minus"
+                  @click="orderQuantity--"
+                ></i>
+                <p>{{ orderQuantity }}</p>
+                <i class="fa fa-plus" @click="orderQuantity++"></i>
+              </div>
+            </div>
+          </div>
+          <div class="order-desc">
+            <i class="fa fa-hotel"></i>
+            <p>{{ orderRoom.type }}</p>
+          </div>
+          <div class="order-reminder">
+            <i class="fa fa-info"></i>
+            <p class="t1">不可退款</p>
+            <p>立即出票</p>
+          </div>
+        </div>
+        <div class="order" @click="toPayment"><button>预 订</button></div>
+      </div>
     </div>
   </div>
 </template>
@@ -83,14 +143,18 @@ export default {
       hotelId: this.$route.query.id,
       hotel: "",
       minStartDate: this.getCurDate(),
-      startDate: this.getCurDate(),
-      endDate: this.getNextDate(),
+      startDate: this.$route.query.startDate ?? this.getCurDate(),
+      endDate: this.$route.query.endDate ?? this.getNextDate(),
       minEndDate: this.getNextDate(),
       night: 1,
       roomArr: [],
 
       userFav: false,
       animateHeart: false,
+
+      showOrder: false,
+      orderRoom: "", // selected room object
+      orderQuantity: 1,
     };
   },
   created() {
@@ -120,29 +184,6 @@ export default {
         console.error(error);
       });
 
-    // get comment list with hotelId
-    this.$axios
-      .get(`CommentController/listCommentByTargetId/3/${this.hotelId}`)
-      .then((response) => {
-        this.commentArr = response.data.result;
-
-        // fetch user detail for each comment
-        this.commentArr.forEach((comment, index) => {
-          this.$axios
-            .get(`UserController/getUserById/${comment.userId}`)
-            .then((response) => {
-              // direct assignment
-              comment.username = response.data.result.username;
-              comment.userImg = response.data.result.userImg;
-              comment.createT = comment.createT.split("T")[0];
-            })
-            .catch((error) => console.error(error));
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
     // get favourite with user, category and target id
     this.$axios
       .get(
@@ -156,6 +197,8 @@ export default {
       .catch((error) => {
         console.error(error);
       });
+
+    this.calNight(); // calculate night when page is loaded because of this.$route.query
   },
   components: {
     Nav2,
@@ -224,6 +267,49 @@ export default {
             console.error(error);
           });
       }
+    },
+
+    openOrder(room) {
+      this.showOrder = true;
+      this.orderRoom = room; // parse room to order
+    },
+    closeOrder() {
+      this.showOrder = false;
+      this.orderQuantity = 1; // reset room quantity
+    },
+
+    toPayment() {
+      // create and save order
+      this.$axios
+        .post(
+          `OrdersController/saveOrders/${this.user.userId}/3/${this.hotelId}/${
+            this.orderRoom.roomId
+          }/${this.orderRoom.price * this.night}/${this.orderQuantity}/${
+            this.startDate
+          }/${this.endDate}`
+        )
+        .then((response) => {
+          const orderId = response.data.result;
+          // go to payment page after creating order
+          if (orderId > 0) {
+            console.log(response.data.message);
+            this.$router.push({ path: "/payment", query: { id: orderId } });
+          } else {
+            alert("订单创建失败");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+  },
+  watch: {
+    // auto update end date when start date change
+    startDate(newVal) {
+      const tmr = new Date(newVal);
+      tmr.setDate(tmr.getDate() + 1);
+      console.log("endDate changed");
+      this.endDate = tmr.toISOString().split("T")[0];
     },
   },
 };
@@ -416,7 +502,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   justify-self: flex-end;
 }
 .wrapper .container .hotel .card li .detail .cost .price {
-  font-size: 1.5vw;
+  font-size: 1.35vw;
   font-weight: 700;
   text-align: end;
   color: var(--color-text3);
@@ -457,13 +543,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 1vw 1vw 0 0;
   transition: transform 0.3s ease-in-out;
 }
-
 .wrapper .container .hotel .card li:hover img {
   transform: scale(1.1);
 }
 
 /*************** button transition *****************/
-.wrapper .container .hotel .card li .detail .reserve button::before {
+.wrapper .container .hotel .card li .detail .reserve button::before,
+.wrapper .order-box .order-content .order button::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -475,8 +561,182 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: #d94500;
   z-index: -1;
 }
-
-.wrapper .container .hotel .card li .detail .reserve button:hover::before {
+.wrapper .container .hotel .card li .detail .reserve button:hover::before,
+.wrapper .order-box .order-content .order button:hover::before {
   transform: translateX(0);
+}
+
+/*************** order box *****************/
+.wrapper .order-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.wrapper .order-box .order-content {
+  background: white;
+  width: 40vw;
+  border-radius: 1vw;
+  padding: 2vw;
+}
+.wrapper .order-box .order-content .header {
+  display: flex;
+  justify-content: space-between;
+}
+.wrapper .order-box .order-content .header p {
+  font-size: 1.5vw;
+}
+.wrapper .order-box .order-content .header i {
+  cursor: pointer;
+  font-size: 2vw;
+}
+.wrapper .order-box .order-content .order-date {
+  padding: 0.5vw 2vw;
+  margin: 1vw 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3vw;
+  border-radius: 0.5vw;
+  border: 1px solid var(--color-text);
+  outline: none;
+}
+.wrapper .order-box .order-content .order-date label {
+  display: flex;
+  justify-content: center;
+}
+.wrapper .order-box .order-content .order-date p {
+  font-size: 1.2vw;
+  margin-right: 1vw;
+}
+.wrapper .order-box .order-content .order-date select,
+.wrapper .order-box .order-content .order-date input {
+  font-size: 1.2vw;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  cursor: pointer;
+}
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 8vw;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+  width: 8vw;
+}
+.wrapper .order-box .order-content .order-info .order-info-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1vw;
+}
+.wrapper .order-box .order-content .order-info .order-info-header p {
+  font-size: 1.5vw;
+  font-weight: 700;
+}
+.wrapper .order-box .order-content .order-info .order-info-header .right {
+  display: flex;
+  align-items: center;
+}
+.wrapper
+  .order-box
+  .order-content
+  .order-info
+  .order-info-header
+  .right
+  .price {
+  color: var(--color-text3);
+  margin-right: 2vw;
+  font-weight: normal;
+}
+.wrapper
+  .order-box
+  .order-content
+  .order-info
+  .order-info-header
+  .right
+  .order-info-quantity {
+  display: flex;
+  align-items: center;
+}
+.wrapper
+  .order-box
+  .order-content
+  .order-info
+  .order-info-header
+  .right
+  .order-info-quantity
+  i {
+  cursor: pointer;
+  background-color: var(--color-text2);
+  color: white;
+  padding: 0.5vw 0.6vw;
+  border-radius: 10vw;
+  font-size: 1vw;
+}
+.wrapper
+  .order-box
+  .order-content
+  .order-info
+  .order-info-header
+  .right
+  .order-info-quantity
+  p {
+  margin: 0 1vw;
+  font-weight: normal;
+}
+.wrapper .order-box .order-content .order-info p {
+  font-size: 1.25vw;
+  font-weight: normal;
+}
+.wrapper .order-box .order-content .order-info .order-reminder,
+.wrapper .order-box .order-content .order-info .order-desc {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1vw;
+}
+.wrapper .order-box .order-content .order-info .order-reminder p,
+.wrapper .order-box .order-content .order-info .order-desc p {
+  margin-left: 1vw;
+}
+.wrapper .order-box .order-content .order-info .order-desc i {
+  font-size: 1.5vw;
+}
+.wrapper .order-box .order-content .order-info .order-reminder .t1 {
+  color: var(--color-text3);
+}
+.wrapper .order-box .order-content .order-info .order-reminder i {
+  border-radius: 10vw;
+  border: solid 0.1vw var(--color-text);
+  padding: 0.2vw 0.5vw;
+  font-size: 1vw;
+}
+.wrapper .order-box .order-content .order {
+  display: flex;
+  justify-content: center;
+}
+.wrapper .order-box .order-content .order button {
+  width: 14vw;
+  height: 3vw;
+  background-color: var(--color-orange);
+  border: none;
+  outline: none;
+  border-radius: 0.5vw;
+  font-size: 1.25vw;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
 </style>

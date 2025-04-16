@@ -24,14 +24,18 @@ public interface AttractionMapper {
             "price=#{price}, open_t=#{openTime}, rating=#{rating}, attr_img=#{attractionImg}, map_img=#{mapImg}, map_link=#{mapLink}, " +
             "update_t=NOW() WHERE id=#{attractionId}")
     public int updateAttraction(Attraction attraction);
+
+
     @Select("select * from ticket")
     public List<Ticket> listTicket();
     @Select("select * from ticket where attraction_id=#{attractionId} order by price")
     public List<Ticket> listTicketById(Integer attractionId);
-    @Insert("insert into ticket (attraction_id, name, description, price, amount, create_t, update_t) values " +
-            "(#{attractionId}, #{name}, #{desc}, #{price}, #{amount}, NOW(), NOW())")
+    @Select("select * from ticket where id=#{ticketId}")
+    public Ticket getTicketById(Integer ticketId);
+    @Insert("insert into ticket (attraction_id, name, description, price, quantity, create_t, update_t) values " +
+            "(#{attractionId}, #{name}, #{desc}, #{price}, #{quantity}, NOW(), NOW())")
     public int saveTicket(Ticket ticket);
     @Update("UPDATE ticket SET attraction_id=#{attractionId}, name=#{name}, description=#{desc}, price=#{price}, " +
-            "amount=#{amount}, update_t=NOW() WHERE id=#{ticketId}")
+            "quantity=#{quantity}, update_t=NOW() WHERE id=#{ticketId}")
     public int updateTicket(Ticket ticket);
 }

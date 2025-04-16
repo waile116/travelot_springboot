@@ -45,6 +45,10 @@ public class HotelServiceImpl implements HotelService{
         return hotelMapper.listRoomById(hotelId);
     }
     @Override
+    public Room getRoomById(Integer roomId){
+        return hotelMapper.getRoomById(roomId);
+    }
+    @Override
     public int saveRoom(Room room){
         // if id exists, update, else save
         if (room.getRoomId() != null) {

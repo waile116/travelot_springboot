@@ -9,8 +9,10 @@ public interface AttractionService {
     public List<Attraction> listAttractionById(Integer stateId);
     public Attraction getAttractionById(Integer attractionId);
     public int saveAttraction(Attraction attraction);
-    public List<Ticket> listTicket();
 
+    public List<Ticket> listTicket();
     public List<Ticket> listTicketById(Integer attractionId);
+    public Ticket getTicketById(Integer ticketId);
+
     public int saveTicket(Ticket ticket);
 }

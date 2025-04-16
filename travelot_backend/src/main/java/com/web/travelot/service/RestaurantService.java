@@ -2,7 +2,6 @@ package com.web.travelot.service;
 
 import com.web.travelot.po.Food;
 import com.web.travelot.po.Restaurant;
-import com.web.travelot.po.Ticket;
 
 import java.util.List;
 

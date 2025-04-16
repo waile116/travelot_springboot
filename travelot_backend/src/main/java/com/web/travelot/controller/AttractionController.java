@@ -73,13 +73,19 @@ public class AttractionController {
         return new CommonResult<>(200, "success", result);
     };
 
-    @PostMapping("/saveTicket/{id}/{attractionId}/{name}/{desc}/{price}/{amount}")
+    @GetMapping("/getTicketById/{ticketId}")
+    public CommonResult<Ticket> getTicketById(@PathVariable("ticketId") Integer ticketId) throws Exception{
+       Ticket result = attractionService.getTicketById(ticketId);
+        return new CommonResult<>(200, "success", result);
+    };
+
+    @PostMapping("/saveTicket/{id}/{attractionId}/{name}/{desc}/{price}/{quantity}")
     public CommonResult<Integer> saveTicket(@PathVariable("id") Integer ticketId,
                                                 @PathVariable("attractionId") Integer attractionId,
                                                 @PathVariable("name") String name,
                                                 @PathVariable("desc") String desc,
                                                 @PathVariable("price") Integer price,
-                                                @PathVariable("amount") Integer amount) throws Exception {
+                                                @PathVariable("quantity") Integer quantity) throws Exception {
         Ticket ticket = new Ticket();
         if(ticketId > -1) {
             ticket.setTicketId(ticketId);
@@ -88,7 +94,7 @@ public class AttractionController {
         ticket.setName(name);
         ticket.setDesc(desc);
         ticket.setPrice(price);
-        ticket.setAmount(amount);
+        ticket.setQuantity(quantity);
         int result = attractionService.saveTicket(ticket);
         return new CommonResult<>(200, "Insert ticket success", result);
     }

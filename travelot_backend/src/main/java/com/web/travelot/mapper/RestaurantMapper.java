@@ -2,7 +2,6 @@ package com.web.travelot.mapper;
 
 import com.web.travelot.po.Restaurant;
 import com.web.travelot.po.Food;
-import com.web.travelot.po.Ticket;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

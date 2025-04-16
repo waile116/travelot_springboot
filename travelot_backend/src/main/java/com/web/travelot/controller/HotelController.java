@@ -73,6 +73,11 @@ public class HotelController {
         List<Room> result = hotelService.listRoomById(hotelId);
         return new CommonResult<>(200, "success", result);
     };
+    @GetMapping("/getRoomById/{roomId}")
+    public CommonResult<Room> getRoomById(@PathVariable("roomId") Integer roomId) throws Exception{
+        Room result = hotelService.getRoomById(roomId);
+        return new CommonResult<>(200, "success", result);
+    };
 
     @PostMapping("/saveRoom/{id}/{hotelId}/{name}/{type}/{capacity}/{price}")
     public CommonResult<Integer> saveRoom(@PathVariable("id") Integer roomId,

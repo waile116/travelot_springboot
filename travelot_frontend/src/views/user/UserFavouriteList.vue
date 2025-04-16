@@ -22,17 +22,6 @@
                   <p>{{ favourite.location }}</p>
                 </div>
               </div>
-              <div class="cost">
-                <!-- <p v-if="getMinPrice(attraction.attractionId) !== 0">门票</p>
-                <p class="price">
-                  {{
-                    getMinPrice(attraction.attractionId) === 0
-                      ? "免费"
-                      : `¥${getMinPrice(attraction.attractionId)}`
-                  }}
-                </p>
-                <p v-if="getMinPrice(attraction.attractionId) !== 0">起</p> -->
-              </div>
             </div>
             <div class="arrow">
               <i class="fa fa-chevron-right"></i>
@@ -66,7 +55,6 @@ export default {
       .get(`FavouriteController/listFavouriteByUserId/${this.user.userId}`)
       .then((response) => {
         this.favouriteArr = response.data.result;
-
         // sort favourite in descending order
         this.favouriteArr.sort(
           (a, b) => new Date(b.createT) - new Date(a.createT)
@@ -75,7 +63,6 @@ export default {
         // fetch target name for each favourite
         this.favouriteArr.forEach((favourite) => {
           favourite.createT = favourite.createT.split("T")[0];
-
           let categoryName;
           switch (favourite.category) {
             case 1:

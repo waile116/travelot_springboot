@@ -157,7 +157,7 @@ export default {
 .wrapper .container .box .comment li .header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1vw;
+  margin-bottom: 0.5vw;
 }
 .wrapper .container .box .comment li .header .info {
   display: flex;

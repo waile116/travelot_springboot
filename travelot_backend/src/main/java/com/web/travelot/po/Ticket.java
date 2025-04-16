@@ -6,7 +6,7 @@ public class Ticket {
     private String name;
     private String description;
     private Integer price;
-    private Integer amount;
+    private Integer quantity;
 
     public Integer getTicketId() {
         return id;
@@ -48,11 +48,11 @@ public class Ticket {
         this.price = price;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

@@ -28,24 +28,72 @@
           <p>{{ attraction.openTime }}</p>
         </div>
         <ul class="card">
-          <li v-for="ticket in ticketArr" @click="">
+          <li v-for="ticket in ticketArr">
             <div class="detail">
               <div class="header">
                 <p class="title">{{ ticket.name }}</p>
                 <p class="desc">{{ ticket.desc }}</p>
-                <p class="sold">已售出 {{ ticket.amount }} 份</p>
+                <p class="sold">已售出 {{ ticket.quantity }} 份</p>
               </div>
               <div class="cost">
                 <p class="price">{{ `¥${ticket.price}` }}</p>
               </div>
               <div class="reserve">
-                <button @click="">预 定</button>
+                <button @click="openOrder(ticket)">预 订</button>
               </div>
             </div>
           </li>
         </ul>
       </div>
       <Comment category="1" :target_id="attractionId"></Comment>
+    </div>
+
+    <div v-if="showOrder" class="order-box">
+      <div class="order-content">
+        <div class="header">
+          <div></div>
+          <p>{{ attraction.name }}门票</p>
+          <i class="fa fa-close" @click="closeOrder"></i>
+        </div>
+        <div class="order-date">
+          <label
+            ><p>选择日期</p>
+            <input
+              type="date"
+              v-model="orderDate"
+              :min="minOrderDate"
+              :max="maxOrderDate"
+            />
+          </label>
+        </div>
+        <div class="order-info">
+          <div class="order-info-header">
+            <p>{{ orderTicket.name }}</p>
+            <div class="right">
+              <p class="price">¥{{ orderTicket.price * orderQuantity }}</p>
+              <div class="order-info-quantity">
+                <i
+                  v-if="orderQuantity > 1"
+                  class="fa fa-minus"
+                  @click="orderQuantity--"
+                ></i>
+                <p>{{ orderQuantity }}</p>
+                <i class="fa fa-plus" @click="orderQuantity++"></i>
+              </div>
+            </div>
+          </div>
+          <div class="order-desc">
+            <i class="fa fa-user"></i>
+            <p>{{ orderTicket.desc }}</p>
+          </div>
+          <div class="order-reminder">
+            <i class="fa fa-info"></i>
+            <p class="t1">不可退款</p>
+            <p>无需取票</p>
+          </div>
+        </div>
+        <div class="order" @click="toPayment"><button>预 订</button></div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,6 +114,13 @@ export default {
 
       userFav: false,
       animateHeart: false,
+
+      minOrderDate: this.getNextDate(),
+      maxOrderDate: this.getWeekDate(),
+      showOrder: false,
+      orderDate: this.getNextDate(),
+      orderTicket: "", // selected ticket object
+      orderQuantity: 1,
     };
   },
   created() {
@@ -123,24 +178,16 @@ export default {
     },
   },
   methods: {
-    getCurDate() {
-      const tdy = new Date();
-      return tdy.toISOString().split("T")[0]; // Format YYYY-MM-DD
-    },
-
     getNextDate() {
-      const tmr = new Date();
-      tmr.setDate(tmr.getDate() + 1);
-      return tmr.toISOString().split("T")[0]; // Format YYYY-MM-DD
+      const date = new Date();
+      date.setDate(date.getDate() + 1);
+      return date.toISOString().split("T")[0]; // Format YYYY-MM-DD
     },
 
-    calNight() {
-      if (this.startDate && this.endDate) {
-        const start = new Date(this.startDate);
-        const end = new Date(this.endDate);
-        const difference = (end - start) / (1000 * 60 * 60 * 24); // convert milliseconds to days
-        this.night = difference > 0 ? difference : 0;
-      }
+    getWeekDate() {
+      const date = new Date();
+      date.setDate(date.getDate() + 7);
+      return date.toISOString().split("T")[0]; // Format YYYY-MM-DD
     },
 
     setFav() {
@@ -176,6 +223,36 @@ export default {
             console.error(error);
           });
       }
+    },
+
+    openOrder(ticket) {
+      this.showOrder = true;
+      this.orderTicket = ticket; // parse ticket to order
+    },
+    closeOrder() {
+      this.showOrder = false;
+      this.orderQuantity = 1; // reset ticket quantity
+    },
+
+    toPayment() {
+      // create and save order
+      this.$axios
+        .post(
+          `OrdersController/saveOrders/${this.user.userId}/1/${this.attractionId}/${this.orderTicket.ticketId}/${this.orderTicket.price}/${this.orderQuantity}/${this.orderDate}/null`
+        )
+        .then((response) => {
+          const orderId = response.data.result;
+          // go to payment page after creating order
+          if (orderId > 0) {
+            console.log(response.data.message);
+            this.$router.push({ path: "/payment", query: { id: orderId } });
+          } else {
+            alert("订单创建失败");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };
@@ -317,7 +394,7 @@ export default {
   color: white;
   background-color: var(--color-text2);
   padding: 0.5vw;
-  width: 6vw;
+  width: 7vw;
   border-radius: 0.5vw;
   font-size: 1vw;
   margin-top: 0.5vw;
@@ -372,7 +449,8 @@ export default {
 }
 
 /*************** button transition *****************/
-.wrapper .container .attraction .card li .detail .reserve button::before {
+.wrapper .container .attraction .card li .detail .reserve button::before,
+.wrapper .order-box .order-content .order button::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -385,7 +463,183 @@ export default {
   z-index: -1;
 }
 
-.wrapper .container .attraction .card li .detail .reserve button:hover::before {
+.wrapper .container .attraction .card li .detail .reserve button:hover::before,
+.wrapper .order-box .order-content .order button:hover::before {
   transform: translateX(0);
+}
+
+/*************** order box *****************/
+.wrapper .order-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.wrapper .order-box .order-content {
+  background: white;
+  width: 40vw;
+  border-radius: 1vw;
+  padding: 2vw;
+}
+.wrapper .order-box .order-content .header {
+  display: flex;
+  justify-content: space-between;
+}
+.wrapper .order-box .order-content .header p {
+  font-size: 1.5vw;
+}
+.wrapper .order-box .order-content .header i {
+  cursor: pointer;
+  font-size: 2vw;
+}
+.wrapper .order-box .order-content .order-date {
+  padding: 0.5vw 2vw;
+  margin: 1vw 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 14vw;
+  height: 3vw;
+  border-radius: 0.5vw;
+  border: 1px solid var(--color-text);
+  outline: none;
+}
+.wrapper .order-box .order-content .order-date label {
+  display: flex;
+  justify-content: center;
+}
+.wrapper .order-box .order-content .order-date p {
+  font-size: 1.2vw;
+  margin-right: 1vw;
+}
+.wrapper .order-box .order-content .order-date select,
+.wrapper .order-box .order-content .order-date input {
+  font-size: 1.2vw;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  cursor: pointer;
+}
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 8vw;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+  width: 8vw;
+}
+.wrapper .order-box .order-content .order-info .order-info-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1vw;
+}
+.wrapper .order-box .order-content .order-info .order-info-header p {
+  font-size: 1.5vw;
+  font-weight: 700;
+}
+.wrapper .order-box .order-content .order-info .order-info-header .right {
+  display: flex;
+  align-items: center;
+}
+.wrapper
+  .order-box
+  .order-content
+  .order-info
+  .order-info-header
+  .right
+  .price {
+  color: var(--color-text3);
+  margin-right: 2vw;
+  font-weight: normal;
+}
+.wrapper
+  .order-box
+  .order-content
+  .order-info
+  .order-info-header
+  .right
+  .order-info-quantity {
+  display: flex;
+  align-items: center;
+}
+.wrapper
+  .order-box
+  .order-content
+  .order-info
+  .order-info-header
+  .right
+  .order-info-quantity
+  i {
+  cursor: pointer;
+  background-color: var(--color-text2);
+  color: white;
+  padding: 0.5vw 0.6vw;
+  border-radius: 10vw;
+  font-size: 1vw;
+}
+.wrapper
+  .order-box
+  .order-content
+  .order-info
+  .order-info-header
+  .right
+  .order-info-quantity
+  p {
+  margin: 0 1vw;
+  font-weight: normal;
+}
+.wrapper .order-box .order-content .order-info p {
+  font-size: 1.25vw;
+  font-weight: normal;
+}
+.wrapper .order-box .order-content .order-info .order-reminder,
+.wrapper .order-box .order-content .order-info .order-desc {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1vw;
+}
+.wrapper .order-box .order-content .order-info .order-reminder p,
+.wrapper .order-box .order-content .order-info .order-desc p {
+  margin-left: 1vw;
+}
+.wrapper .order-box .order-content .order-info .order-desc i {
+  font-size: 1.5vw;
+}
+.wrapper .order-box .order-content .order-info .order-reminder .t1 {
+  color: var(--color-text3);
+}
+.wrapper .order-box .order-content .order-info .order-reminder i {
+  border-radius: 10vw;
+  border: solid 0.1vw var(--color-text);
+  padding: 0.2vw 0.5vw;
+  font-size: 1vw;
+}
+.wrapper .order-box .order-content .order {
+  display: flex;
+  justify-content: center;
+}
+.wrapper .order-box .order-content .order button {
+  width: 14vw;
+  height: 3vw;
+  background-color: var(--color-orange);
+  border: none;
+  outline: none;
+  border-radius: 0.5vw;
+  font-size: 1.25vw;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
 </style>

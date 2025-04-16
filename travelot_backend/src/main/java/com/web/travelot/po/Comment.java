@@ -11,7 +11,6 @@ public class Comment {
     private String text;
     private String comment_img;
     private LocalDateTime create_t;
-    private LocalDateTime update_t;
 
     public Integer getCommentId() {
         return id;
@@ -75,14 +74,6 @@ public class Comment {
 
     public void setCreateT(LocalDateTime create_t) {
         this.create_t = create_t;
-    }
-
-    public LocalDateTime getUpdateT() {
-        return update_t;
-    }
-
-    public void setUpdateT(LocalDateTime update_t) {
-        this.update_t = update_t;
     }
 
 }

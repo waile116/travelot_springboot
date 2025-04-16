@@ -44,6 +44,10 @@ public class AttractionServiceImpl implements AttractionService{
         return attractionMapper.listTicketById(attractionId);
     }
     @Override
+    public Ticket getTicketById(Integer ticketId){
+        return attractionMapper.getTicketById(ticketId);
+    }
+    @Override
     public int saveTicket(Ticket ticket){
         // if id exists, update, else save
         if (ticket.getTicketId() != null) {
