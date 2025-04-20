@@ -63,7 +63,7 @@ public class UserController {
         user.setUserId(userId);
         user.setPassword(password);
         User result = userService.getUserByIdPass(user);
-        return new CommonResult<>(200, "success", result);
+        return new CommonResult<>(200, "Login success", result);
     }
 
     @GetMapping("/getUserById/{userId}")

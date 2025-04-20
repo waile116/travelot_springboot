@@ -1,6 +1,11 @@
 package com.web.travelot.po;
 
-public class Attraction {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Attraction implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private Integer id;
     private Integer state_id;
     private String name;

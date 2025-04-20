@@ -52,12 +52,14 @@ public class OrdersController {
 
     @PostMapping("/updateOrdersById/{orderId}/{status}")
     public CommonResult<Integer> updateOrdersById(@PathVariable("orderId") Integer orderId,
-                                            @PathVariable("status") Integer status) throws Exception {
+                                                  @PathVariable("status") Integer status) throws Exception {
 
         Orders orders = new Orders();
         orders.setOrderId(orderId);
         orders.setStatus(status);
-        int result = ordersService.updateOrdersById(orders);
+
+        OrderDetail od = ordersService.getOrderDetailById(orderId);
+        int result = ordersService.updateOrdersById(orders, od);
         return new CommonResult<>(200, "Update order success", result);
     }
 

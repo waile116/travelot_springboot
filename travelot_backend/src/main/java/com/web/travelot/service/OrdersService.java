@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrdersService {
     public int saveOrders(Orders orders, OrderDetail od);
-    public int updateOrdersById(Orders orders);
+    public int updateOrdersById(Orders orders, OrderDetail od);
     public List<Orders> listOrdersByUserId(Integer userId);
     public OrderDetail getOrderDetailById(Integer orderId);
     public Orders getOrdersById(Integer orderId);

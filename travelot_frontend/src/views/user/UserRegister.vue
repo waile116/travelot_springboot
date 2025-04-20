@@ -6,15 +6,26 @@
           <p class="title">用户注册</p>
           <ul class="form">
             <li>
-              <input type="text" v-model="userId" placeholder="手机号码" />
+              <input
+                type="text"
+                v-model="userId"
+                @input="checkId(userId)"
+                placeholder="手机号码"
+              />
             </li>
             <li>
-              <input type="password" v-model="password" placeholder="密码" />
+              <input
+                type="password"
+                v-model="password"
+                @input="checkPass(password)"
+                placeholder="密码"
+              />
             </li>
             <li>
               <input
                 type="password"
                 v-model="confirmPassword"
+                @input="checkCPass(confirmPassword)"
                 placeholder="确认密码"
               />
             </li>
@@ -65,66 +76,89 @@ export default {
     };
   },
   methods: {
-    // register user
-    register() {
-      if (this.userId == "") {
+    // validate userId
+    checkId(id) {
+      if (id == "") {
         this.isError = true;
         this.errorMsg = "请输入手机号码";
-        return;
+        return false;
+      } else {
+        this.$axios.get(`UserController/getUserById/${id}`).then((response) => {
+          if (response.data.result) {
+            this.isError = true;
+            this.errorMsg = "此手机号码已存在";
+            return false;
+          }
+        });
       }
-      if (this.password == "") {
+      // success case
+      this.isError = false;
+      return true;
+    },
+
+    // validate password
+    checkPass(pass) {
+      const rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      if (pass == "") {
         this.isError = true;
         this.errorMsg = "请输入密码";
-        return;
+        return false;
+      } else if (!rule.test(pass)) {
+        this.isError = true;
+        this.errorMsg = "密码需至少8位，包含字母和数字";
+        return false;
       }
-      if (this.password != this.confirmPassword) {
+      // success case
+      this.isError = false;
+      return true;
+    },
+
+    // validate confirm password
+    checkCPass(cPass) {
+      if (cPass == "") {
+        this.isError = true;
+        this.errorMsg = "请输入确认密码";
+        return false;
+      } else if (this.password != cPass) {
         this.isError = true;
         this.errorMsg = "密码不一致";
-        return;
+        return false;
       }
+      // success case
+      this.isError = false;
+      return true;
+    },
+
+    // register user
+    register() {
+      if (!this.checkId(this.userId)) return;
+      if (!this.checkPass(this.password)) return;
+      if (!this.checkCPass(this.confirmPassword)) return;
       if (this.userName == "") {
         this.isError = true;
         this.errorMsg = "请输入用户名";
         return;
-      }
-      if (!document.getElementById("checkbox").checked) {
+      } else if (!document.getElementById("checkbox").checked) {
         this.isError = true;
         this.errorMsg = "请阅读并同意旅客之家的服务协议";
         return;
+      } else {
+        this.isError = false;
       }
 
+      //update user table through backend
       this.$axios
-        .get(`UserController/getUserById/${this.userId}`)
+        .post(
+          `UserController/saveUser/${this.userId}/${this.password}/${this.userName}/user_${this.userName}/${this.userSex}`
+        )
         .then((response) => {
-          if (response.data.result) {
-            this.isError = true;
-            this.errorMsg = "此手机号码已存在";
-            console.log("Register failed");
-            //reset input
-            this.userId = "";
-            this.password = "";
-            this.confirmPassword = "";
-            this.userName = "";
-            return;
+          if (response.data.result > 0) {
+            alert("注册成功");
+            console.log(response.data.message);
+            this.$router.push("/login");
+          } else {
+            alert("注册失败");
           }
-
-          //update user table through backend
-          this.$axios
-            .post(
-              `UserController/saveUser/${this.userId}/${this.password}/${this.userName}/user_${this.userName}/${this.userSex}`
-            )
-            .then((response) => {
-              if (response.data.result > 0) {
-                alert("注册成功");
-                console.log(response.data.message);
-                this.$router.push("/login");
-              } else {
-                alert("注册失败");
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
         })
         .catch((error) => {
           console.error(error);

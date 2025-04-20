@@ -89,8 +89,8 @@
                   <td>{{ item.desc }}</td>
                 </tr>
                 <tr v-if="category === 'Attraction'">
-                  <td>amount</td>
-                  <td>{{ item.amount }}</td>
+                  <td>quantity</td>
+                  <td>{{ item.quantity }}</td>
                 </tr>
                 <tr v-if="category === 'Hotel'">
                   <td>type</td>
@@ -143,8 +143,8 @@
                 <td><input v-model="subData.desc" type="text" /></td>
               </tr>
               <tr v-if="category === 'Attraction'">
-                <td>amount</td>
-                <td><input v-model="subData.amount" type="text" /></td>
+                <td>quantity</td>
+                <td><input v-model="subData.quantity" type="text" /></td>
               </tr>
               <tr v-if="category === 'Hotel'">
                 <td>type</td>
@@ -198,7 +198,7 @@ export default {
         type: "",
         capacity: "",
         price: "",
-        amount: "",
+        quantity: "",
         img: "",
       },
       showForm: false,
@@ -261,7 +261,7 @@ export default {
         type: "",
         capacity: "",
         price: "",
-        amount: "",
+        quantity: "",
         img: "",
       };
     },
@@ -298,7 +298,7 @@ export default {
         this.data.stateId
       }/${this.data.name}/${this.data.desc}/${this.data.location}/${
         this.data.price
-      }/${this.category !== "hotel" ? this.data.openTime + "/" : ""}${
+      }/${this.category !== "Hotel" ? this.data.openTime + "/" : ""}${
         this.data.rating
       }`;
 
@@ -328,7 +328,7 @@ export default {
           ? this.subData.type + "/" + this.subData.capacity + "/"
           : ""
       }${this.subData.price}${
-        this.subCategory === "Ticket" ? "/" + this.subData.amount : ""
+        this.subCategory === "Ticket" ? "/" + this.subData.quantity : ""
       }`;
 
       console.log(url);

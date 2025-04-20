@@ -112,15 +112,27 @@
           <ul class="info">
             <li>
               <p>旧密码</p>
-              <input type="password" v-model="temp.oldPass" />
+              <input
+                type="password"
+                @input="checkOldPass(temp.oldPass)"
+                v-model="temp.oldPass"
+              />
             </li>
             <li>
               <p>新密码</p>
-              <input type="password" v-model="temp.newPass" />
+              <input
+                type="password"
+                @input="checkNewPass(temp.newPass)"
+                v-model="temp.newPass"
+              />
             </li>
             <li>
               <p>确认密码</p>
-              <input type="password" v-model="temp.confirmPass" />
+              <input
+                type="password"
+                @input="checkCPass(temp.confirmPass)"
+                v-model="temp.confirmPass"
+              />
             </li>
           </ul>
           <div class="error" v-if="isError">
@@ -206,21 +218,6 @@ export default {
         });
     },
 
-    openInfo() {
-      this.showInfo = true;
-    },
-    closeInfo() {
-      this.showInfo = false;
-      this.isError = false;
-    },
-    openPass() {
-      this.showPass = true;
-    },
-    closePass() {
-      this.showPass = false;
-      this.isError = false;
-    },
-
     saveInfo() {
       if (this.temp.userName == "") {
         this.isError = true;
@@ -261,69 +258,103 @@ export default {
         });
     },
 
-    savePass() {
-      if (this.temp.oldPass == "") {
+    // validate old password
+    checkOldPass(pass) {
+      if (pass == "") {
         this.isError = true;
         this.errorMsg = "旧密码不能为空";
-        return;
+        return false;
+      } else {
+        this.$axios
+          .get(`UserController/getUserByIdPass/${this.user.userId}/${pass}`)
+          .then((response) => {
+            let user = response.data.result;
+
+            if (user == null) {
+              this.isError = true;
+              this.errorMsg = "旧密码不正确";
+              return;
+            }
+          });
       }
-      if (this.temp.newPass == "") {
+      // success case
+      this.isError = false;
+      return true;
+    },
+
+    // validate new password
+    checkNewPass(pass) {
+      const rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      if (pass == "") {
         this.isError = true;
         this.errorMsg = "新密码不能为空";
-        return;
+        return false;
+      } else if (!rule.test(pass)) {
+        this.isError = true;
+        this.errorMsg = "密码需至少8位，包含字母和数字";
+        return false;
+      } else if (this.temp.oldPass == pass) {
+        this.isError = true;
+        this.errorMsg = "旧密码与新密码不能相同";
+        return false;
       }
-      if (this.temp.confirmPass == "") {
+      // success case
+      this.isError = false;
+      return true;
+    },
+
+    // validate confirm password
+    checkCPass(cPass) {
+      if (cPass == "") {
         this.isError = true;
         this.errorMsg = "确认密码不能为空";
-        return;
+        return false;
+      } else if (this.temp.newPass != cPass) {
+        this.isError = true;
+        this.errorMsg = "密码不一致";
+        return false;
       }
+      // success case
+      this.isError = false;
+      return true;
+    },
 
-      // get user id from backend
+    savePass() {
+      if (!this.checkOldPass(this.temp.oldPass)) return;
+      if (!this.checkNewPass(this.temp.newPass)) return;
+      if (!this.checkCPass(this.temp.confirmPass)) return;
+
+      //update password through backend
       this.$axios
-        .get(
-          `UserController/getUserByIdPass/${this.user.userId}/${this.temp.oldPass}`
+        .post(
+          `UserController/updateUserPassword/${this.user.userId}/${this.temp.newPass}`
         )
         .then((response) => {
-          let user = response.data.result;
-
-          if (user == null) {
-            this.isError = true;
-            this.errorMsg = "旧密码不正确";
-            // reset input
-            this.temp.oldPass = "";
-            this.temp.newPass = "";
-            this.temp.confirmPass = "";
-            return;
+          if (response.data.result > 0) {
+            console.log(response.data.message);
+            alert("更改密码成功");
+            this.$router.go();
+          } else {
+            alert("更改密码失败");
           }
-          if (this.temp.oldPass == this.temp.newPass) {
-            this.isError = true;
-            this.errorMsg = "旧密码与新密码不能相同";
-            // reset input
-            this.temp.oldPass = "";
-            this.temp.newPass = "";
-            this.temp.confirmPass = "";
-            return;
-          }
-
-          //update password through backend
-          this.$axios
-            .post(
-              `UserController/updateUserPassword/${this.user.userId}/${this.temp.newPass}`
-            )
-            .then((response) => {
-              if (response.data.result > 0) {
-                console.log(response.data.message);
-                alert("更改密码成功");
-                this.$router.go();
-              } else {
-                alert("更改密码失败");
-              }
-            });
-        })
-        .catch((error) => {
-          console.error(error);
         });
     },
+
+    openInfo() {
+      this.showInfo = true;
+    },
+    closeInfo() {
+      this.showInfo = false;
+      this.isError = false;
+    },
+    openPass() {
+      this.showPass = true;
+    },
+    closePass() {
+      this.showPass = false;
+      this.isError = false;
+    },
+
     toOrderList() {
       this.$router.push({ path: "/user/orderList" });
     },

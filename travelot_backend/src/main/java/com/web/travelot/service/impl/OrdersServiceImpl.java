@@ -24,13 +24,6 @@ public class OrdersServiceImpl implements OrdersService {
         ordersMapper.saveOrders(orders);
         int orderId = orders.getOrderId();
 
-        // (attraction) add ticket to ordered ticket
-        if(od.getCategory() == 1){
-            Ticket ticket = attractionMapper.getTicketById(od.getTargetSubId());
-            ticket.setQuantity(ticket.getQuantity() + od.getQuantity());
-            attractionMapper.updateTicket(ticket);
-        }
-
         // save order detail
         od.setOrderId(orderId);
         ordersMapper.saveOrderDetail(od);
@@ -38,8 +31,14 @@ public class OrdersServiceImpl implements OrdersService {
     };
 
     @Override
-    public int updateOrdersById(Orders orders){
+    public int updateOrdersById(Orders orders, OrderDetail od){
         if(orders.getStatus() > 0) {
+            // (attraction) add ticket to ordered ticket
+            if(od.getCategory() == 1){
+                Ticket ticket = attractionMapper.getTicketById(od.getTargetSubId());
+                ticket.setQuantity(ticket.getQuantity() + od.getQuantity());
+                attractionMapper.updateTicket(ticket);
+            }
             return ordersMapper.payOrders(orders);
         }
         else {

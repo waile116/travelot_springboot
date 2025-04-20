@@ -75,7 +75,7 @@
             <input type="radio" name="method" />
           </li>
         </ul>
-        <div class="pay" @click="toPay"><button>支 付</button></div>
+        <div class="pay"><button @click="toPay">支 付</button></div>
         <div class="delete" @click="openDelete">
           <i class="fa fa-trash"></i>
           <p>取消订单</p>

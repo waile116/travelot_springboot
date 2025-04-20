@@ -124,16 +124,18 @@ export default {
     },
 
     insertData() {
-      const url = `${
-        this.category.charAt(0).toUpperCase() + this.category.slice(1)
-      }Controller/save${
-        this.category.charAt(0).toUpperCase() + this.category.slice(1)
-      }/-1/${this.data.stateId}/${this.data.name}/${this.data.desc}/${
-        this.data.location
-      }/${this.data.price}/${
-        this.category !== "hotel" ? this.data.openTime + "/" : ""
-      }${this.data.rating}`;
+      const categoryU =
+        this.category.charAt(0).toUpperCase() + this.category.slice(1);
 
+      const url = `${categoryU}Controller/save${categoryU}/-1/${
+        this.data.stateId
+      }/${this.data.name}/${this.data.desc}/${this.data.location}/${
+        this.data.price
+      }/${this.category !== "hotel" ? this.data.openTime + "/" : ""}${
+        this.data.rating
+      }`;
+
+      console.log(url);
       this.$axios
         .post(url, {
           img: this.data.img,
