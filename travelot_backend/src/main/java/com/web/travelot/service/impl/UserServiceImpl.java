@@ -15,20 +15,21 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    @CachePut(value="user", key="#user.userId")
-    public int saveUser(User user) {
-        // generate salt and encrypt password
-        String salt = PasswordUtil.generateSalt();
-        String encryptedPassword = PasswordUtil.encrypt(user.getPassword(), salt);
-        user.setPassword(encryptedPassword);
-        user.setSalt(salt);
-
+    public User saveUser(User user) {
         // if user exists, update, else save
         if(userMapper.getUserById(user.getUserId()) != null){
-            return userMapper.updateUser(user);
+            userMapper.updateUser(user);
         }else {
-            return userMapper.saveUser(user);
+            // generate salt and encrypt password
+            String salt = PasswordUtil.generateSalt();
+            String encryptedPassword = PasswordUtil.encrypt(user.getPassword(), salt);
+            user.setPassword(encryptedPassword);
+            user.setSalt(salt);
+            userMapper.saveUser(user);
         }
+
+        // get user info and put into redis again (because updated)
+        return userMapper.getUserById(user.getUserId());
     }
 
     @Override
@@ -46,7 +47,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateUserPassword(user);
     };
     @Override
-    @Cacheable(value="user", key="#user.userId")
     public User getUserByIdPass(User user) {
         User dbUser = userMapper.getUserByIdPass(user);
         if(dbUser != null) {
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value="user", key="#userId")
+    //@Cacheable(value="user", key="#userId")
     public User getUserById(Integer userId) {
         return userMapper.getUserById(userId);
     }

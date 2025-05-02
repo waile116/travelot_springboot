@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 public interface UserService {
-    public int saveUser(User user);
+    public User saveUser(User user);
     public int updateUserImgById(User user);
     public int updateUserPassword(User user);
     public User getUserByIdPass(User user);

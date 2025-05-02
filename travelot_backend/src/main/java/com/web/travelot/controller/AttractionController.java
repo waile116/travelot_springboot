@@ -32,7 +32,7 @@ public class AttractionController {
     };
 
     @PostMapping("/saveAttraction/{id}/{stateId}/{name}/{desc}/{location}/{price}/{openTime}/{rating}")
-    public CommonResult<Integer> saveAttraction(@PathVariable("id") Integer attractionId,
+    public CommonResult<Attraction> saveAttraction(@PathVariable("id") Integer attractionId,
                                                 @PathVariable("stateId") Integer stateId,
                                                 @PathVariable("name") String name,
                                                 @PathVariable("desc") String desc,
@@ -58,7 +58,7 @@ public class AttractionController {
         attraction.setMapLink(mapLink);
         attraction.setAttractionImg(img);
         attraction.setMapImg(mapImg);
-        int result = attractionService.saveAttraction(attraction);
+        Attraction result = attractionService.saveAttraction(attraction);
         return new CommonResult<>(200, "Insert attraction success", result);
     }
 
@@ -80,7 +80,7 @@ public class AttractionController {
     };
 
     @PostMapping("/saveTicket/{id}/{attractionId}/{name}/{desc}/{price}/{quantity}")
-    public CommonResult<Integer> saveTicket(@PathVariable("id") Integer ticketId,
+    public CommonResult<Ticket> saveTicket(@PathVariable("id") Integer ticketId,
                                                 @PathVariable("attractionId") Integer attractionId,
                                                 @PathVariable("name") String name,
                                                 @PathVariable("desc") String desc,
@@ -95,7 +95,7 @@ public class AttractionController {
         ticket.setDesc(desc);
         ticket.setPrice(price);
         ticket.setQuantity(quantity);
-        int result = attractionService.saveTicket(ticket);
+        Ticket result = attractionService.saveTicket(ticket);
         return new CommonResult<>(200, "Insert ticket success", result);
     }
 }

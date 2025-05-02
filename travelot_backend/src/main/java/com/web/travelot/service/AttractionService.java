@@ -11,11 +11,11 @@ public interface AttractionService {
     @Cacheable(value="attraction", key="#stateId")
     public List<Attraction> listAttractionById(Integer stateId);
     public Attraction getAttractionById(Integer attractionId);
-    public int saveAttraction(Attraction attraction);
+    public Attraction saveAttraction(Attraction attraction);
 
     public List<Ticket> listTicket();
     public List<Ticket> listTicketById(Integer attractionId);
     public Ticket getTicketById(Integer ticketId);
 
-    public int saveTicket(Ticket ticket);
+    public Ticket saveTicket(Ticket ticket);
 }

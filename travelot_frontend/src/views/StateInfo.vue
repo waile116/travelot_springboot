@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <Nav></Nav>
+    <Nav2></Nav2>
     <div class="header">
       <p>{{ state.name }}</p>
       <img class="background" :src="state.stateImg" />
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import Nav from "../components/Nav.vue";
+import Nav2 from "../components/Nav2.vue";
 import { updateArrows } from "../common.js";
 
 export default {
@@ -184,7 +184,7 @@ export default {
     });
   },
   components: {
-    Nav,
+    Nav2,
   },
   methods: {
     toAttractionInfo(id) {

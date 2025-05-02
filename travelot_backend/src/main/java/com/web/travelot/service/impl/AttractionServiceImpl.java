@@ -16,27 +16,31 @@ public class AttractionServiceImpl implements AttractionService{
     private AttractionMapper attractionMapper;
 
     @Override
-    @Cacheable(value="attraction", key="")
+    @Cacheable(value="list_attraction", key="")
     public List<Attraction> listAttractionRandom(){
         return attractionMapper.listAttractionRandom();
     };
     @Override
+    @Cacheable(value="list_attraction", key="#stateId")
     public List<Attraction> listAttractionById(Integer stateId){
         return attractionMapper.listAttractionById(stateId);
     };
     @Override
+    @Cacheable(value="attraction", key="#attractionId")
     public Attraction getAttractionById(Integer attractionId){
         return attractionMapper.getAttractionById(attractionId);
     };
     @Override
     @CachePut(value="attraction", key="#attraction.attractionId")
-    public int saveAttraction(Attraction attraction){
+    public Attraction saveAttraction(Attraction attraction){
         // if id exists, update, else save
         if (attraction.getAttractionId() != null) {
-            return attractionMapper.updateAttraction(attraction);
+            attractionMapper.updateAttraction(attraction);
         } else {
-            return attractionMapper.saveAttraction(attraction);
+           attractionMapper.saveAttraction(attraction);
         }
+
+        return attractionMapper.getAttractionById(attraction.getAttractionId());
     };
 
     @Override
@@ -52,12 +56,13 @@ public class AttractionServiceImpl implements AttractionService{
         return attractionMapper.getTicketById(ticketId);
     }
     @Override
-    public int saveTicket(Ticket ticket){
+    public Ticket saveTicket(Ticket ticket){
         // if id exists, update, else save
         if (ticket.getTicketId() != null) {
-            return attractionMapper.updateTicket(ticket);
+            attractionMapper.updateTicket(ticket);
         } else {
-            return attractionMapper.saveTicket(ticket);
+            attractionMapper.saveTicket(ticket);
         }
+        return attractionMapper.getTicketById(ticket.getTicketId());
     };
 }

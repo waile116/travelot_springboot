@@ -16,7 +16,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/saveUser/{userId}/{password}/{userName}/{userAlias}/{userSex}")
-    public CommonResult<Integer> saveUser(@PathVariable("userId") Integer userId,
+    public CommonResult<User> saveUser(@PathVariable("userId") Integer userId,
                                           @PathVariable("password") String password,
                                           @PathVariable("userName") String userName,
                                           @PathVariable("userAlias") String userAlias,
@@ -29,7 +29,7 @@ public class UserController {
         user.setUserName(userName);
         user.setUserAlias(userAlias);
         user.setUserSex(userSex);
-        int result = userService.saveUser(user);
+        User result = userService.saveUser(user);
         return new CommonResult<>(200, "Save user success", result);
     }
 

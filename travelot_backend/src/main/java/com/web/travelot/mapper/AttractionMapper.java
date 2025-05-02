@@ -19,11 +19,11 @@ public interface AttractionMapper {
     public Attraction getAttractionById(Integer attractionId);
     @Insert("insert into attraction (state_id, name, description, location, price, open_t, rating, attr_img, create_t, update_t) values " +
             "(#{stateId}, #{name}, #{desc}, #{location}, #{price}, #{openTime}, #{rating}, #{attractionImg}, NOW(), NOW())")
-    public int saveAttraction(Attraction attraction);
+    public void saveAttraction(Attraction attraction);
     @Update("UPDATE attraction SET state_id=#{stateId}, name=#{name}, description=#{desc}, location=#{location}, " +
             "price=#{price}, open_t=#{openTime}, rating=#{rating}, attr_img=#{attractionImg}, map_img=#{mapImg}, map_link=#{mapLink}, " +
             "update_t=NOW() WHERE id=#{attractionId}")
-    public int updateAttraction(Attraction attraction);
+    public void updateAttraction(Attraction attraction);
 
 
     @Select("select * from ticket")
@@ -34,8 +34,8 @@ public interface AttractionMapper {
     public Ticket getTicketById(Integer ticketId);
     @Insert("insert into ticket (attraction_id, name, description, price, quantity, create_t, update_t) values " +
             "(#{attractionId}, #{name}, #{desc}, #{price}, #{quantity}, NOW(), NOW())")
-    public int saveTicket(Ticket ticket);
+    public void saveTicket(Ticket ticket);
     @Update("UPDATE ticket SET attraction_id=#{attractionId}, name=#{name}, description=#{desc}, price=#{price}, " +
             "quantity=#{quantity}, update_t=NOW() WHERE id=#{ticketId}")
-    public int updateTicket(Ticket ticket);
+    public void updateTicket(Ticket ticket);
 }

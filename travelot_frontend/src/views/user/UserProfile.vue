@@ -236,9 +236,7 @@ export default {
           `UserController/saveUser/${this.user.userId}/-1/${this.temp.userName}/${this.temp.userAlias}/${this.temp.userSex}`
         )
         .then((response) => {
-          if (response.data.result > 0) {
-            console.log(response.data.message);
-
+          if (response.data.result) {
             //update user in session storage
             this.$axios
               .get(`UserController/getUserById/${this.user.userId}`)
@@ -247,6 +245,7 @@ export default {
                 this.$setSessionStorage("user", user);
               });
 
+            console.log(response.data.message);
             alert("更改个人信息成功");
             this.$router.go();
           } else {

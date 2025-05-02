@@ -198,8 +198,10 @@ export default {
     startDate(newVal) {
       const tmr = new Date(newVal);
       tmr.setDate(tmr.getDate() + 1);
-      console.log("endDate changed");
       this.endDate = tmr.toISOString().split("T")[0];
+      this.minEndDate = tmr.toISOString().split("T")[0];
+
+      console.log("endDate changed");
     },
   },
 };

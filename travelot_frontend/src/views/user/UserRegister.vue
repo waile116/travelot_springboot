@@ -152,7 +152,7 @@ export default {
           `UserController/saveUser/${this.userId}/${this.password}/${this.userName}/user_${this.userName}/${this.userSex}`
         )
         .then((response) => {
-          if (response.data.result > 0) {
+          if (response.data.result) {
             alert("注册成功");
             console.log(response.data.message);
             this.$router.push("/login");
