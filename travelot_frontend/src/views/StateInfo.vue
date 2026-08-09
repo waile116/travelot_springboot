@@ -162,7 +162,7 @@ export default {
         setTimeout(() => {
           this.container[index].addEventListener(
             "scroll",
-            updateArrows(this.container[index], l, this.rightArrow[index])
+            updateArrows(this.container[index], l, this.rightArrow[index]),
           );
         }, 600);
       });
@@ -177,7 +177,7 @@ export default {
         setTimeout(() => {
           this.container[index].addEventListener(
             "scroll",
-            updateArrows(this.container[index], this.leftArrow[index], r)
+            updateArrows(this.container[index], this.leftArrow[index], r),
           );
         }, 600);
       });

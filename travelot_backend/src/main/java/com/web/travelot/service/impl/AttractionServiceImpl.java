@@ -3,8 +3,10 @@ import java.util.List;
 
 import com.web.travelot.po.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import com.web.travelot.po.Attraction;
 import com.web.travelot.service.AttractionService;
@@ -31,7 +33,15 @@ public class AttractionServiceImpl implements AttractionService{
         return attractionMapper.getAttractionById(attractionId);
     };
     @Override
-    @CachePut(value="attraction", key="#attraction.attractionId")
+    @Caching(
+            put = {
+                    @CachePut(value = "attraction", key = "#attraction.attractionId")
+            },
+            evict = {
+                    @CacheEvict(value = "list_attraction", key = "#attraction.stateId"),
+                    @CacheEvict(value = "list_attraction", key = "\"\"")
+            }
+    )
     public Attraction saveAttraction(Attraction attraction){
         // if id exists, update, else save
         if (attraction.getAttractionId() != null) {

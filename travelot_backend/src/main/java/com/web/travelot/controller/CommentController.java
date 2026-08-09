@@ -23,7 +23,7 @@ public class CommentController {
                                                           @PathVariable("rating") Double rating,
                                                           @PathVariable("text") String text,
                                                           @RequestBody Map<String, String> requestBody) throws Exception {
-        String commentImg = requestBody.get("userImg");
+        String commentImg = requestBody.get("commentImg");
         Comment comment = new Comment();
         comment.setUserId(userId);
         comment.setCategory(category);

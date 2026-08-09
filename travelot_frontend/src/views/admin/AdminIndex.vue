@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
     <div class="content">
-      <div class="insert" @click="toInsert">
-        <p>添加数据<i class="fa fa-chevron-right"></i></p>
+      <div class="insert">
+        <p @click="toInsert">添加数据<i class="fa fa-chevron-right"></i></p>
       </div>
       <div class="category">
         <!-- :class is vue's class binding, when category matches, it will render  class "active"-->
