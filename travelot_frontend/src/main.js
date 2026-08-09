@@ -17,7 +17,8 @@ import {
 } from "./common.js";
 
 // axios base URL for backend server
-axios.defaults.baseURL = "travelotspringboot-production.up.railway.app:8080"; //"http://localhost:8080/travelot/";
+axios.defaults.baseURL =
+  "https://travelotspringboot-production.up.railway.app:8080"; //"http://localhost:8080/travelot/";
 
 const app = createApp(App);
 
