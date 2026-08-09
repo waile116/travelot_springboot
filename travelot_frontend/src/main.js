@@ -18,7 +18,7 @@ import {
 
 // axios base URL for backend server
 axios.defaults.baseURL =
-  "https://travelotspringboot-production.up.railway.app:8080/travelot/"; //"http://localhost:8080/travelot/";
+  "https://travelotspringboot-production.up.railway.app/travelot/"; //"http://localhost:8080/travelot/";
 
 const app = createApp(App);
 
