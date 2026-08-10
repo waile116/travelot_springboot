@@ -2,9 +2,7 @@
   <div class="wrapper">
     <div class="nav">
       <div class="left">
-        <p v-if="isLogin" @click="toBack">
-          <i class="fa fa-chevron-left"></i>返回
-        </p>
+        <p @click="toBack"><i class="fa fa-chevron-left"></i>返回</p>
       </div>
     </div>
   </div>
