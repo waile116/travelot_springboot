@@ -18,22 +18,22 @@ public class AttractionServiceImpl implements AttractionService{
     private AttractionMapper attractionMapper;
 
     @Override
-    @Cacheable(value="list_attraction", key="")
+    //@Cacheable(value="list_attraction", key="")
     public List<Attraction> listAttractionRandom(){
         return attractionMapper.listAttractionRandom();
     };
     @Override
-    @Cacheable(value="list_attraction", key="#stateId")
+    //@Cacheable(value="list_attraction", key="#stateId")
     public List<Attraction> listAttractionById(Integer stateId){
         return attractionMapper.listAttractionById(stateId);
     };
     @Override
-    @Cacheable(value="attraction", key="#attractionId")
+    //@Cacheable(value="attraction", key="#attractionId")
     public Attraction getAttractionById(Integer attractionId){
         return attractionMapper.getAttractionById(attractionId);
     };
     @Override
-    @Caching(
+    /*@Caching(
             put = {
                     @CachePut(value = "attraction", key = "#attraction.attractionId")
             },
@@ -41,7 +41,7 @@ public class AttractionServiceImpl implements AttractionService{
                     @CacheEvict(value = "list_attraction", key = "#attraction.stateId"),
                     @CacheEvict(value = "list_attraction", key = "\"\"")
             }
-    )
+    )*/
     public Attraction saveAttraction(Attraction attraction){
         // if id exists, update, else save
         if (attraction.getAttractionId() != null) {
