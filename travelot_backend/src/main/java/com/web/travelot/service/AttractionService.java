@@ -6,9 +6,9 @@ import org.springframework.cache.annotation.Cacheable;
 import java.util.List;
 
 public interface AttractionService {
-    @Cacheable(value="attraction", key="")
+    //@Cacheable(value="attraction", key="")
     public List<Attraction> listAttractionRandom();
-    @Cacheable(value="attraction", key="#stateId")
+    //@Cacheable(value="attraction", key="#stateId")
     public List<Attraction> listAttractionById(Integer stateId);
     public Attraction getAttractionById(Integer attractionId);
     public Attraction saveAttraction(Attraction attraction);
